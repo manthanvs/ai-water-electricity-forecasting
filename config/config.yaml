@@ -19,19 +19,21 @@ sources:
   bwdf:
     package: water-benchmark-hub[bwdf]
     docs: https://waterbenchmarkhub.readthedocs.io
+    primary_series: DMA 3   # fewest missing values (0.53%), Phase 1
   battledim:
     zenodo_record: 4017659
     url: https://zenodo.org/record/4017659
+    inflow_links: [p227, p235]   # the two reservoir inlets; PUMP_1 is internal
   open_meteo:
     url: https://archive-api.open-meteo.com/v1/archive
     latitude: 48.78
     longitude: 2.29
-    timezone: Europe/Paris
+    timezone: GMT   # UTC; local time (UCI clock = fixed UTC+1) is applied in cleaning
     hourly: [temperature_2m, relative_humidity_2m, precipitation]
 
 holidays:
   electricity: FR
-  water: null            # set in Phase 1 once the BWDF country is confirmed
+  water: IT              # BWDF is a city in north-east Italy (wf4bwdf also flags Sundays and 3 Nov)
 
 # Chronological splits. Electricity dates are provisional until confirmed against the data (Phase 2).
 splits:

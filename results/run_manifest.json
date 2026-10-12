@@ -1,0 +1,20 @@
+[
+  {
+    "stage": "download",
+    "timestamp": "2026-10-12T13:54:56+00:00",
+    "git_commit": "19ddf4588737a06fc193e7aa82df98cbd874d6f3",
+    "config_hash": "003a8005b666a824bb67cf177810ddf3a9081e626b6002b773b8888b45815004",
+    "inputs": {
+      "data/raw/uci_electricity/household_power_consumption.zip": "9f84b46ade8a2d8e1286ec4b2b6c2987a45a755c59f263be3b3b3d10dfbda3ff",
+      "data/raw/bwdf/InflowData.xlsx": "c239bdb5c98eee00d94fb68b6b0405c39c3ac9b032c6fd4c94bb8d12d00640c0",
+      "data/raw/bwdf/WeatherData.xlsx": "70729f184c0b47abde2ef2686e28e013693641782d6f1b26b3f28de9c8d0c62c",
+      "data/raw/battledim/README.txt": "e6a3e83bdf7f116c47c72640de6e4785fd3437b96428448adf9ca76f066f2226",
+      "data/raw/battledim/dataset_configuration.yaml": "23471d8989d82c66a4909816ea248f7588d8ccc910e142265a7ea48db940b6a0",
+      "data/raw/battledim/2018_Fixed_Leakages_Report.txt": "5dba254c623b867a0a91150e2b5539842ca05a989fde6cf2754065d5b415a8f3",
+      "data/raw/battledim/2018_Leakages.csv": "e1abd9d549a18880d8ae704dc90c06c8a3d5aecbd2541fa091548ef392084ba6",
+      "data/raw/battledim/2018_SCADA_Flows.csv": "7f7e8625c9d92b083ee079a54cffb9ef803876de1e35017c1da0455968daf3ff",
+      "data/raw/battledim/2018_SCADA_Levels.csv": "a1fc5f0229448a620b6220f4d079b3162a255b3070acdce448608fbfc760903c",
+      "data/raw/open_meteo/sceaux_hourly_utc_2006-12-01_2010-11-30.json": "9c8f001b581317c99c52f31d558eb1b8b4a1b160a6bc7255f5af8878c65d4c0e"
+    }
+  }
+]

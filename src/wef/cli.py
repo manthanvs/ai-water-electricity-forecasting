@@ -60,7 +60,7 @@ def run_stage(name: str, cfg: dict) -> None:
         "timestamp": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "git_commit": _git_commit(),
         "config_hash": _config_hash(),
-        "inputs": {str(Path(p).resolve().relative_to(ROOT)): sha256(p) for p in inputs},
+        "inputs": {Path(p).resolve().relative_to(ROOT).as_posix(): sha256(p) for p in inputs},
     })
     write_json(MANIFEST, manifest)
     print(f"[{name}] done")
