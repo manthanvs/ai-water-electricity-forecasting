@@ -66,17 +66,23 @@ models:
   sarima:
     d1: {seasonal_period: 24, window_weeks: 8}
     w1: {seasonal_period: 7}
-    grid: {p: [0, 1, 2], d: [0, 1], q: [0, 1, 2], P: [0, 1], D: [0, 1], Q: [0, 1]}
+    # d = 0 and D = 1 fixed so that AIC values are comparable across the grid
+    pq: [[1, 0], [1, 1], [2, 1]]
+    PQ: [[0, 1], [1, 1]]
+  # relative: model the target relative to the recent level (chosen on validation)
   ridge:
     alpha: [0.1, 1.0, 10.0, 100.0]
+    relative: [false, true]
   random_forest:
     n_estimators: [200]
     max_depth: [10, 20]
     min_samples_leaf: [5, 20]
+    relative: [false, true]
   xgboost:
     n_estimators: 2000
     learning_rate: [0.03, 0.1]
     max_depth: [4, 6, 8]
+    relative: [false, true]
     early_stopping_rounds: 50
   deep:
     window: {d1: 168, w1: 56}

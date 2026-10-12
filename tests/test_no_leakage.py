@@ -32,7 +32,7 @@ def test_features_use_only_data_before_origin(resource, horizon):
         h2.loc[h2.index >= o, "value"] = rng.uniform(0, 100, (h2.index >= o).sum())
         d2.loc[d2.index >= o, "value"] = rng.uniform(0, 1e4, (d2.index >= o).sum())
         pert = build.tabular(resource, horizon, cfg, h2, d2)
-        cols = ["step", *build.LAGS[horizon], *build.CALENDAR[horizon]]
+        cols = ["step", "level", *build.LAGS[horizon], *build.CALENDAR[horizon]]
         a = base.loc[base.origin <= o].set_index(["origin", "step"])[cols[1:]]
         b = pert.set_index(["origin", "step"]).reindex(a.index)[cols[1:]]
         pd.testing.assert_frame_equal(a, b)

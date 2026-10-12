@@ -25,3 +25,9 @@
 
 - Added `wef.features.build` (origin-formulated tables in `data/processed/features/`, deep-model windows, eval mask); `prepare` stage now runs cleaning + features.
 - Added `tests/test_no_leakage.py` (perturbation test) and `tests/test_splits.py`.
+
+## Phase 4 - baselines, statistical and machine learning models (2026-10-12)
+
+- Added `wef.models.registry` (Data, Model interface, tuning, `train` stage), `baselines.py` (seasonal naive), `classical.py` (SARIMA), `ml.py` (Ridge, Random Forest, XGBoost with the relative-to-level option).
+- Added `wef.evaluation.metrics` (MAE, RMSE, MAPE with exclusion, sMAPE, R2, peak MAE, skill) and `wef.evaluation.backtest` (`evaluate` stage: `results/metrics.json`, selection by validation MAE, Diebold-Mariano test, error by hour).
+- Feature tables now keep rows with a missing target and carry a `level` column; tests updated (`tests/test_metrics.py`).

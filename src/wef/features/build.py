@@ -7,8 +7,9 @@ known hour is D-1 23:00). One row per (origin, step):
   W1: step s = 0..6, target day D + s.        Lags d-7, d-14, d-21, d-28 (all >= 7 days old), mean of the last
       28 days (D-28..D-1).
 Weather and calendar are taken at the target time; weather is observed weather standing in for a forecast
-("perfect weather forecast" assumption). Missing lags (long gaps) stay NaN; rows with a missing target are
-dropped. `eval_ok` marks origins whose full target window and seasonal-naive inputs are present.
+("perfect weather forecast" assumption). `level` (mean of the last 168 h for D1, last 28 days for W1, at the
+origin) is not a feature; models may use it to work relative to the recent level. Missing lags and targets (long gaps) stay NaN: training skips rows
+with a missing target, and `eval_ok` marks origins whose full target window and seasonal-naive inputs are present.
 """
 import holidays
 import numpy as np
@@ -84,6 +85,7 @@ def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily
             df[f"lag_{k}"] = at(t - pd.Timedelta(hours=k))
         df["same_hour_mean_7d"] = np.nanmean(np.stack([at(t - pd.Timedelta(hours=24 * k)) for k in range(1, 8)]), 0)
         df["prev_day_mean"] = y.resample("D").mean().shift(1).reindex(pd.DatetimeIndex(o)).to_numpy()
+        df["level"] = y.rolling(168, min_periods=24).mean().shift(1).reindex(pd.DatetimeIndex(o)).to_numpy()
         w = hourly.reindex(t)
         df["temperature_c"], df["humidity_pct"], df["rain_mm"] = (w[c].to_numpy() for c in ["temperature_c", "humidity_pct", "rain_mm"])
         df["cdh"] = np.maximum(0, df["temperature_c"] - fc["cooling_base_c"])
@@ -92,6 +94,7 @@ def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily
         for k in (7, 14, 21, 28):
             df[f"lag_{k}"] = at(t - pd.Timedelta(days=k))
         df["mean_28d"] = y.rolling(28, min_periods=21).mean().shift(1).reindex(pd.DatetimeIndex(o)).to_numpy()
+        df["level"] = y.rolling(28, min_periods=7).mean().shift(1).reindex(pd.DatetimeIndex(o)).to_numpy()
         w = daily.reindex(t)
         for c in ["temperature_mean", "temperature_max", "temperature_min"]:
             df[c] = w[c].to_numpy()
@@ -107,15 +110,15 @@ def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily
     df.loc[_split_of(last_t, sp) != df["split"], "split"] = None
     complete = df.groupby("origin")[["y", NAIVE[horizon]]].transform(lambda c: c.notna().all()).all(axis=1)
     df["eval_ok"] = complete
-    return df[df["split"].notna() & df["y"].notna()].reset_index(drop=True)
+    return df[df["split"].notna()].reset_index(drop=True)
 
 
 def windows(table: pd.DataFrame, series: pd.Series, horizon: str, window: int, weather: bool = True) -> dict:
-    """Deep-model tensors for every origin in `table` (assumed complete target windows):
+    """Deep-model tensors for every origin in `table`:
     seq (n, window, 5): past values and their hour/day-of-week encodings, ending at origin - 1 step;
-    fut (n, steps, k): calendar (+ weather) of the target steps; y (n, steps)."""
+    fut (n, steps, k): calendar (+ weather) of the target steps; y (n, steps), NaN where missing."""
     n = STEPS[horizon]
-    t = table.groupby("origin").filter(lambda g: len(g) == n).sort_values(["origin", "step"])
+    t = table.sort_values(["origin", "step"])
     origins = pd.DatetimeIndex(t["origin"].unique())
     unit = pd.Timedelta(hours=1) if horizon == "d1" else pd.Timedelta(days=1)
     rel = np.arange(-window, 0)
