@@ -70,7 +70,7 @@
     "epochs_run": 17,
     "best_epoch": 9,
     "val_loss": 0.44614,
-    "train_seconds": 14.9,
+    "train_seconds": 14.7,
     "n_train_windows": 1089,
     "n_val_windows": 176
   },
@@ -145,7 +145,7 @@
     "epochs_run": 17,
     "best_epoch": 9,
     "val_loss": 0.44574,
-    "train_seconds": 17.1,
+    "train_seconds": 16.8,
     "n_train_windows": 1089,
     "n_val_windows": 176
   },
@@ -220,7 +220,7 @@
     "epochs_run": 18,
     "best_epoch": 10,
     "val_loss": 0.45161,
-    "train_seconds": 7.7,
+    "train_seconds": 8.0,
     "n_train_windows": 1089,
     "n_val_windows": 176
   },
@@ -368,7 +368,7 @@
     "epochs_run": 15,
     "best_epoch": 7,
     "val_loss": 0.35699,
-    "train_seconds": 6.0,
+    "train_seconds": 6.1,
     "n_train_windows": 1065,
     "n_val_windows": 158
   },
@@ -517,7 +517,7 @@
     "epochs_run": 23,
     "best_epoch": 15,
     "val_loss": 0.00745,
-    "train_seconds": 12.9,
+    "train_seconds": 13.2,
     "n_train_windows": 663,
     "n_val_windows": 70
   },
@@ -592,7 +592,7 @@
     "epochs_run": 27,
     "best_epoch": 19,
     "val_loss": 0.00731,
-    "train_seconds": 16.4,
+    "train_seconds": 16.6,
     "n_train_windows": 663,
     "n_val_windows": 70
   },
@@ -667,7 +667,7 @@
     "epochs_run": 26,
     "best_epoch": 18,
     "val_loss": 0.00744,
-    "train_seconds": 8.2,
+    "train_seconds": 7.4,
     "n_train_windows": 663,
     "n_val_windows": 70
   },
@@ -815,7 +815,7 @@
     "epochs_run": 9,
     "best_epoch": 1,
     "val_loss": 0.01641,
-    "train_seconds": 3.3,
+    "train_seconds": 3.0,
     "n_train_windows": 651,
     "n_val_windows": 64
   },
@@ -1014,7 +1014,7 @@
     "epochs_run": 19,
     "best_epoch": 11,
     "val_loss": 0.37892,
-    "train_seconds": 7.4,
+    "train_seconds": 7.6,
     "n_train_windows": 1065,
     "n_val_windows": 158
   },
@@ -1139,7 +1139,7 @@
     "epochs_run": 9,
     "best_epoch": 1,
     "val_loss": 0.01762,
-    "train_seconds": 2.4,
+    "train_seconds": 2.5,
     "n_train_windows": 651,
     "n_val_windows": 64
   }

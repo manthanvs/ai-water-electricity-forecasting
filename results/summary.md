@@ -1,6 +1,6 @@
 # Summary of findings
 
-Generated from results/metrics.json (2026-10-12T18:10:18+00:00). Test-period numbers; every model is scored on the same forecast origins.
+Generated from results/metrics.json (2026-10-12T18:54:13+00:00). Test-period numbers; every model is scored on the same forecast origins.
 
 ## Electricity, next-day hourly (D1)
 

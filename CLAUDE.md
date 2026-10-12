@@ -73,7 +73,8 @@ If an instruction file and this file disagree, this file wins. If either disagre
 |   |-- evaluation/                metrics.py, backtest.py
 |   |-- anomaly/                   residual.py, iforest.py, inject.py, evaluate.py
 |   |-- optimise/                  pump_schedule.py, peak_alerts.py
-|   `-- viz/                       style.py, figures.py, architecture.py
+|   |-- viz/                       style.py, figures.py, architecture.py
+|   `-- service.py                 shared read-only functions behind the API and the dashboard's offline fallback
 |-- api/app.py                     Flask REST API
 |-- dashboard/app.py               Streamlit dashboard (multi-page)
 |-- powerbi/                       export.py, exports/*.csv, POWERBI_BUILD_GUIDE.md
@@ -133,7 +134,7 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 8 - resource optimisation (2026-10-12: LP feasible on all 84 test days; savings vs both baselines and perfect foresight in optimisation.json)
 - [x] Phase 9 - Flask API and Streamlit dashboard (2026-10-13: API tests cover every endpoint incl. invalid input; all six dashboard pages render with the API running and stopped)
 - [x] Phase 10 - Power BI export and build guide (2026-10-13: eight CSVs load with pandas; dimension keys unique and cover every fact; Manthan builds the .pbix and saves screenshots)
-- [ ] Phase 11 - figure freeze, tests, README, release tag
+- [ ] Phase 11 - figure freeze, tests, README, release tag (2026-10-13: all figures in both styles, 67 tests pass, README written, clean re-run of `all` in 17 min reproduced every results number exactly; TAG PENDING Manthan's confirmation of the numbers)
 
 Report (02_SEMINAR_REPORT.md)
 - [ ] R1 - bibliography verified

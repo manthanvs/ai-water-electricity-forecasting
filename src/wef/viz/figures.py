@@ -330,14 +330,112 @@ def fig_pump_schedule():
     style.save_both("fig_pump_schedule", draw)
 
 
+# --------------------------------------------------------------------------- screenshots (Phase 11)
+def _free_port(preferred=0):
+    """The preferred port if it is free (so screenshots show the documented port), else any free port."""
+    import socket
+    for port in (preferred, 0):
+        with socket.socket() as sock:
+            try:
+                sock.bind(("127.0.0.1", port))
+                return sock.getsockname()[1]
+            except OSError:
+                continue
+
+
+def _wait_http(url, timeout=120):
+    import time
+
+    import requests
+    t0 = time.time()
+    while time.time() - t0 < timeout:
+        try:
+            if requests.get(url, timeout=2).ok:
+                return
+        except requests.RequestException:
+            pass
+        time.sleep(1)
+    raise TimeoutError(url)
+
+
+def fig_dashboard():
+    """Start the API and the dashboard, open the Forecast page in headless Chromium/Edge (1600 x 900), save the
+    colour screenshot for the slides and a greyscale copy for the report. Skips with a warning if no browser works."""
+    import os
+    import subprocess
+    import sys
+
+    from PIL import Image
+    from wef.utils.paths import ROOT
+    api_port, ui_port = _free_port(5000), _free_port(8501)
+    env = {**os.environ, "WEF_API_URL": f"http://127.0.0.1:{api_port}"}
+    procs = [subprocess.Popen([sys.executable, "-m", "flask", "--app", "api.app", "run", "--port", str(api_port)], cwd=ROOT,
+                              env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL),
+             subprocess.Popen([sys.executable, "-m", "streamlit", "run", "dashboard/app.py", "--server.port", str(ui_port),
+                               "--server.headless", "true", "--browser.gatherUsageStats", "false"], cwd=ROOT, env=env,
+                              stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)]
+    out = {m: ROOT / "figures" / m / "fig_dashboard.png" for m in ("slides", "report")}
+    try:
+        _wait_http(f"http://127.0.0.1:{api_port}/api/health")
+        _wait_http(f"http://127.0.0.1:{ui_port}/_stcore/health")
+        from playwright.sync_api import Error, sync_playwright
+        with sync_playwright() as pw:
+            browser = None
+            for kw in ({"channel": "msedge"}, {"channel": "chrome"}, {}):
+                try:
+                    browser = pw.chromium.launch(**kw)
+                    break
+                except Error:
+                    continue
+            if browser is None:
+                print("  WARNING fig_dashboard skipped: no Chromium/Edge/Chrome found (run: playwright install chromium)")
+                return
+            page = browser.new_page(viewport={"width": 1600, "height": 900})
+            page.goto(f"http://127.0.0.1:{ui_port}", wait_until="networkidle")
+            page.get_by_text("Forecast", exact=True).first.click()
+            page.wait_for_selector(".js-plotly-plot", timeout=120000)
+            page.wait_for_timeout(4000)
+            out["slides"].parent.mkdir(parents=True, exist_ok=True)
+            page.screenshot(path=str(out["slides"]))
+            browser.close()
+        out["report"].parent.mkdir(parents=True, exist_ok=True)
+        Image.open(out["slides"]).convert("L").save(out["report"])
+    finally:
+        for proc in procs:
+            proc.terminate()
+
+
+def convert_raw_screenshots():
+    """Power BI screenshots saved by hand in figures/raw_screenshots/*.png -> slide copy and greyscale report copy."""
+    from PIL import Image
+    from wef.utils.paths import ROOT
+    for src in sorted((ROOT / "figures" / "raw_screenshots").glob("*.png")):
+        img = Image.open(src).convert("RGB")
+        for mode in ("slides", "report"):
+            dst = ROOT / "figures" / mode / src.name
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            (img if mode == "slides" else img.convert("L")).save(dst)
+        print(f"  converted {src.name}")
+
+
 EDA = [fig_eda_profiles, fig_eda_weekly_heatmap, fig_eda_temperature, fig_eda_missing]
 RESULT_FIGS = [fig_model_comparison, fig_forecast_electricity, fig_forecast_water, fig_error_by_hour, fig_training_curves]
 ANOMALY_FIGS = [fig_anomaly_water, fig_anomaly_electricity]
-FIGURES = EDA + RESULT_FIGS + ANOMALY_FIGS + [fig_pump_schedule]  # later phases append their figures here
+def _diagrams():
+    from wef.viz.architecture import fig_architecture, fig_pipeline
+    return [fig_architecture, fig_pipeline]
+
+
+FIGURES = EDA + RESULT_FIGS + ANOMALY_FIGS + [fig_pump_schedule]
+# ids required by section E of 01_PROJECT_BUILD.md (tests check both versions exist; report versions greyscale)
+REQUIRED = ["fig_architecture", "fig_pipeline", "fig_eda_profiles", "fig_eda_temperature", "fig_forecast_electricity",
+            "fig_forecast_water", "fig_model_comparison", "fig_anomaly_water", "fig_anomaly_electricity", "fig_pump_schedule",
+            "fig_dashboard"]
 
 
 def run(cfg) -> list:
-    for f in FIGURES:
+    for f in _diagrams() + FIGURES + [fig_dashboard]:
         f()
         print(f"  {f.__name__}")
+    convert_raw_screenshots()
     return []

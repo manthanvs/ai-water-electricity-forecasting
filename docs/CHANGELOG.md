@@ -62,3 +62,9 @@
 ## Phase 10 - Power BI dataset and build guide (2026-10-13)
 
 - Added `powerbi/export.py` (`export-powerbi` stage, eight CSV tables) and `powerbi/POWERBI_BUILD_GUIDE.md`; optimise stage writes `results/pump_schedule_days.csv`; `tests/test_powerbi.py`.
+
+## Phase 11 - figure freeze, tests, README (2026-10-13)
+
+- Added `wef.viz.architecture` (`fig_architecture`, `fig_pipeline`), automatic `fig_dashboard` capture and Power BI screenshot conversion in the `figures` stage, `tests/test_figures.py`, `README.md`.
+- Clean end-to-end re-run (17 min) reproduced every results number exactly. Full test suite: 67 passed.
+- Release tag pending confirmation.

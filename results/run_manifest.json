@@ -1,9 +1,9 @@
 [
   {
     "stage": "download",
-    "timestamp": "2026-10-12T13:54:56+00:00",
-    "git_commit": "19ddf4588737a06fc193e7aa82df98cbd874d6f3",
-    "config_hash": "003a8005b666a824bb67cf177810ddf3a9081e626b6002b773b8888b45815004",
+    "timestamp": "2026-10-12T18:38:12+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
       "data/raw/uci_electricity/household_power_consumption.zip": "9f84b46ade8a2d8e1286ec4b2b6c2987a45a755c59f263be3b3b3d10dfbda3ff",
       "data/raw/bwdf/InflowData.xlsx": "c239bdb5c98eee00d94fb68b6b0405c39c3ac9b032c6fd4c94bb8d12d00640c0",
@@ -19,47 +19,9 @@
   },
   {
     "stage": "prepare",
-    "timestamp": "2026-10-12T14:02:50+00:00",
-    "git_commit": "aff45827064190762cbe125435bc2b370a2bc9bc",
-    "config_hash": "5d853cbdc49c311ddc70e334caa71e765aeb7e30d6da27eb31e7eb144c4cf8b6",
-    "inputs": {
-      "data/raw/battledim/2018_Fixed_Leakages_Report.txt": "5dba254c623b867a0a91150e2b5539842ca05a989fde6cf2754065d5b415a8f3",
-      "data/raw/battledim/2018_Leakages.csv": "e1abd9d549a18880d8ae704dc90c06c8a3d5aecbd2541fa091548ef392084ba6",
-      "data/raw/battledim/2018_SCADA_Flows.csv": "7f7e8625c9d92b083ee079a54cffb9ef803876de1e35017c1da0455968daf3ff",
-      "data/raw/battledim/2018_SCADA_Levels.csv": "a1fc5f0229448a620b6220f4d079b3162a255b3070acdce448608fbfc760903c",
-      "data/raw/battledim/dataset_configuration.yaml": "23471d8989d82c66a4909816ea248f7588d8ccc910e142265a7ea48db940b6a0",
-      "data/raw/battledim/README.txt": "e6a3e83bdf7f116c47c72640de6e4785fd3437b96428448adf9ca76f066f2226",
-      "data/raw/bwdf/InflowData.xlsx": "c239bdb5c98eee00d94fb68b6b0405c39c3ac9b032c6fd4c94bb8d12d00640c0",
-      "data/raw/bwdf/WeatherData.xlsx": "70729f184c0b47abde2ef2686e28e013693641782d6f1b26b3f28de9c8d0c62c",
-      "data/raw/checksums.json": "a1dde1ab39ff67315a6045155ccf9c1e7908d83d9d611e0305fc4940c18a0b3b",
-      "data/raw/open_meteo/sceaux_hourly_utc_2006-12-01_2010-11-30.json": "9c8f001b581317c99c52f31d558eb1b8b4a1b160a6bc7255f5af8878c65d4c0e",
-      "data/raw/uci_electricity/household_power_consumption.zip": "9f84b46ade8a2d8e1286ec4b2b6c2987a45a755c59f263be3b3b3d10dfbda3ff"
-    }
-  },
-  {
-    "stage": "prepare",
-    "timestamp": "2026-10-12T14:08:35+00:00",
-    "git_commit": "f9d6368fb3b3c4818fdf032ed5b5089ce07e868b",
-    "config_hash": "49a896546f672f024cb025290cb1409c4bcabdfeadf73010faf481b1729e72f4",
-    "inputs": {
-      "data/raw/battledim/2018_Fixed_Leakages_Report.txt": "5dba254c623b867a0a91150e2b5539842ca05a989fde6cf2754065d5b415a8f3",
-      "data/raw/battledim/2018_Leakages.csv": "e1abd9d549a18880d8ae704dc90c06c8a3d5aecbd2541fa091548ef392084ba6",
-      "data/raw/battledim/2018_SCADA_Flows.csv": "7f7e8625c9d92b083ee079a54cffb9ef803876de1e35017c1da0455968daf3ff",
-      "data/raw/battledim/2018_SCADA_Levels.csv": "a1fc5f0229448a620b6220f4d079b3162a255b3070acdce448608fbfc760903c",
-      "data/raw/battledim/dataset_configuration.yaml": "23471d8989d82c66a4909816ea248f7588d8ccc910e142265a7ea48db940b6a0",
-      "data/raw/battledim/README.txt": "e6a3e83bdf7f116c47c72640de6e4785fd3437b96428448adf9ca76f066f2226",
-      "data/raw/bwdf/InflowData.xlsx": "c239bdb5c98eee00d94fb68b6b0405c39c3ac9b032c6fd4c94bb8d12d00640c0",
-      "data/raw/bwdf/WeatherData.xlsx": "70729f184c0b47abde2ef2686e28e013693641782d6f1b26b3f28de9c8d0c62c",
-      "data/raw/checksums.json": "a1dde1ab39ff67315a6045155ccf9c1e7908d83d9d611e0305fc4940c18a0b3b",
-      "data/raw/open_meteo/sceaux_hourly_utc_2006-12-01_2010-11-30.json": "9c8f001b581317c99c52f31d558eb1b8b4a1b160a6bc7255f5af8878c65d4c0e",
-      "data/raw/uci_electricity/household_power_consumption.zip": "9f84b46ade8a2d8e1286ec4b2b6c2987a45a755c59f263be3b3b3d10dfbda3ff"
-    }
-  },
-  {
-    "stage": "prepare",
-    "timestamp": "2026-10-12T14:15:06+00:00",
-    "git_commit": "f9d6368fb3b3c4818fdf032ed5b5089ce07e868b",
-    "config_hash": "371898e2ddccf1bae1506d1c977edf70da41e3c297b4ef1342f040e0759babd3",
+    "timestamp": "2026-10-12T18:38:20+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
       "data/raw/battledim/2018_Fixed_Leakages_Report.txt": "5dba254c623b867a0a91150e2b5539842ca05a989fde6cf2754065d5b415a8f3",
       "data/raw/battledim/2018_Leakages.csv": "e1abd9d549a18880d8ae704dc90c06c8a3d5aecbd2541fa091548ef392084ba6",
@@ -76,87 +38,33 @@
   },
   {
     "stage": "train",
-    "timestamp": "2026-10-12T15:17:36+00:00",
-    "git_commit": "f9d6368fb3b3c4818fdf032ed5b5089ce07e868b",
-    "config_hash": "371898e2ddccf1bae1506d1c977edf70da41e3c297b4ef1342f040e0759babd3",
+    "timestamp": "2026-10-12T18:54:13+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
-      "data/processed/features/electricity_d1.parquet": "765b1ae82493202fe9852eff5ae1676fb2a29c8c07777c99757a12258592c5ff",
-      "data/processed/features/electricity_w1.parquet": "27b829086cab131d4229671a520d1fea9ccc17ef6e78442bf7b6ea309826e018",
-      "data/processed/features/water_d1.parquet": "3e0c3f02d182be7a4341a5b837e7a19c6601891a8a50f4eb2860ecfc3396bdab",
-      "data/processed/features/water_w1.parquet": "04e48cb7c95fed82272ca4e7cbc4f1b2853bddbc3ecf6821d4f9d08ca7b0c47d"
+      "data/processed/features/electricity_d1.parquet": "1beb187fd185921a07c938ea826b81f8637fff68a1f34e8e6339fd549f4b1667",
+      "data/processed/features/electricity_w1.parquet": "aae15c5e7f2241d4a57d91b1c088ce6cd31ed0786887d38a4452a29b79540663",
+      "data/processed/features/water_d1.parquet": "267d63dd03048a0c7f8e8dc67dad327f6d47902374a15a86041dd8f13ddd36d9",
+      "data/processed/features/water_w1.parquet": "59a6f7c45b320d04ded54d62cad5f134b81bc555ab7284f24d4d061bce44e264"
     }
   },
   {
     "stage": "evaluate",
-    "timestamp": "2026-10-12T15:17:55+00:00",
-    "git_commit": "f9d6368fb3b3c4818fdf032ed5b5089ce07e868b",
-    "config_hash": "371898e2ddccf1bae1506d1c977edf70da41e3c297b4ef1342f040e0759babd3",
+    "timestamp": "2026-10-12T18:54:30+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
-      "results/predictions/electricity_d1.parquet": "6cd83ace6d47e2220b85a8251a784ef1718c5b69c6eb3a39bbd6837caa9c1d49",
-      "results/predictions/electricity_w1.parquet": "d0dcc65f613788dc462eb59b166017643c47067f07108fe917e88f5dab1b4b72",
-      "results/predictions/water_d1.parquet": "22fb45ea4567c0da179242ab6bda55a82e9d02470aa40310a483ae81bcc7546d",
-      "results/predictions/water_w1.parquet": "ad5f708869faa75ecd0552d728305005ae4c756dc9f46e5cef2a3a114ee190f4"
-    }
-  },
-  {
-    "stage": "evaluate",
-    "timestamp": "2026-10-12T18:09:58+00:00",
-    "git_commit": "55b88346fb5880fbee2e83cc9509bd2b30805333",
-    "config_hash": "565eec1544d7012180e2d8cf898f2b813a7ce4d3070bea225ce307cc3732f26d",
-    "inputs": {
-      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
-      "results/predictions/electricity_w1.parquet": "318ba7abca94a5d387581dc18fa93e238648abf840abf71dc2a2b1a2cb4e1c3c",
-      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
-      "results/predictions/water_w1.parquet": "789a42196dd804330b60403bc7ae5ca7b805c30c997734551c61195da5e35e68"
-    }
-  },
-  {
-    "stage": "evaluate",
-    "timestamp": "2026-10-12T18:10:36+00:00",
-    "git_commit": "55b88346fb5880fbee2e83cc9509bd2b30805333",
-    "config_hash": "565eec1544d7012180e2d8cf898f2b813a7ce4d3070bea225ce307cc3732f26d",
-    "inputs": {
-      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
-      "results/predictions/electricity_w1.parquet": "318ba7abca94a5d387581dc18fa93e238648abf840abf71dc2a2b1a2cb4e1c3c",
-      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
-      "results/predictions/water_w1.parquet": "789a42196dd804330b60403bc7ae5ca7b805c30c997734551c61195da5e35e68"
+      "results/predictions/electricity_d1.parquet": "70c3f33f808c097256ea68f44042b85edec7943c8522b5baba9fb3e2038f3dd0",
+      "results/predictions/electricity_w1.parquet": "0687aebfcc0bd6bd125f1cc100e111d6b5282ccbac508634800c1386eecebf2d",
+      "results/predictions/water_d1.parquet": "d16ea0d96912b214ee171df795fe4d5c85d5cd9221c538defe410203447efda0",
+      "results/predictions/water_w1.parquet": "2b822ee84c44d4a52e270a5b111b70c87b70648c95e83ae24fb5b40cf1b1ee46"
     }
   },
   {
     "stage": "anomaly",
-    "timestamp": "2026-10-12T18:14:51+00:00",
-    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
-    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
-    "inputs": {
-      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
-      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
-    }
-  },
-  {
-    "stage": "anomaly",
-    "timestamp": "2026-10-12T18:15:53+00:00",
-    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
-    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
-    "inputs": {
-      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
-      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
-    }
-  },
-  {
-    "stage": "anomaly",
-    "timestamp": "2026-10-12T18:16:30+00:00",
-    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
-    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
-    "inputs": {
-      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
-      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
-    }
-  },
-  {
-    "stage": "anomaly",
-    "timestamp": "2026-10-12T18:17:14+00:00",
-    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
-    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
+    "timestamp": "2026-10-12T18:54:40+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
       "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
       "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
@@ -164,44 +72,29 @@
   },
   {
     "stage": "optimise",
-    "timestamp": "2026-10-12T18:19:54+00:00",
-    "git_commit": "c374ac05e2f98cbb777fd124aa015842ad72752d",
+    "timestamp": "2026-10-12T18:54:45+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
     "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
-      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
-      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
+      "results/predictions/water_d1.parquet": "d16ea0d96912b214ee171df795fe4d5c85d5cd9221c538defe410203447efda0",
+      "results/predictions/electricity_d1.parquet": "70c3f33f808c097256ea68f44042b85edec7943c8522b5baba9fb3e2038f3dd0",
       "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
     }
   },
   {
-    "stage": "optimise",
-    "timestamp": "2026-10-12T18:20:40+00:00",
-    "git_commit": "c374ac05e2f98cbb777fd124aa015842ad72752d",
+    "stage": "figures",
+    "timestamp": "2026-10-12T18:55:04+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
     "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
-    "inputs": {
-      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
-      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
-      "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
-    }
-  },
-  {
-    "stage": "optimise",
-    "timestamp": "2026-10-12T18:32:10+00:00",
-    "git_commit": "c0bf5762b22102ad5ec478ebac924ba741994f6b",
-    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
-    "inputs": {
-      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
-      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
-      "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
-    }
+    "inputs": {}
   },
   {
     "stage": "export-powerbi",
-    "timestamp": "2026-10-12T18:32:40+00:00",
-    "git_commit": "c0bf5762b22102ad5ec478ebac924ba741994f6b",
+    "timestamp": "2026-10-12T18:55:06+00:00",
+    "git_commit": "b3243460ef3ed2b31afc2d13d23b1c3ba3719267",
     "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
     "inputs": {
-      "results/metrics.json": "f7c1af525c9f1a3415d2826512c3370886fb558408b9b495db37f2589a2a036b",
+      "results/metrics.json": "133fff96ed707389ec660cb9e16a90b713a915a8bb31d282053a04331f235dfe",
       "results/anomaly.json": "c0f76a96c3ad7acc3a50f981db2da7ef597d1e32889cd8b19110c2b3fef03ae4",
       "results/anomaly_events.csv": "cdf47d3387e5f281e47abd7346b67a3c07b29822fca37f1a509a032b379c7d9b",
       "results/pump_schedule_days.csv": "a82688819d3b55a495f70ddb84ec85c5aa854992ac6a7eded1f2e2ff8983a624"
