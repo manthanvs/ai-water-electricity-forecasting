@@ -116,7 +116,8 @@ def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily
 def windows(table: pd.DataFrame, series: pd.Series, horizon: str, window: int, weather: bool = True) -> dict:
     """Deep-model tensors for every origin in `table`:
     seq (n, window, 5): past values and their hour/day-of-week encodings, ending at origin - 1 step;
-    fut (n, steps, k): calendar (+ weather) of the target steps; y (n, steps), NaN where missing."""
+    fut (n, steps, k): calendar (+ weather) of the target steps; lags (n, steps, m): the lag-rule features of each
+    target step (all known at the origin); y (n, steps), NaN where missing."""
     n = STEPS[horizon]
     t = table.sort_values(["origin", "step"])
     origins = pd.DatetimeIndex(t["origin"].unique())
@@ -132,7 +133,8 @@ def windows(table: pd.DataFrame, series: pd.Series, horizon: str, window: int, w
                     np.sin(2 * np.pi * dow / 7), np.cos(2 * np.pi * dow / 7)], axis=-1)
     fut_cols = CALENDAR[horizon] + (WEATHER[horizon] if weather else [])
     fut = t[fut_cols].to_numpy(dtype="float64").reshape(len(origins), n, len(fut_cols))
-    return {"origins": origins, "seq": seq, "fut": fut, "y": t["y"].to_numpy().reshape(len(origins), n),
+    lags = t[LAGS[horizon]].to_numpy(dtype="float64").reshape(len(origins), n, len(LAGS[horizon]))
+    return {"origins": origins, "seq": seq, "fut": fut, "lags": lags, "y": t["y"].to_numpy().reshape(len(origins), n),
             "split": t.groupby("origin")["split"].first().to_numpy(),
             "eval_ok": t.groupby("origin")["eval_ok"].first().to_numpy()}
 
