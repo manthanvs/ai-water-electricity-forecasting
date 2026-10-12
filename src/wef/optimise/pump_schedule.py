@@ -134,6 +134,9 @@ def run(cfg) -> list:
     actual = wide("y")
     plans = {"selected_forecast": wide(sel), "seasonal_naive_forecast": wide("seasonal_naive"), "perfect_forecast": actual}
     res, schedules = run_days(plans, actual, P)
+    per_day = pd.DataFrame([{"date": day.date(), "plan": name, **{k: sim[k] for k in ("cost", "energy_kwh", "offpeak_kwh", "peak_kwh", "corrective_m3", "spill_m3")}}
+                            for (name, day), (_, sim) in schedules.items()])
+    per_day.sort_values(["date", "plan"]).to_csv(RESULTS / "pump_schedule_days.csv", index=False)
     base = {k: res[k]["cost"] for k in ("demand_following", "level_trigger")}
     summary = {}
     for name in plans:

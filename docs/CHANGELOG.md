@@ -58,3 +58,7 @@
 
 - Added `wef.service`, `api/app.py`, `dashboard/app.py`, `.streamlit/config.toml`; `build.tabular(inference=True)`; `pump_schedule.params_from`.
 - Tests: `tests/test_api.py`, `tests/test_dashboard.py`.
+
+## Phase 10 - Power BI dataset and build guide (2026-10-13)
+
+- Added `powerbi/export.py` (`export-powerbi` stage, eight CSV tables) and `powerbi/POWERBI_BUILD_GUIDE.md`; optimise stage writes `results/pump_schedule_days.csv`; `tests/test_powerbi.py`.

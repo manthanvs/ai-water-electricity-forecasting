@@ -16,3 +16,4 @@ models/*.pkl
 # Stray copies of the reference documents at the repo root (canonical copies live in docs/reference/)
 /*.docx
 .claude/
+powerbi/exports/

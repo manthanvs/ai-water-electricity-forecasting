@@ -183,5 +183,28 @@
       "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
       "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
     }
+  },
+  {
+    "stage": "optimise",
+    "timestamp": "2026-10-12T18:32:10+00:00",
+    "git_commit": "c0bf5762b22102ad5ec478ebac924ba741994f6b",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
+    "inputs": {
+      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
+      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
+      "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
+    }
+  },
+  {
+    "stage": "export-powerbi",
+    "timestamp": "2026-10-12T18:32:40+00:00",
+    "git_commit": "c0bf5762b22102ad5ec478ebac924ba741994f6b",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
+    "inputs": {
+      "results/metrics.json": "f7c1af525c9f1a3415d2826512c3370886fb558408b9b495db37f2589a2a036b",
+      "results/anomaly.json": "c0f76a96c3ad7acc3a50f981db2da7ef597d1e32889cd8b19110c2b3fef03ae4",
+      "results/anomaly_events.csv": "cdf47d3387e5f281e47abd7346b67a3c07b29822fca37f1a509a032b379c7d9b",
+      "results/pump_schedule_days.csv": "a82688819d3b55a495f70ddb84ec85c5aa854992ac6a7eded1f2e2ff8983a624"
+    }
   }
 ]
