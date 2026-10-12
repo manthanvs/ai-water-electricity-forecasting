@@ -161,5 +161,27 @@
       "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
       "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
     }
+  },
+  {
+    "stage": "optimise",
+    "timestamp": "2026-10-12T18:19:54+00:00",
+    "git_commit": "c374ac05e2f98cbb777fd124aa015842ad72752d",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
+    "inputs": {
+      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
+      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
+      "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
+    }
+  },
+  {
+    "stage": "optimise",
+    "timestamp": "2026-10-12T18:20:40+00:00",
+    "git_commit": "c374ac05e2f98cbb777fd124aa015842ad72752d",
+    "config_hash": "09198fadb12d11908f5edb920c3f1b629687d3b4ba91f60bc2f05eae3769e248",
+    "inputs": {
+      "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
+      "results/predictions/electricity_d1.parquet": "c69d74b787a968adc7037c8a5b7024baf8ba9bfed3397785444e53e57cd320e6",
+      "config/optimisation.yaml": "f2d90cd62bab9670ae1a4ca11947d1ddfa08948df86b6de0693f771c4b8764cc"
+    }
   }
 ]

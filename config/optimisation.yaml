@@ -1,0 +1,31 @@
+# ILLUSTRATIVE ASSUMPTIONS - not data from a real utility.
+# Sized for the water series (DMA 3: test-period demand about 7-19 m3/h, about 250 m3/day). Costs are in
+# "cost units": the base energy rate is 1 cost unit per kWh and the time-of-day bands are multipliers of it,
+# so savings are reported in percent and no real tariff rate is assumed. Replace with a real tariff schedule
+# (and cite it) if one is supplied.
+label: ILLUSTRATIVE ASSUMPTIONS
+
+tank:
+  capacity_m3: 150
+  min_fraction: 0.20          # L_min = 30 m3
+  max_fraction: 0.95          # L_max = 142.5 m3
+  start_fraction: 0.50        # every day starts at 75 m3 and must end at or above it
+
+pump:
+  max_m3_per_h: 30            # about 1.6 x the peak hourly demand of the test period
+  kwh_per_m3: 0.5
+
+tariff:
+  base_rate: 1.0              # cost units per kWh
+  multipliers: {off_peak: 0.6, normal: 1.0, peak: 1.5}
+  # hour-of-day band (local time); hours not listed are "normal"
+  off_peak_hours: [23, 0, 1, 2, 3, 4, 5, 6]
+  peak_hours: [7, 8, 9, 10, 18, 19, 20, 21]
+
+level_trigger:                # baseline on/off controller
+  on_below_fraction: 0.40
+  off_above_fraction: 0.90
+
+peak_alerts:                  # electricity
+  quantile: 0.90              # of training-period daily peaks (hourly kW)
+  shiftable_submeters: [Sub_metering_2, Sub_metering_3]   # laundry; electric water heater and air conditioner

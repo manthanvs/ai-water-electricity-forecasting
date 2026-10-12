@@ -48,3 +48,8 @@
 
 - Added `wef.anomaly` (`inject.py`, `residual.py`, `iforest.py`, `evaluate.py`; `anomaly` stage), `results/anomaly.json`, `results/anomaly_events.csv`, figures `fig_anomaly_water` and `fig_anomaly_electricity`, `tests/test_anomaly.py`.
 - Config: BattLeDIM splits, anomaly grids and injection settings; `split_dates` and holiday helper generalised.
+
+## Phase 8 - resource optimisation (2026-10-12)
+
+- Added `config/optimisation.yaml` (ILLUSTRATIVE ASSUMPTIONS), `wef.optimise.pump_schedule` (LP, simulation with corrective pumping, baselines; `optimise` stage) and `wef.optimise.peak_alerts`.
+- Outputs: `results/optimisation.json`, `results/pump_schedule_example.csv`, figure `fig_pump_schedule`; `tests/test_lp.py`.

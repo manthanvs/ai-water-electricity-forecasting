@@ -291,10 +291,49 @@ def fig_anomaly_electricity():
     style.save_both("fig_anomaly_electricity", draw)
 
 
+# --------------------------------------------------------------------------- optimisation (Phase 8)
+def fig_pump_schedule():
+    """The median-saving test day: forecast and actual demand, optimised pumping, tank level, tariff bands."""
+    d = pd.read_csv(RESULTS / "pump_schedule_example.csv")
+    o = json.loads((RESULTS / "optimisation.json").read_text())["assumptions"]
+    cap = o["tank"]["capacity_m3"]
+    lmin, lmax = cap * o["tank"]["min_fraction"], cap * o["tank"]["max_fraction"]
+
+    def draw(mode, size):
+        fig, (a1, a2) = plt.subplots(2, 1, figsize=(size[0], size[1] * 1.45), sharex=True, height_ratios=[1.2, 1])
+        h = d["hour"].to_numpy()
+        for ax in (a1, a2):
+            for hr, band in zip(h, d["band"]):
+                if band != "normal":
+                    kw = ({"facecolor": "0.88" if band == "peak" else "white", "hatch": "..." if band == "off_peak" else None,
+                           "edgecolor": "0.7", "lw": 0} if mode == "report" else
+                          {"color": style.SLIDE_COLORS[7] if band == "peak" else style.SLIDE_COLORS[2], "alpha": 0.12, "lw": 0})
+                    ax.axvspan(hr - 0.5, hr + 0.5, zorder=0, **kw)
+        a1.bar(h, d["planned_pumping_m3h"], 0.7, label="Optimised pumping (plan)", zorder=2, **style.bar(mode, 1 if mode == "report" else 0))
+        a1.plot(h, d["forecast_m3h"], label="Forecast demand", marker="o" if mode == "report" else None, ms=2.5, zorder=3, **style.line(mode, 0 if mode == "report" else 1))
+        a1.plot(h, d["actual_m3h"], label="Actual demand", zorder=3, **(style.line(mode, 2) if mode == "report" else {"color": style.INK, "ls": ":"}))
+        a1.set_ylabel("m$^3$/h")
+        a1.legend(frameon=False, ncol=3, loc="upper left", bbox_to_anchor=(0, 1.22))
+        a2.plot(h, d["planned_level_m3"], label="Tank level, plan", **style.line(mode, 0 if mode == "report" else 0))
+        a2.plot(h, d["simulated_level_m3"], label="Tank level, actual demand", **(style.line(mode, 1) if mode == "report" else {"color": style.SLIDE_COLORS[1], "ls": "--"}))
+        for v in (lmin, lmax):
+            a2.axhline(v, color="0.3" if mode == "report" else style.INK2, lw=0.8, ls=":")
+        a2.text(23.4, lmax, "max", va="top", ha="right", fontsize=plt.rcParams["legend.fontsize"] - 1)
+        a2.text(23.4, lmin, "min", va="bottom", ha="right", fontsize=plt.rcParams["legend.fontsize"] - 1)
+        a2.set_ylabel("Tank level (m$^3$)")
+        a2.set_xlabel("Hour of day (grey: peak tariff; dotted: off-peak)" if mode == "report"
+                      else "Hour of day (red: peak tariff; green: off-peak)")
+        a2.set_xticks(range(0, 24, 3)); a2.set_xlim(-0.5, 23.5)
+        a2.legend(frameon=False, ncol=2, loc="lower left")
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_pump_schedule", draw)
+
+
 EDA = [fig_eda_profiles, fig_eda_weekly_heatmap, fig_eda_temperature, fig_eda_missing]
 RESULT_FIGS = [fig_model_comparison, fig_forecast_electricity, fig_forecast_water, fig_error_by_hour, fig_training_curves]
 ANOMALY_FIGS = [fig_anomaly_water, fig_anomaly_electricity]
-FIGURES = EDA + RESULT_FIGS + ANOMALY_FIGS  # later phases append their figures here
+FIGURES = EDA + RESULT_FIGS + ANOMALY_FIGS + [fig_pump_schedule]  # later phases append their figures here
 
 
 def run(cfg) -> list:

@@ -1,0 +1,200 @@
+{
+  "label": "ILLUSTRATIVE ASSUMPTIONS - tank, pump and tariff parameters are not from a real utility",
+  "assumptions": {
+    "label": "ILLUSTRATIVE ASSUMPTIONS",
+    "tank": {
+      "capacity_m3": 150,
+      "min_fraction": 0.2,
+      "max_fraction": 0.95,
+      "start_fraction": 0.5
+    },
+    "pump": {
+      "max_m3_per_h": 30,
+      "kwh_per_m3": 0.5
+    },
+    "tariff": {
+      "base_rate": 1.0,
+      "multipliers": {
+        "off_peak": 0.6,
+        "normal": 1.0,
+        "peak": 1.5
+      },
+      "off_peak_hours": [
+        23,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "peak_hours": [
+        7,
+        8,
+        9,
+        10,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    "level_trigger": {
+      "on_below_fraction": 0.4,
+      "off_above_fraction": 0.9
+    },
+    "peak_alerts": {
+      "quantile": 0.9,
+      "shiftable_submeters": [
+        "Sub_metering_2",
+        "Sub_metering_3"
+      ]
+    }
+  },
+  "units": {
+    "cost": "cost units (base rate 1 per kWh)",
+    "energy": "kWh",
+    "volume": "m3"
+  },
+  "water_pump": {
+    "series": "water DMA 3 test days with complete data",
+    "forecast_model": "xgboost",
+    "n_days": 84,
+    "results": {
+      "selected_forecast": {
+        "days": 84,
+        "infeasible_days": [],
+        "cost": 8455.809955954575,
+        "energy_kwh": 10906.754292920124,
+        "offpeak_kwh": 6253.018810046734,
+        "peak_kwh": 100.52637410629075,
+        "corrective_m3": 358.8283123396775,
+        "spill_m3": 69.97350160874117,
+        "unmet_m3": 0.0,
+        "low_level_hours": 42,
+        "days_with_corrective_pumping": 59
+      },
+      "seasonal_naive_forecast": {
+        "days": 84,
+        "infeasible_days": [],
+        "cost": 8527.764825,
+        "energy_kwh": 10942.197750000001,
+        "offpeak_kwh": 6223.93575,
+        "peak_kwh": 150.28275000000002,
+        "corrective_m3": 476.1989999999999,
+        "spill_m3": 72.65699999999995,
+        "unmet_m3": 0.0,
+        "low_level_hours": 50,
+        "days_with_corrective_pumping": 56
+      },
+      "perfect_forecast": {
+        "days": 84,
+        "infeasible_days": [],
+        "cost": 8348.02515,
+        "energy_kwh": 10813.85325,
+        "offpeak_kwh": 6164.57025,
+        "peak_kwh": 0.0,
+        "corrective_m3": 0.0,
+        "spill_m3": 0.0,
+        "unmet_m3": 0.0,
+        "low_level_hours": 0,
+        "days_with_corrective_pumping": 0
+      },
+      "demand_following": {
+        "days": 84,
+        "cost": 12080.94075,
+        "energy_kwh": 10813.853250000002,
+        "offpeak_kwh": 2429.4937500000005,
+        "peak_kwh": 4477.77,
+        "corrective_m3": 0.0,
+        "spill_m3": 0.0,
+        "unmet_m3": 0.0,
+        "low_level_hours": 0,
+        "days_with_corrective_pumping": 0
+      },
+      "level_trigger": {
+        "days": 84,
+        "cost": 9479.098049999999,
+        "energy_kwh": 11121.077249999998,
+        "offpeak_kwh": 4949.4892500000005,
+        "peak_kwh": 675.6330000000003,
+        "corrective_m3": 150.75000000000003,
+        "spill_m3": 0.0,
+        "unmet_m3": 0.0,
+        "low_level_hours": 0,
+        "days_with_corrective_pumping": 23
+      }
+    },
+    "summary": {
+      "selected_forecast": {
+        "saving_pct_vs_demand_following": 30.00702403118254,
+        "saving_pct_vs_level_trigger": 10.795205289024556,
+        "offpeak_kwh_shift_vs_demand_following": 3823.5250600467334,
+        "peak_kwh_avoided_vs_demand_following": 4377.24362589371
+      },
+      "seasonal_naive_forecast": {
+        "saving_pct_vs_demand_following": 29.41141752557639,
+        "saving_pct_vs_level_trigger": 10.036115461428297,
+        "offpeak_kwh_shift_vs_demand_following": 3794.441999999999,
+        "peak_kwh_avoided_vs_demand_following": 4327.48725
+      },
+      "perfect_forecast": {
+        "saving_pct_vs_demand_following": 30.899212877937508,
+        "saving_pct_vs_level_trigger": 11.932284000374905,
+        "offpeak_kwh_shift_vs_demand_following": 3735.076499999999,
+        "peak_kwh_avoided_vs_demand_following": 4477.77
+      }
+    }
+  },
+  "electricity_peak_alerts": {
+    "selected_model": "gru",
+    "rule": "forecast daily peak > 90% quantile of training daily peaks",
+    "val": {
+      "alert_threshold_kw": 4.338146666666667,
+      "peak_threshold_kw": 4.338146666666667,
+      "alert_days": 0,
+      "actual_peak_days": 8,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "precision": null,
+      "false_alarms": 0,
+      "missed_peak_days": 8
+    },
+    "test": {
+      "alert_threshold_kw": 4.338146666666667,
+      "peak_threshold_kw": 4.338146666666667,
+      "alert_days": 0,
+      "actual_peak_days": 2,
+      "hits": 0,
+      "hit_rate": 0.0,
+      "precision": null,
+      "false_alarms": 0,
+      "missed_peak_days": 2
+    },
+    "test_calibrated": {
+      "alert_threshold_kw": 2.738953113555908,
+      "peak_threshold_kw": 4.338146666666667,
+      "alert_days": 5,
+      "actual_peak_days": 2,
+      "hits": 1,
+      "hit_rate": 0.5,
+      "precision": 0.2,
+      "false_alarms": 4,
+      "missed_peak_days": 1,
+      "note": "alert threshold = 90th percentile of validation forecast peaks (tuned on validation)"
+    },
+    "shiftable_energy": {
+      "alert_days": 5,
+      "submeters": [
+        "Sub_metering_2",
+        "Sub_metering_3"
+      ],
+      "shiftable_kwh_in_peak_hours": 30.63,
+      "total_kwh_in_peak_hours": 76.25393333333332,
+      "shiftable_share": 0.4016841972741953,
+      "cost_saving_if_moved_to_off_peak_units": 27.567,
+      "note": "upper bound: assumes all sub-metered laundry, water-heater and air-conditioner energy in peak hours can move to off-peak"
+    }
+  }
+}
