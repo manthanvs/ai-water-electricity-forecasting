@@ -1,0 +1,178 @@
+{
+  "generated_by": "wef.data.clean",
+  "rules": [
+    "Rules (also in docs/DECISIONS.md):",
+    "- Electricity: the UCI clock has no DST, so the hourly index is that fixed clock (treated as UTC+1). An hour",
+    "  is the mean of its minutes when at least 45 of 60 are present, else missing. Open-Meteo (UTC) is shifted +1 h.",
+    "- Water: local CET/CEST wall time. The repeated autumn hour is averaged; the absent spring hour becomes a",
+    "  1-hour gap (interpolated below). Every day therefore has 24 hours.",
+    "- Target gaps of up to 3 hours are linearly interpolated (flag `interpolated`); longer gaps stay missing",
+    "  (flag `long_gap`) and the affected origins are excluded later. Weather gaps are interpolated (flag).",
+    "- Outliers are flagged with a rolling median/MAD rule and kept.",
+    "- Daily totals need all 24 hours (after short-gap filling): electricity kWh/day, water m3/day."
+  ],
+  "electricity": {
+    "units": {
+      "hourly": "kW (hourly mean)",
+      "daily": "kWh per day"
+    },
+    "period": [
+      "2006-12-16 18:00:00",
+      "2010-11-26 20:00:00"
+    ],
+    "n_hours": 34587,
+    "n_days": 1440,
+    "n_complete_days": 1418,
+    "duplicated_timestamps": 0,
+    "regular_frequency": true,
+    "missing_hours_before_fill": 436,
+    "interpolated_hours": 8,
+    "long_gap_hours": 428,
+    "long_gap_runs": 7,
+    "outlier_hours_flagged": 777,
+    "weather_interpolated_hours": 0,
+    "splits": {
+      "train": [
+        "2007-01-01",
+        "2009-12-31"
+      ],
+      "val": [
+        "2010-01-01",
+        "2010-06-30"
+      ],
+      "test": [
+        "2010-07-01",
+        "2010-11-25"
+      ]
+    },
+    "split_days": {
+      "train": 1089,
+      "val": 176,
+      "test": 138
+    },
+    "hourly_all": {
+      "mean": 1.0916,
+      "std": 0.8975,
+      "min": 0.124,
+      "p50": 0.8028,
+      "p90": 2.3451,
+      "max": 6.5605
+    },
+    "hourly_train": {
+      "mean": 1.0892,
+      "std": 0.9185,
+      "min": 0.124,
+      "p50": 0.7837,
+      "p90": 2.379,
+      "max": 6.5605
+    },
+    "daily_all": {
+      "mean": 26.1922,
+      "std": 10.0026,
+      "min": 4.1716,
+      "p50": 25.9368,
+      "p90": 38.237,
+      "max": 79.5564
+    },
+    "daily_train": {
+      "mean": 26.1492,
+      "std": 10.1655,
+      "min": 4.1716,
+      "p50": 25.9361,
+      "p90": 38.7535,
+      "max": 67.162
+    },
+    "corr_daily_value_temperature_train": -0.556
+  },
+  "water": {
+    "units": {
+      "hourly": "L/s (hourly mean inflow)",
+      "daily": "m3 per day"
+    },
+    "period": [
+      "2021-01-01 00:00:00",
+      "2023-03-31 23:00:00"
+    ],
+    "n_hours": 19680,
+    "n_days": 820,
+    "n_complete_days": 818,
+    "duplicated_timestamps": 0,
+    "regular_frequency": true,
+    "missing_hours_before_fill": 108,
+    "interpolated_hours": 77,
+    "long_gap_hours": 31,
+    "long_gap_runs": 1,
+    "outlier_hours_flagged": 1,
+    "weather_interpolated_hours": 805,
+    "splits": {
+      "train": [
+        "2021-01-01",
+        "2022-10-28"
+      ],
+      "val": [
+        "2022-10-29",
+        "2023-01-06"
+      ],
+      "test": [
+        "2023-01-07",
+        "2023-03-31"
+      ]
+    },
+    "split_days": {
+      "train": 664,
+      "val": 70,
+      "test": 84
+    },
+    "hourly_all": {
+      "mean": 4.1752,
+      "std": 1.4797,
+      "min": 1.4875,
+      "p50": 4.0275,
+      "p90": 6.033,
+      "max": 11.675
+    },
+    "hourly_train": {
+      "mean": 4.4372,
+      "std": 1.4706,
+      "min": 1.7425,
+      "p50": 4.2875,
+      "p90": 6.29,
+      "max": 11.675
+    },
+    "daily_all": {
+      "mean": 360.7329,
+      "std": 86.2168,
+      "min": 234.144,
+      "p50": 336.735,
+      "p90": 498.2571,
+      "max": 601.11
+    },
+    "daily_train": {
+      "mean": 383.3876,
+      "std": 79.8389,
+      "min": 271.746,
+      "p50": 363.3255,
+      "p90": 511.4061,
+      "max": 601.11
+    },
+    "corr_daily_value_temperature_train": 0.673,
+    "primary_series": "DMA 3"
+  },
+  "battledim": {
+    "units": "m3/h network inflow (p227 + p235)",
+    "period": [
+      "2018-01-01 00:00:00",
+      "2018-12-31 23:00:00"
+    ],
+    "n_hours": 8760,
+    "hourly": {
+      "mean": 201.6968,
+      "std": 59.6851,
+      "min": 39.0933,
+      "p50": 215.6792,
+      "p90": 266.7435,
+      "max": 330.1533
+    },
+    "n_leaks_2018": 14
+  }
+}

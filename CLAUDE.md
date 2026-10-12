@@ -124,7 +124,7 @@ All commands must work on Windows (PowerShell) and Linux. Use `pathlib`, never h
 Project (01_PROJECT_BUILD.md)
 - [x] Phase 0 - scaffold and environment (2026-10-12: fresh-venv install from requirements.txt OK; tf/xgboost/statsmodels import; `wef.cli --help` lists all stages; SELFTEST OK)
 - [x] Phase 1 - data acquisition and data cards (2026-10-12: all four sources present, CC BY 4.0, checksums recorded, cards generated; primary water series DMA 3)
-- [ ] Phase 2 - cleaning and exploratory analysis
+- [x] Phase 2 - cleaning and exploratory analysis (2026-10-12: no duplicate timestamps, regular hourly/daily frequency, eda_summary.json written, 4 EDA figures)
 - [ ] Phase 3 - feature engineering
 - [ ] Phase 4 - baselines, statistical and machine learning models
 - [ ] Phase 5 - deep learning models
