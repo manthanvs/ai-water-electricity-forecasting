@@ -27,15 +27,16 @@ def r2(y, f):
 
 
 def peak_mae(y, f, threshold: float):
-    """MAE over points whose actual exceeds the threshold (90th percentile of training demand)."""
+    """MAE over points whose actual exceeds the threshold (90th percentile of training demand); None if none do."""
     keep = y > threshold
-    return float(np.mean(np.abs(y[keep] - f[keep]))) if keep.any() else float("nan")
+    return float(np.mean(np.abs(y[keep] - f[keep]))) if keep.any() else None
 
 
 def all_metrics(y, f, train_mean: float, peak_threshold: float, naive_mae: float = None, min_frac: float = 0.05) -> dict:
     y, f = np.asarray(y, float), np.asarray(f, float)
     m, excl = mape(y, f, min_frac * train_mean)
     out = {"mae": mae(y, f), "rmse": rmse(y, f), "mape": m, "smape": smape(y, f), "r2": r2(y, f),
-           "peak_mae": peak_mae(y, f, peak_threshold), "mape_excluded_points": excl, "n_points": int(len(y))}
+           "peak_mae": peak_mae(y, f, peak_threshold), "n_peak_points": int((y > peak_threshold).sum()),
+           "mape_excluded_points": excl, "n_points": int(len(y))}
     out["skill"] = 1 - out["mae"] / naive_mae if naive_mae else 0.0
     return out

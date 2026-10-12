@@ -31,3 +31,15 @@
 - Added `wef.models.registry` (Data, Model interface, tuning, `train` stage), `baselines.py` (seasonal naive), `classical.py` (SARIMA), `ml.py` (Ridge, Random Forest, XGBoost with the relative-to-level option).
 - Added `wef.evaluation.metrics` (MAE, RMSE, MAPE with exclusion, sMAPE, R2, peak MAE, skill) and `wef.evaluation.backtest` (`evaluate` stage: `results/metrics.json`, selection by validation MAE, Diebold-Mariano test, error by hour).
 - Feature tables now keep rows with a missing target and carry a `level` column; tests updated (`tests/test_metrics.py`).
+
+## Phase 5 - deep learning models (2026-10-12)
+
+- Added `wef.models.dl` (LSTM, GRU, CNN-LSTM; relative and residual options; zero-initialised head; model card and training curves). `build.windows` now also returns per-step lag features.
+- Config: deep grid units x relative x residual, 1 layer, batch 32.
+
+## Phase 6 - evaluation and model selection (2026-10-12)
+
+- `wef.evaluation.backtest`: schema check, no-weather ablation scoring, DMA robustness check, generated `results/summary.md`; `registry.ablation`.
+- Metrics: `peak_mae` is null when no point exceeds the training 90th percentile (`n_peak_points`); `write_json` refuses NaN.
+- Figures: `fig_model_comparison`, `fig_forecast_electricity`, `fig_forecast_water`, `fig_error_by_hour`, `fig_training_curves`.
+- Tests: metrics.json schema test.

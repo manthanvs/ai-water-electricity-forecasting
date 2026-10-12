@@ -16,7 +16,7 @@ from wef.data.clean import UNITS, split_dates
 from wef.evaluation.metrics import all_metrics, mae
 from wef.features import build
 from wef.models.registry import PRED_DIR
-from wef.utils.io import read_json, write_json
+from wef.utils.io import read_json, write_json  # noqa: F401
 from wef.utils.paths import RESULTS
 
 METRICS = RESULTS / "metrics.json"
@@ -79,15 +79,107 @@ def score(resource: str, horizon: str, cfg) -> dict:
     return out
 
 
+MODELS = ["seasonal_naive", "sarima", "ridge", "random_forest", "xgboost", "lstm", "gru", "cnn_lstm"]
+METRIC_KEYS = ["mae", "rmse", "mape", "smape", "r2", "peak_mae", "skill", "mape_excluded_points"]
+
+
+def check_schema(m: dict) -> None:
+    """Raise AssertionError if metrics.json does not follow section D of 01_PROJECT_BUILD.md."""
+    for key in ("generated_at", "git_commit", "electricity", "water", "units"):
+        assert key in m, key
+    for r in ("electricity", "water"):
+        for h in ("d1", "w1"):
+            d = m[r][h]
+            for key in ("split_dates", "n_test_origins", "test", "val", "ablation_no_weather", "selected", "significance"):
+                assert key in d, f"{r}.{h}.{key}"
+            assert set(d["split_dates"]) == {"train", "val", "test"}
+            for split in ("test", "val"):
+                for model in MODELS:
+                    assert all(k in d[split][model] for k in METRIC_KEYS), f"{r}.{h}.{split}.{model}"
+            assert len(d["ablation_no_weather"]["test"]) == 2
+            assert d["selected"]["model"] in MODELS and "reason" in d["selected"]
+            assert {"vs", "method", "p_value"} <= set(d["significance"])
+
+
+def robustness(cfg) -> dict:
+    """Water D1 on every DMA: XGBoost with the hyper-parameters selected on DMA 3, against seasonal naive."""
+    from wef.data.clean import PROCESSED as P, daily
+    from wef.models.ml import XGBoostModel
+    from wef.models.registry import TUNING, Data
+    params = read_json(TUNING)["water.d1"]["xgboost"]["selected_params"]
+    dmas = pd.read_parquet(P / "water_all_dmas_hourly.parquet")
+    weather = pd.read_parquet(P / "water_hourly.parquet")[["temperature_c", "humidity_pct", "rain_mm"]]
+    out = {}
+    for c in dmas.columns:
+        hourly = weather.assign(value=dmas[c].reindex(weather.index))
+        table = build.tabular("water", "d1", cfg, hourly, daily(hourly, 3.6))
+        data = Data("water", "d1", table, hourly["value"], cfg)
+        sel = XGBoostModel(**params).fit(data, ("train",))
+        final = XGBoostModel(**params, **sel.refit_params()).fit(data, ("train", "val"))
+        o = data.origins("test", eval_only=True)
+        y, f, nv = data.matrix(o, "y").ravel(), final.predict(data, o).ravel(), data.matrix(o, "lag_168").ravel()
+        out[c] = {"n_test_origins": len(o), "mae": mae(y, f), "naive_mae": mae(y, nv), "skill": 1 - mae(y, f) / mae(y, nv),
+                  "mean_flow": float(np.nanmean(y)), "missing_share": float(dmas[c].isna().mean())}
+        print(f"  robustness {c}: skill {out[c]['skill']:.3f} on {len(o)} origins")
+    sk = [v["skill"] for v in out.values()]
+    return {"model": "xgboost", "horizon": "d1", "params_from": "DMA 3 selection", "dmas": out,
+            "n_dmas_beating_naive": int(sum(v > 0 for v in sk)), "median_skill": float(np.median(sk))}
+
+
+NICE = {"seasonal_naive": "seasonal naive", "sarima": "SARIMA", "ridge": "Ridge regression", "random_forest": "Random Forest",
+        "xgboost": "XGBoost", "lstm": "LSTM", "gru": "GRU", "cnn_lstm": "CNN-LSTM"}
+TABULAR, DEEP = ("ridge", "random_forest", "xgboost"), ("lstm", "gru", "cnn_lstm")
+
+
+def summary(m: dict) -> str:
+    """Plain-language findings generated from metrics.json (the report paraphrases this file)."""
+    unit = {("electricity", "d1"): "kW", ("electricity", "w1"): "kWh/day", ("water", "d1"): "L/s", ("water", "w1"): "m3/day"}
+    hname = {"d1": "next-day hourly (D1)", "w1": "next-week daily (W1)"}
+    out = ["# Summary of findings", "", f"Generated from results/metrics.json ({m['generated_at']}). Test-period numbers; "
+           "every model is scored on the same forecast origins.", ""]
+    for r in ("electricity", "water"):
+        for h in ("d1", "w1"):
+            d, u = m[r][h], unit[(r, h)]
+            t, sel = d["test"], d["selected"]["model"]
+            ranked = sorted(t, key=lambda k: t[k]["mae"])
+            bt = min(TABULAR, key=lambda k: t[k]["mae"]); bd = min(DEEP, key=lambda k: t[k]["mae"])
+            sig = d["significance"]
+            beat = [k for k in t if k != "seasonal_naive" and t[k]["mae"] < t["seasonal_naive"]["mae"]]
+            out += [f"## {r.capitalize()}, {hname[h]}", "",
+                    f"- Selected model (lowest validation MAE): {NICE[sel]}. Test MAE {t[sel]['mae']:.3f} {u}, "
+                    f"RMSE {t[sel]['rmse']:.3f} {u}, MAPE {t[sel]['mape']:.1f} percent, sMAPE {t[sel]['smape']:.1f} percent, "
+                    f"R2 {t[sel]['r2']:.3f}, skill versus seasonal naive {t[sel]['skill']:.3f}.",
+                    f"- Seasonal naive: test MAE {t['seasonal_naive']['mae']:.3f} {u}. {len(beat)} of {len(t) - 1} models beat it on test"
+                    + ("" if len(beat) == len(t) - 1 else f"; not beating it: {', '.join(NICE[k] for k in t if k != 'seasonal_naive' and k not in beat)}") + ".",
+                    f"- Lowest test MAE overall: {NICE[ranked[0]]} ({t[ranked[0]]['mae']:.3f} {u}); "
+                    f"{'the selected model' if ranked[0] == sel else 'the selected model ranks ' + str(ranked.index(sel) + 1) + ' of ' + str(len(ranked)) + ' on test'}.",
+                    f"- Best tabular model {NICE[bt]} ({t[bt]['mae']:.3f}) versus best deep model {NICE[bd]} ({t[bd]['mae']:.3f}): "
+                    + ("the deep model is better." if t[bd]["mae"] < t[bt]["mae"] else "the deep model does not beat the tabular model."),
+                    f"- Diebold-Mariano test, {NICE[sel]} versus {NICE[sig['vs']]} (per-origin MAE): p = {sig['p_value']:.3f}"
+                    + (" - the difference is statistically significant at the 5 percent level." if sig["p_value"] < 0.05 else " - the difference is not statistically significant at the 5 percent level."),
+                    ]
+            ab = d["ablation_no_weather"]["test"]
+            for k, v in ab.items():
+                full = t[k]["mae"]
+                out.append(f"- Without weather inputs, {NICE[k]} test MAE is {v['mae']:.3f} {u} (with weather {full:.3f}; change {100 * (v['mae'] - full) / full:+.1f} percent).")
+            out.append("")
+    rb = m["water"].get("robustness")
+    if rb:
+        out += ["## Robustness across water areas", "",
+                f"- XGBoost with the DMA 3 hyper-parameters beats seasonal naive on {rb['n_dmas_beating_naive']} of {len(rb['dmas'])} DMAs "
+                f"(D1, test period); median skill {rb['median_skill']:.3f}.", ""]
+    return "\n".join(out)
+
+
 def run(cfg) -> list:
     res = {"generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "git_commit": _git_commit()}
-    old = read_json(METRICS, default={})
     for resource in ("electricity", "water"):
         res[resource] = {h: score(resource, h, cfg) for h in ("d1", "w1")}
-        if resource in old and "robustness" in old[resource]:
-            res[resource]["robustness"] = old[resource]["robustness"]
+    res["water"]["robustness"] = robustness(cfg)
     res["units"] = {"electricity": "kW (hourly mean) for D1; kWh per day for W1",
                     "water": "L/s (hourly mean inflow, DMA 3) for D1; m3 per day for W1",
                     "detail": UNITS}
+    check_schema(res)
     write_json(METRICS, res)
+    (RESULTS / "summary.md").write_text(summary(res), encoding="utf-8")
     return sorted(PRED_DIR.glob("*.parquet"))

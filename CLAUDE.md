@@ -127,8 +127,8 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 2 - cleaning and exploratory analysis (2026-10-12: no duplicate timestamps, regular hourly/daily frequency, eda_summary.json written, 4 EDA figures)
 - [x] Phase 3 - feature engineering (2026-10-12: perturbation leakage test passes for all four tables and the deep-model windows; mutation check fails as expected)
 - [x] Phase 4 - baselines, statistical and machine learning models (2026-10-12: 5 models x 4 series backtested, results/metrics.json written; water SARIMA and water W1 Ridge do not beat naive on validation, reported)
-- [ ] Phase 5 - deep learning models
-- [ ] Phase 6 - evaluation and model selection
+- [x] Phase 5 - deep learning models (2026-10-12: 96 deep fits in about 13 min; training time per model in model_card.json and tuning.json; metrics added)
+- [x] Phase 6 - evaluation and model selection (2026-10-12: metrics.json passes schema check; selected GRU for electricity D1, XGBoost elsewhere; comparison figures and generated summary.md)
 - [ ] Phase 7 - anomaly detection
 - [ ] Phase 8 - resource optimisation
 - [ ] Phase 9 - Flask API and Streamlit dashboard

@@ -27,4 +27,4 @@ def read_json(path: Path, default=None):
 def write_json(path: Path, obj) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(obj, indent=2, default=str), encoding="utf-8")
+    path.write_text(json.dumps(obj, indent=2, default=str, allow_nan=False), encoding="utf-8")  # NaN is not JSON

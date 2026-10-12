@@ -103,8 +103,128 @@ def fig_eda_missing():
     style.save_both("fig_eda_missing", draw)
 
 
+# --------------------------------------------------------------------------- results (Phase 6)
+MODEL_LABEL = {"seasonal_naive": "Seasonal\nnaive", "sarima": "SARIMA", "ridge": "Ridge", "random_forest": "Random\nforest",
+               "xgboost": "XGBoost", "lstm": "LSTM", "gru": "GRU", "cnn_lstm": "CNN-\nLSTM"}
+SHORT = {k: v.replace("-\n", "-").replace("\n", " ") for k, v in MODEL_LABEL.items()}
+
+
+def _metrics():
+    return json.loads((RESULTS / "metrics.json").read_text())
+
+
+def fig_model_comparison():
+    """Test MAE of every model relative to seasonal naive (1 = naive; shorter is better), D1 and W1 panels."""
+    m = _metrics()
+    models = list(MODEL_LABEL)
+
+    def draw(mode, size):
+        fig, axes = plt.subplots(1, 2, figsize=(size[0], size[1] * 1.15), sharey=True)
+        y = np.arange(len(models))[::-1]
+        for ax, letter, h in zip(axes, "ab", ["d1", "w1"]):
+            for i, res in enumerate(["electricity", "water"]):
+                t = m[res][h]["test"]
+                rel = [t[k]["mae"] / t["seasonal_naive"]["mae"] for k in models]
+                ax.barh(y + (0.5 - i) * 0.38, rel, 0.38, label=res.capitalize(), **style.bar(mode, i))
+            ax.axvline(1, color=style.INK if mode == "slides" else "0", lw=0.8, ls="--")
+            ax.set_yticks(y, [SHORT[k] for k in models])
+            ax.set_xlabel("Test MAE / seasonal-naive MAE")
+            ax.grid(axis="y", visible=False)
+            _panel(ax, letter, "Next day, hourly (D1)" if h == "d1" else "Next week, daily (W1)")
+        axes[1].legend(frameon=False, loc="lower right")
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_model_comparison", draw)
+
+
+def _representative_week(resource):
+    """The test week (7 consecutive evaluable origins starting on a Monday) whose selected-model MAE is closest
+    to the median weekly MAE - a typical week, not a best case."""
+    sel = _metrics()[resource]["d1"]["selected"]["model"]
+    p = pd.read_parquet(RESULTS / "predictions" / f"{resource}_d1.parquet").reset_index()
+    p = p[(p.split == "test") & p.eval_ok]
+    ok = set(p.origin)
+    weeks = []
+    for o in sorted(ok):
+        days = [o + pd.Timedelta(days=k) for k in range(7)]
+        if o.dayofweek == 0 and all(d in ok for d in days):
+            w = p[p.origin.isin(days)]
+            weeks.append((float(np.mean(np.abs(w[sel] - w.y))), o))
+    med = np.median([e for e, _ in weeks])
+    start = min(weeks, key=lambda t: abs(t[0] - med))[1]
+    return sel, p[p.origin.isin([start + pd.Timedelta(days=k) for k in range(7)])].sort_values("target_time")
+
+
+def _fig_forecast(resource):
+    sel, w = _representative_week(resource)
+
+    def draw(mode, size):
+        fig, ax = plt.subplots(figsize=size)
+        series = [("y", "Actual"), ("seasonal_naive", "Seasonal naive"), (sel, f"{SHORT[sel]} (selected)")]
+        for i, (col, lab) in enumerate(series):
+            kw = style.line(mode, [0, 2, 1][i]) if mode == "report" else {"color": [style.INK, "#b5b4ae", style.SLIDE_COLORS[0]][i]}
+            ax.plot(w.target_time, w[col], label=lab, lw=[1.2, 0.9, 1.1][i] if mode == "report" else [2.2, 1.6, 2.0][i], **kw)
+        ax.set_ylabel(LABEL[resource]); ax.set_xlabel("Day (test period)")
+        ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%a %d %b"))
+        ax.legend(frameon=False, ncol=3, loc="upper left", bbox_to_anchor=(0, 1.12))
+        fig.tight_layout()
+        return fig
+    style.save_both(f"fig_forecast_{resource}", draw)
+
+
+def fig_forecast_electricity():
+    _fig_forecast("electricity")
+
+
+def fig_forecast_water():
+    _fig_forecast("water")
+
+
+def fig_error_by_hour():
+    m = _metrics()
+
+    def draw(mode, size):
+        fig, axes = plt.subplots(1, 2, figsize=size)
+        for ax, letter, res in zip(axes, "ab", ["electricity", "water"]):
+            e = m[res]["d1"]["error_by_hour"]
+            sel = SHORT[m[res]["d1"]["selected"]["model"]]
+            ax.plot(range(24), e["seasonal_naive"], label="Seasonal naive", marker="o" if mode == "report" else None, ms=2.5, **style.line(mode, 1 if mode == "slides" else 2))
+            ax.plot(range(24), e["selected"], label=f"{sel} (selected)", marker="s" if mode == "report" else None, ms=2.5, **style.line(mode, 0))
+            ax.set_xticks(range(0, 24, 3)); ax.set_xlabel("Hour of day"); ax.set_ylabel("Test MAE (" + LABEL[res].split("(")[1])
+            _panel(ax, letter, res.capitalize())
+            ax.legend(frameon=False)
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_error_by_hour", draw)
+
+
+def fig_training_curves():
+    """Training and validation loss of each resource-horizon's best deep model (viva appendix)."""
+    curves = json.loads((RESULTS / "training_curves.json").read_text())
+    tuning = json.loads((RESULTS / "tuning.json").read_text())
+    picks = []
+    for res in ("electricity", "water"):
+        for h in ("d1", "w1"):
+            t = tuning[f"{res}.{h}"]
+            best = min(("lstm", "gru", "cnn_lstm"), key=lambda k: next(c["val_mae"] for c in t[k]["candidates"] if c["params"] == t[k]["selected_params"]))
+            picks.append((f"{res}_{h}_{best}", f"{res.capitalize()} {h.upper()}, {SHORT[best]}"))
+
+    def draw(mode, size):
+        fig, axes = plt.subplots(2, 2, figsize=(size[0], size[1] * 1.5))
+        for ax, letter, (key, title) in zip(axes.ravel(), "abcd", picks):
+            c = curves[key]
+            ax.plot(range(1, len(c["loss"]) + 1), c["loss"], label="Training", **style.line(mode, 0))
+            ax.plot(range(1, len(c["val_loss"]) + 1), c["val_loss"], label="Validation", **style.line(mode, 1))
+            ax.set_xlabel("Epoch"); ax.set_ylabel("MSE (scaled)"); _panel(ax, letter, title)
+        axes[0, 0].legend(frameon=False)
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_training_curves", draw)
+
+
 EDA = [fig_eda_profiles, fig_eda_weekly_heatmap, fig_eda_temperature, fig_eda_missing]
-FIGURES = EDA  # later phases append their figures here
+RESULT_FIGS = [fig_model_comparison, fig_forecast_electricity, fig_forecast_water, fig_error_by_hour, fig_training_curves]
+FIGURES = EDA + RESULT_FIGS  # later phases append their figures here
 
 
 def run(cfg) -> list:

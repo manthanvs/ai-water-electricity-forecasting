@@ -177,7 +177,7 @@ def prediction_frame(data: Data) -> pd.DataFrame:
 
 
 def run(cfg, only=None) -> list:
-    """Train Phase 4 (and, once present, Phase 5) models for both resources and horizons."""
+    """Train every model for both resources and horizons, then the no-weather ablation."""
     PRED_DIR.mkdir(parents=True, exist_ok=True)
     tuning = read_json(TUNING, default={})
     inputs = []
@@ -193,6 +193,8 @@ def run(cfg, only=None) -> list:
                 train_one(cls, cands, data, preds, tuning)
                 preds.to_parquet(path)
                 write_json(TUNING, tuning)
+    if not only:
+        ablation(cfg)
     return inputs
 
 
@@ -202,3 +204,29 @@ def _deep_specs(cfg, horizon):
         return []
     from wef.models import dl
     return dl.specs(cfg, horizon)
+
+
+TABULAR = ("ridge", "random_forest", "xgboost")
+DEEP = ("lstm", "gru", "cnn_lstm")
+
+
+def ablation(cfg) -> None:
+    """No-weather ablation: refit the best tabular and the best deep model (by validation MAE) with their selected
+    hyper-parameters but without weather inputs; columns '<model>_no_weather' in the prediction files."""
+    from wef.evaluation.backtest import ABLATION_SUFFIX
+    tuning = read_json(TUNING)
+    classes = {cls.name: cls for h in ("d1", "w1") for cls, _ in specs(cfg, h) + _deep_specs(cfg, h)}
+    for resource in ("electricity", "water"):
+        for horizon in ("d1", "w1"):
+            key = f"{resource}.{horizon}"
+            val = {m: next(c["val_mae"] for c in t["candidates"] if c["params"] == t["selected_params"])
+                   for m, t in tuning[key].items() if not m.endswith(ABLATION_SUFFIX)}
+            path = PRED_DIR / f"{resource}_{horizon}.parquet"
+            preds = pd.read_parquet(path)
+            data = Data.load(resource, horizon, cfg, weather=False)
+            for family in (TABULAR, DEEP):
+                best = min((m for m in family if m in val), key=val.get)
+                params = tuning[key][best]["selected_params"]
+                train_one(classes[best], [params], data, preds, tuning, suffix=ABLATION_SUFFIX)
+            preds.to_parquet(path)
+            write_json(TUNING, tuning)

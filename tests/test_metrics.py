@@ -22,3 +22,16 @@ def test_against_hand_computed_values():
 def test_skill_is_relative_to_naive():
     out = m.all_metrics(Y, F, train_mean=2, peak_threshold=1.5, naive_mae=2 * m.mae(Y, F))
     assert out["skill"] == pytest.approx(0.5)
+
+
+def test_peak_mae_is_none_without_peak_points():
+    out = m.all_metrics(Y, F, train_mean=2, peak_threshold=100)
+    assert out["peak_mae"] is None and out["n_peak_points"] == 0
+
+
+def test_metrics_json_follows_schema():
+    from wef.evaluation.backtest import METRICS, check_schema
+    from wef.utils.io import read_json
+    if not METRICS.exists():
+        pytest.skip("results/metrics.json missing; run python -m wef.cli evaluate")
+    check_schema(read_json(METRICS))
