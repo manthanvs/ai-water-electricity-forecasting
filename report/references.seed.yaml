@@ -1,0 +1,262 @@
+# Seed bibliography for the seminar report.
+# Rules (see docs/instructions/02_SEMINAR_REPORT.md, section E):
+#   * Every entry starts as status: seed. Claude Code verifies each one (DOI resolution, Crossref or the
+#     official page), corrects any field, then copies it to report/references.yaml with status: verified.
+#   * "precheck" records what was already confirmed while preparing this kit; it is a hint, not a verification.
+#   * Only verified entries may be cited. Add sources to reach 15-20 entries; record the claim each supports in used_for.
+
+- key: hochreiter1997
+  type: journal
+  authors: [S. Hochreiter, J. Schmidhuber]
+  title: Long short-term memory
+  venue: Neural Computation
+  volume: 9
+  issue: 8
+  pages: 1735-1780
+  year: 1997
+  doi: 10.1162/neco.1997.9.8.1735
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: LSTM architecture (3.3, 5.5)
+
+- key: cho2014
+  type: conference
+  authors: [K. Cho, B. van Merrienboer, C. Gulcehre, D. Bahdanau, F. Bougares, H. Schwenk, Y. Bengio]
+  title: Learning phrase representations using RNN encoder-decoder for statistical machine translation
+  venue: Proc. 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)
+  pages: 1724-1734
+  year: 2014
+  doi: 10.3115/v1/D14-1179
+  status: seed
+  used_for: GRU (3.3, 5.5)
+
+- key: kong2019
+  type: journal
+  authors: [W. Kong, Z. Y. Dong, Y. Jia, D. J. Hill, Y. Xu, Y. Zhang]
+  title: Short-term residential load forecasting based on LSTM recurrent neural network
+  venue: IEEE Transactions on Smart Grid
+  volume: 10
+  issue: 1
+  pages: 841-851
+  year: 2019
+  doi: 10.1109/TSG.2017.2753802
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: LSTM for household load (3.3); key paper for the viva
+
+- key: sajjad2020
+  type: journal
+  authors: [M. Sajjad, Z. A. Khan, A. Ullah, T. Hussain, W. Ullah, M. Y. Lee, S. W. Baik]
+  title: A novel CNN-GRU-based hybrid approach for short-term residential load forecasting
+  venue: IEEE Access
+  volume: 8
+  pages: 143759-143768
+  year: 2020
+  doi: 10.1109/ACCESS.2020.3009537
+  status: seed
+  precheck: title, venue, volume, pages and DOI seen in citing sources and OpenAlex
+  used_for: CNN-recurrent hybrids (3.3)
+
+- key: marino2016
+  type: conference
+  authors: [D. L. Marino, K. Amarasinghe, M. Manic]
+  title: Building energy load forecasting using deep neural networks
+  venue: Proc. 42nd Annual Conference of the IEEE Industrial Electronics Society (IECON 2016)
+  year: 2016
+  doi: 10.1109/IECON.2016.7793413
+  status: seed
+  note: uses the same UCI household dataset as this study - check pages and DOI
+  used_for: LSTM on the UCI household dataset (3.3, 6.3 comparison context)
+
+- key: chen2016
+  type: conference
+  authors: [T. Chen, C. Guestrin]
+  title: "XGBoost: A scalable tree boosting system"
+  venue: Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining
+  pages: 785-794
+  year: 2016
+  doi: 10.1145/2939672.2939785
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: XGBoost (3.2, 5.5)
+
+- key: breiman2001
+  type: journal
+  authors: [L. Breiman]
+  title: Random forests
+  venue: Machine Learning
+  volume: 45
+  issue: 1
+  pages: 5-32
+  year: 2001
+  doi: 10.1023/A:1010933404324
+  status: seed
+  used_for: Random Forest (3.2, 5.5)
+
+- key: liu2008
+  type: conference
+  authors: [F. T. Liu, K. M. Ting, Z.-H. Zhou]
+  title: Isolation forest
+  venue: Proc. 8th IEEE International Conference on Data Mining (ICDM)
+  pages: 413-422
+  year: 2008
+  doi: 10.1109/ICDM.2008.17
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: Isolation Forest (3.4, 5.7)
+
+- key: box2015
+  type: book
+  authors: [G. E. P. Box, G. M. Jenkins, G. C. Reinsel, G. M. Ljung]
+  title: "Time Series Analysis: Forecasting and Control"
+  edition: 5th
+  publisher: Wiley
+  address: Hoboken, NJ, USA
+  year: 2015
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: ARIMA and SARIMA (3.1, 5.5)
+
+- key: hyndman2021
+  type: book
+  authors: [R. J. Hyndman, G. Athanasopoulos]
+  title: "Forecasting: Principles and Practice"
+  edition: 3rd
+  publisher: OTexts
+  address: Melbourne, Australia
+  year: 2021
+  url: https://otexts.com/fpp3/
+  status: seed
+  precheck: cited in the approved synopsis
+  used_for: forecasting practice, seasonal naive baseline, rolling-origin evaluation, accuracy measures (3.1, 5.6)
+
+- key: antunes2018
+  type: journal
+  authors: [A. Antunes, A. Andrade-Campos, A. Sardinha-Lourenco, M. S. Oliveira]
+  title: Short-term water demand forecasting using machine learning techniques
+  venue: Journal of Hydroinformatics
+  volume: 20
+  issue: 6
+  pages: 1343-1366
+  year: 2018
+  doi: 10.2166/hydro.2018.163
+  status: seed
+  precheck: volume, issue, pages and DOI confirmed against the publisher page and citing articles
+  note: author name is "Sardinha-Lourenco" with a cedilla (c) in the original
+  used_for: machine learning for water demand (3.2); key paper for the viva
+
+- key: guo2018
+  type: journal
+  authors: [G. Guo, S. Liu, Y. Wu, J. Li, R. Zhou, X. Zhu]
+  title: Short-term water demand forecast based on deep learning method
+  venue: Journal of Water Resources Planning and Management
+  volume: 144
+  issue: 12
+  pages: "04018076"
+  year: 2018
+  doi: 10.1061/(ASCE)WR.1943-5452.0000992
+  status: seed
+  precheck: authors, venue, article number and DOI seen in citing sources
+  used_for: deep learning for water demand (3.3)
+
+- key: alvisi2025bwdf
+  type: journal
+  authors: [S. Alvisi, M. Franchini, V. Marsili, F. Mazzoni, E. Salomons, M. Housh, "et al."]
+  title: Battle of water demand forecasting
+  venue: Journal of Water Resources Planning and Management
+  volume: 151
+  issue: 10
+  pages: "04025049"
+  year: 2025
+  doi: 10.1061/JWRMD5.WRENG-6887
+  status: seed
+  precheck: citation confirmed on the KWR library record; full author list to be taken from the DOI record (IEEE allows "et al." after the first author when there are more than six authors)
+  used_for: BWDF dataset and benchmark (3.3, 5.2)
+
+- key: vrachimis2022battledim
+  type: journal
+  authors: [S. G. Vrachimis, "et al."]
+  title: Battle of the leakage detection and isolation methods
+  venue: Journal of Water Resources Planning and Management
+  year: 2022
+  doi: 10.1061/(ASCE)WR.1943-5452.0001601
+  status: seed
+  precheck: DOI seen on the TU Delft repository copy; complete authors, volume, issue and article number from the DOI record
+  used_for: BattLeDIM benchmark and leak labels (3.4, 5.2, 5.7)
+
+- key: battledim2020data
+  type: dataset
+  authors: [KIOS Research and Innovation Center of Excellence]
+  title: "BattLeDIM 2020 dataset (L-Town)"
+  venue: Zenodo
+  year: 2020
+  url: https://zenodo.org/record/4017659
+  status: seed
+  note: take exact title, creators, version and DOI from the Zenodo record during download
+  used_for: water leakage data (5.2)
+
+- key: uci2012household
+  type: dataset
+  authors: [G. Hebrail, A. Berard]
+  title: Individual household electric power consumption
+  venue: UCI Machine Learning Repository
+  url: https://archive.ics.uci.edu/dataset/235
+  status: seed
+  note: take the year and the DOI shown on the UCI page ("Cite" box); author names carry accents (Hebrail, Berard)
+  used_for: electricity data (5.2)
+
+- key: openmeteo
+  type: dataset
+  authors: [P. Zippenfenig]
+  title: "Open-Meteo.com Weather API"
+  venue: Zenodo
+  url: https://open-meteo.com/en/docs/historical-weather-api
+  status: seed
+  note: Open-Meteo asks users to cite a specific Zenodo DOI and, for the archive, the underlying reanalysis (ERA5); take both from the attribution section of the docs page
+  used_for: weather data (5.2)
+
+- key: taylor2018
+  type: journal
+  authors: [S. J. Taylor, B. Letham]
+  title: Forecasting at scale
+  venue: The American Statistician
+  volume: 72
+  issue: 1
+  pages: 37-45
+  year: 2018
+  doi: 10.1080/00031305.2017.1380080
+  status: seed
+  used_for: Prophet as a related method (3.1) - optional
+
+- key: vaswani2017
+  type: conference
+  authors: [A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, I. Polosukhin]
+  title: Attention is all you need
+  venue: Advances in Neural Information Processing Systems 30 (NeurIPS 2017)
+  year: 2017
+  status: seed
+  used_for: attention and Transformer models (3.3, 7.3)
+
+- key: india_smart_meter
+  type: web
+  authors: [Ministry of Power, Government of India]
+  title: "[[CONFIRM: official page for the Revamped Distribution Sector Scheme / smart prepaid metering]]"
+  status: seed
+  note: find the official government page or report that supports any Indian smart-meter statement in 1.2; if none can be verified, remove the statement
+  used_for: Indian context (1.2)
+
+- key: india_water_losses
+  type: report
+  authors: ["[[CONFIRM: authoritative source]]"]
+  title: "[[CONFIRM: source for non-revenue water in Indian cities]]"
+  status: seed
+  note: the synopsis states 30-40 percent non-revenue water; keep this figure only if a government, World Bank, ADB or peer-reviewed source supports it, otherwise rephrase without a number
+  used_for: Indian context (1.2)
+
+- key: tf_docs
+  type: web
+  authors: [TensorFlow]
+  title: Time series forecasting
+  url: https://www.tensorflow.org/tutorials/structured_data/time_series
+  status: seed
+  used_for: implementation (5.9) - optional

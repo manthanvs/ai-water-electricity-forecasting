@@ -1,0 +1,85 @@
+# Central configuration. Paths are relative to the repository root.
+seed: 42
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  cards: data/cards
+  models: models
+  results: results
+  figures_report: figures/report
+  figures_slides: figures/slides
+
+sources:
+  uci_electricity:
+    uci_id: 235
+    url: https://archive.ics.uci.edu/dataset/235
+    target: Global_active_power   # kW, aggregated to hourly mean
+  bwdf:
+    package: water-benchmark-hub[bwdf]
+    docs: https://waterbenchmarkhub.readthedocs.io
+  battledim:
+    zenodo_record: 4017659
+    url: https://zenodo.org/record/4017659
+  open_meteo:
+    url: https://archive-api.open-meteo.com/v1/archive
+    latitude: 48.78
+    longitude: 2.29
+    timezone: Europe/Paris
+    hourly: [temperature_2m, relative_humidity_2m, precipitation]
+
+holidays:
+  electricity: FR
+  water: null            # set in Phase 1 once the BWDF country is confirmed
+
+# Chronological splits. Electricity dates are provisional until confirmed against the data (Phase 2).
+splits:
+  electricity:
+    train: ["2007-01-01", "2009-12-31"]
+    val: ["2010-01-01", "2010-06-30"]
+    test: ["2010-07-01", null]       # null = end of data
+  water:
+    test_weeks: 12
+    val_weeks: 10
+
+horizons:
+  d1: {steps: 24, freq: h, lags: [24, 48, 168, 336], same_hour_mean_days: 7}
+  w1: {steps: 7, freq: D, lags: [7, 14, 21, 28], rolling_mean_days: 28}
+
+cleaning:
+  max_interpolate_hours: 3
+  outlier_window_hours: 168
+  outlier_mad_k: 5.0
+
+features:
+  cooling_base_c: 22.0
+  heating_base_c: 15.5
+
+metrics:
+  mape_min_fraction_of_train_mean: 0.05
+  peak_quantile: 0.90
+
+models:
+  sarima:
+    d1: {seasonal_period: 24, window_weeks: 8}
+    w1: {seasonal_period: 7}
+    grid: {p: [0, 1, 2], d: [0, 1], q: [0, 1, 2], P: [0, 1], D: [0, 1], Q: [0, 1]}
+  ridge:
+    alpha: [0.1, 1.0, 10.0, 100.0]
+  random_forest:
+    n_estimators: [200]
+    max_depth: [10, 20]
+    min_samples_leaf: [5, 20]
+  xgboost:
+    n_estimators: 2000
+    learning_rate: [0.03, 0.1]
+    max_depth: [4, 6, 8]
+    early_stopping_rounds: 50
+  deep:
+    window: {d1: 168, w1: 56}
+    units: [32, 64]
+    layers: [1, 2]
+    epochs: 60
+    patience: 8
+    batch_size: 64

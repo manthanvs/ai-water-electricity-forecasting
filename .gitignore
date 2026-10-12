@@ -1,0 +1,17 @@
+.venv/
+.env
+.env.*
+data/
+submission/
+report/out/
+presentation/out/
+presentation/node_modules/
+__pycache__/
+*.egg-info/
+.pytest_cache/
+# Model binaries: invariant 12 forbids committing anything over 50 MB. Git cannot filter by size,
+# so the potentially large ones (Random Forest / XGBoost dumps) are ignored; small .keras files stay.
+models/*.joblib
+models/*.pkl
+# Stray copies of the reference documents at the repo root (canonical copies live in docs/reference/)
+/*.docx
