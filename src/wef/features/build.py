@@ -62,11 +62,13 @@ def _split_of(dates: pd.Series, sp: dict) -> pd.Series:
     return out
 
 
-def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily: pd.DataFrame = None) -> pd.DataFrame:
-    """Origin-formulated table: origin, step, target_time, y, split, eval_ok, features."""
+def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily: pd.DataFrame = None,
+            inference: bool = False) -> pd.DataFrame:
+    """Origin-formulated table: origin, step, target_time, y, split, eval_ok, features.
+    inference=True keeps every origin with split "inference" (forecasting from arbitrary history: API, upload)."""
     hourly = pd.read_parquet(PROCESSED / f"{resource}_hourly.parquet") if hourly is None else hourly
     daily = pd.read_parquet(PROCESSED / f"{resource}_daily.parquet") if daily is None else daily
-    sp = split_dates(resource, daily.index, cfg)
+    sp = None if inference else split_dates(resource, daily.index, cfg)
     fc = cfg["features"]
     n = STEPS[horizon]
     if horizon == "d1":
@@ -104,12 +106,14 @@ def tabular(resource: str, horizon: str, cfg, hourly: pd.DataFrame = None, daily
     hol = _holiday_set(resource, cfg, range(t.year.min() - 1, t.year.max() + 2))
     cal = _calendar(t, hol)
     df[CALENDAR[horizon]] = cal[CALENDAR[horizon]].to_numpy()
+    complete = df.groupby("origin")[["y", NAIVE[horizon]]].transform(lambda c: c.notna().all()).all(axis=1)
+    df["eval_ok"] = complete
+    if inference:
+        return df.assign(split="inference")
     # split by origin; the whole target window must lie in the same split
     df["split"] = _split_of(df["origin"], sp)
     last_t = df.groupby("origin")["target_time"].transform("max").dt.normalize()
     df.loc[_split_of(last_t, sp) != df["split"], "split"] = None
-    complete = df.groupby("origin")[["y", NAIVE[horizon]]].transform(lambda c: c.notna().all()).all(axis=1)
-    df["eval_ok"] = complete
     return df[df["split"].notna()].reset_index(drop=True)
 
 

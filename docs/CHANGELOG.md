@@ -53,3 +53,8 @@
 
 - Added `config/optimisation.yaml` (ILLUSTRATIVE ASSUMPTIONS), `wef.optimise.pump_schedule` (LP, simulation with corrective pumping, baselines; `optimise` stage) and `wef.optimise.peak_alerts`.
 - Outputs: `results/optimisation.json`, `results/pump_schedule_example.csv`, figure `fig_pump_schedule`; `tests/test_lp.py`.
+
+## Phase 9 - Flask API and Streamlit dashboard (2026-10-13)
+
+- Added `wef.service`, `api/app.py`, `dashboard/app.py`, `.streamlit/config.toml`; `build.tabular(inference=True)`; `pump_schedule.params_from`.
+- Tests: `tests/test_api.py`, `tests/test_dashboard.py`.

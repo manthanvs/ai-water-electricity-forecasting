@@ -21,7 +21,10 @@ OPTIMISATION = RESULTS / "optimisation.json"
 
 
 def load_params(path=OPT_CFG) -> dict:
-    c = yaml.safe_load(open(path, encoding="utf-8"))
+    return params_from(yaml.safe_load(open(path, encoding="utf-8")))
+
+
+def params_from(c: dict) -> dict:
     t = c["tariff"]
     mult = np.full(24, t["multipliers"]["normal"])
     mult[t["off_peak_hours"]] = t["multipliers"]["off_peak"]

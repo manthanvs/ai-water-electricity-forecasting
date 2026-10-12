@@ -131,7 +131,7 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 6 - evaluation and model selection (2026-10-12: metrics.json passes schema check; selected GRU for electricity D1, XGBoost elsewhere; comparison figures and generated summary.md)
 - [x] Phase 7 - anomaly detection (2026-10-12: both methods on both resources; precision, recall, delay and chance precision in anomaly.json; injected data labelled)
 - [x] Phase 8 - resource optimisation (2026-10-12: LP feasible on all 84 test days; savings vs both baselines and perfect foresight in optimisation.json)
-- [ ] Phase 9 - Flask API and Streamlit dashboard
+- [x] Phase 9 - Flask API and Streamlit dashboard (2026-10-13: API tests cover every endpoint incl. invalid input; all six dashboard pages render with the API running and stopped)
 - [ ] Phase 10 - Power BI export and build guide
 - [ ] Phase 11 - figure freeze, tests, README, release tag
 
