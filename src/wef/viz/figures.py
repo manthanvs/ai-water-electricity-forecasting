@@ -222,9 +222,79 @@ def fig_training_curves():
     style.save_both("fig_training_curves", draw)
 
 
+# --------------------------------------------------------------------------- anomaly detection (Phase 7)
+def fig_anomaly_water():
+    """BattLeDIM test period: daily mean network inflow, leaks that start in the period shaded, alarms marked."""
+    s = pd.read_parquet(PROCESSED / "anomaly_water_test_series.parquet")
+    a = json.loads((RESULTS / "anomaly.json").read_text())["water"]
+    lab = pd.read_csv(PROCESSED / "anomaly_water_labels.csv", parse_dates=["start", "end", "peak", "window_end"])
+    ev = pd.read_csv(RESULTS / "anomaly_events.csv", parse_dates=["alarm", "start", "end"])
+    ev = ev[ev.resource == "water"]
+    t0, t1 = pd.Timestamp(a["splits"]["test"][0]), pd.Timestamp(a["splits"]["test"][1]) + pd.Timedelta(hours=23)
+    s = s.loc[t0:t1]
+    lab = lab[(lab.start >= t0) & (lab.start <= t1)]
+
+    def draw(mode, size):
+        fig, ax = plt.subplots(figsize=(size[0], size[1] * 1.1))
+        daily = s["actual"].resample("D").mean()
+        ax.plot(daily.index, daily.values, label="Network inflow (daily mean)", **style.line(mode, 0))
+        for i, r in enumerate(lab.itertuples()):
+            ax.axvline(r.start, color="0.3" if mode == "report" else style.SLIDE_COLORS[3], lw=1.0 if mode == "report" else 2,
+                       ls="--", label="Leak start (labelled)" if i == 0 else None)
+            ax.annotate(f"{r.link} ({r.type})", (r.start, 1.0), xycoords=("data", "axes fraction"), rotation=90,
+                        va="top", ha="right", fontsize=plt.rcParams["legend.fontsize"] - 1, color=style.INK2 if mode == "slides" else "0.2")
+        lo, hi = ax.get_ylim()
+        for j, (meth, lab_m, mk) in enumerate([("residual_zscore", "Alarm: residual z-score", "v"), ("isolation_forest", "Alarm: Isolation Forest", "x")]):
+            e = ev[ev.method == meth]
+            ax.scatter(e.alarm, np.full(len(e), lo - (0.04 + 0.05 * j) * (hi - lo)), marker=mk, s=18 if mode == "report" else 40,
+                       clip_on=False, color=style.colour(mode, 0) if mode == "report" else style.SLIDE_COLORS[[2, 4][j]], label=lab_m, zorder=3)
+        ax.set_ylim(lo - 0.12 * (hi - lo), hi)
+        ax.set_ylabel("Inflow (m$^3$/h)"); ax.set_xlabel("2018 (test period)")
+        ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%b"))
+        ax.legend(frameon=False, ncol=2, loc="upper left", bbox_to_anchor=(0, -0.18))
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_anomaly_water", draw)
+
+
+def fig_anomaly_electricity():
+    """Injected anomalies (labelled INJECTED) and detections on the test fortnight with the most injected events."""
+    s = pd.read_parquet(PROCESSED / "anomaly_electricity_test_series.parquet")
+    lab = pd.read_csv(PROCESSED / "electricity_test_injected_labels.csv", parse_dates=["start", "end"])
+    ev = pd.read_csv(RESULTS / "anomaly_events.csv", parse_dates=["alarm", "start", "end"])
+    ev = ev[ev.resource == "electricity"]
+    starts = pd.date_range(lab.start.min().normalize(), lab.end.max().normalize(), freq="D")
+    best = max(starts, key=lambda d: ((lab.start >= d) & (lab.start < d + pd.Timedelta(days=14))).sum())
+    t0, t1 = best, best + pd.Timedelta(days=14)
+    s, lab = s.loc[t0:t1], lab[(lab.end >= t0) & (lab.start <= t1)]
+
+    def draw(mode, size):
+        fig, ax = plt.subplots(figsize=size)
+        ax.plot(s.index, s["actual"], label="Actual with INJECTED anomalies", lw=0.8 if mode == "report" else 1.4, **{k: v for k, v in style.line(mode, 0).items()})
+        ax.plot(s.index, s["forecast"], label="Forecast (selected model)", lw=0.8 if mode == "report" else 1.4, **style.line(mode, 1))
+        for i, r in enumerate(lab.itertuples()):
+            kw = {"facecolor": "none", "edgecolor": "0.4", "hatch": "///", "lw": 0} if mode == "report" else {"color": style.SLIDE_COLORS[3], "alpha": 0.22, "lw": 0}
+            ax.axvspan(max(r.start, t0), min(r.end + pd.Timedelta(hours=1), t1), label="Injected anomaly" if i == 0 else None, **kw)
+            ax.annotate(r.type.replace("_", " "), (max(r.start, t0), 1.0), xycoords=("data", "axes fraction"), va="top",
+                        fontsize=plt.rcParams["legend.fontsize"] - 1, color=style.INK2 if mode == "slides" else "0.2")
+        lo, hi = ax.get_ylim()
+        for j, (meth, lab_m, mk) in enumerate([("residual_zscore", "Alarm: residual z-score", "v"), ("isolation_forest", "Alarm: Isolation Forest", "x")]):
+            e = ev[(ev.method == meth) & (ev.alarm >= t0) & (ev.alarm <= t1)]
+            ax.scatter(e.alarm, np.full(len(e), lo - (0.04 + 0.05 * j) * (hi - lo)), marker=mk, s=18 if mode == "report" else 40, clip_on=False,
+                       color=style.colour(mode, 0) if mode == "report" else style.SLIDE_COLORS[[2, 4][j]], label=lab_m, zorder=3)
+        ax.set_ylim(lo - 0.12 * (hi - lo), hi)
+        ax.set_ylabel(LABEL["electricity"]); ax.set_xlabel("Test period (2010)")
+        ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%d %b"))
+        ax.legend(frameon=False, ncol=3, loc="upper left", bbox_to_anchor=(0, -0.16))
+        fig.tight_layout()
+        return fig
+    style.save_both("fig_anomaly_electricity", draw)
+
+
 EDA = [fig_eda_profiles, fig_eda_weekly_heatmap, fig_eda_temperature, fig_eda_missing]
 RESULT_FIGS = [fig_model_comparison, fig_forecast_electricity, fig_forecast_water, fig_error_by_hour, fig_training_curves]
-FIGURES = EDA + RESULT_FIGS  # later phases append their figures here
+ANOMALY_FIGS = [fig_anomaly_water, fig_anomaly_electricity]
+FIGURES = EDA + RESULT_FIGS + ANOMALY_FIGS  # later phases append their figures here
 
 
 def run(cfg) -> list:

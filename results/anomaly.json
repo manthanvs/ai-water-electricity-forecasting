@@ -1,0 +1,1368 @@
+{
+  "units": {
+    "electricity": "kW",
+    "water": "m3/h"
+  },
+  "water": {
+    "residual_zscore": {
+      "params": {
+        "k": 3.5,
+        "m": 2,
+        "window_hours": 168,
+        "merge_gap_hours": 6
+      },
+      "val": {
+        "n_labels": 4,
+        "n_detected": 4,
+        "recall": 1.0,
+        "n_events": 18,
+        "n_true_events": 15,
+        "precision": 0.8333333333333334,
+        "false_alarms": 3,
+        "false_alarms_per_week": 0.23087494273934953,
+        "median_delay_hours": 25.0,
+        "f1": 0.9090909090909091,
+        "chance_precision": 0.7023809523809523,
+        "per_label": [
+          {
+            "event_id": "p628",
+            "type": "incipient",
+            "start": "2018-05-02 14:55:00",
+            "detected": true,
+            "delay_hours": 22.083333333333332
+          },
+          {
+            "event_id": "p538",
+            "type": "abrupt",
+            "start": "2018-05-18 08:35:00",
+            "detected": true,
+            "delay_hours": 1.4166666666666667
+          },
+          {
+            "event_id": "p866",
+            "type": "abrupt",
+            "start": "2018-06-01 09:05:00",
+            "detected": true,
+            "delay_hours": 27.916666666666668
+          },
+          {
+            "event_id": "p31",
+            "type": "incipient",
+            "start": "2018-06-28 10:35:00",
+            "detected": true,
+            "delay_hours": 28.416666666666668
+          }
+        ]
+      },
+      "test": {
+        "n_labels": 5,
+        "n_detected": 4,
+        "recall": 0.8,
+        "n_events": 35,
+        "n_true_events": 26,
+        "precision": 0.7428571428571429,
+        "false_alarms": 9,
+        "false_alarms_per_week": 0.3424688561721404,
+        "median_delay_hours": 8.166666666666666,
+        "f1": 0.7703703703703704,
+        "chance_precision": 0.7171648550724637,
+        "per_label": [
+          {
+            "event_id": "p810",
+            "type": "incipient",
+            "start": "2018-07-28 03:05:00",
+            "detected": true,
+            "delay_hours": 23.916666666666668
+          },
+          {
+            "event_id": "p654",
+            "type": "incipient",
+            "start": "2018-07-05 03:40:00",
+            "detected": true,
+            "delay_hours": 2.3333333333333335
+          },
+          {
+            "event_id": "p183",
+            "type": "abrupt",
+            "start": "2018-08-07 02:35:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "p158",
+            "type": "abrupt",
+            "start": "2018-10-06 02:35:00",
+            "detected": true,
+            "delay_hours": 4.416666666666667
+          },
+          {
+            "event_id": "p369",
+            "type": "abrupt",
+            "start": "2018-10-26 02:05:00",
+            "detected": true,
+            "delay_hours": 11.916666666666666
+          }
+        ]
+      },
+      "grid": [
+        {
+          "k": 2.0,
+          "m": 1,
+          "f1": 0.8426395939086295,
+          "recall": 1.0,
+          "false_alarms_per_week": 2.385707741639945
+        },
+        {
+          "k": 2.0,
+          "m": 2,
+          "f1": 0.851063829787234,
+          "recall": 1.0,
+          "false_alarms_per_week": 1.0774163994502979
+        },
+        {
+          "k": 2.0,
+          "m": 3,
+          "f1": 0.8108108108108109,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.5387081997251489
+        },
+        {
+          "k": 2.0,
+          "m": 4,
+          "f1": 0.6382978723404256,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.3078332569857994
+        },
+        {
+          "k": 2.0,
+          "m": 6,
+          "f1": 0.6666666666666665,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 2.5,
+          "m": 1,
+          "f1": 0.8552631578947367,
+          "recall": 1.0,
+          "false_alarms_per_week": 1.6930829134218965
+        },
+        {
+          "k": 2.5,
+          "m": 2,
+          "f1": 0.8275862068965517,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.7695831424644984
+        },
+        {
+          "k": 2.5,
+          "m": 3,
+          "f1": 0.8,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.3847915712322492
+        },
+        {
+          "k": 2.5,
+          "m": 4,
+          "f1": 0.6,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "k": 2.5,
+          "m": 6,
+          "f1": 0.6666666666666665,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 3.0,
+          "m": 1,
+          "f1": 0.8347826086956522,
+          "recall": 1.0,
+          "false_alarms_per_week": 1.462207970682547
+        },
+        {
+          "k": 3.0,
+          "m": 2,
+          "f1": 0.8421052631578948,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.46174988547869905
+        },
+        {
+          "k": 3.0,
+          "m": 3,
+          "f1": 0.7241379310344827,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "k": 3.0,
+          "m": 4,
+          "f1": 0.6666666666666665,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 3.0,
+          "m": 6,
+          "f1": 0.6666666666666665,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 3.5,
+          "m": 1,
+          "f1": 0.8666666666666666,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.9234997709573981
+        },
+        {
+          "k": 3.5,
+          "m": 2,
+          "f1": 0.9090909090909091,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "k": 3.5,
+          "m": 3,
+          "f1": 0.6818181818181818,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "k": 3.5,
+          "m": 4,
+          "f1": 0.6666666666666665,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 3.5,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 4.0,
+          "m": 1,
+          "f1": 0.888888888888889,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.6156665139715988
+        },
+        {
+          "k": 4.0,
+          "m": 2,
+          "f1": 0.896551724137931,
+          "recall": 1.0,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "k": 4.0,
+          "m": 3,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 4.0,
+          "m": 4,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 4.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "k": 5.0,
+          "m": 1,
+          "f1": 0.6060606060606061,
+          "recall": 0.5,
+          "false_alarms_per_week": 0.46174988547869905
+        },
+        {
+          "k": 5.0,
+          "m": 2,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "k": 5.0,
+          "m": 3,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "k": 5.0,
+          "m": 4,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "k": 5.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.07695831424644985
+        }
+      ],
+      "test_onset_72h": {
+        "n_labels": 5,
+        "n_detected": 4,
+        "recall": 0.8,
+        "n_events": 35,
+        "n_true_events": 5,
+        "precision": 0.14285714285714285,
+        "false_alarms": 30,
+        "false_alarms_per_week": 1.1415628539071347,
+        "median_delay_hours": 8.166666666666666,
+        "f1": 0.24242424242424243,
+        "chance_precision": 0.08401268115942029,
+        "per_label": [
+          {
+            "event_id": "p810",
+            "type": "incipient",
+            "start": "2018-07-28 03:05:00",
+            "detected": true,
+            "delay_hours": 23.916666666666668
+          },
+          {
+            "event_id": "p654",
+            "type": "incipient",
+            "start": "2018-07-05 03:40:00",
+            "detected": true,
+            "delay_hours": 2.3333333333333335
+          },
+          {
+            "event_id": "p183",
+            "type": "abrupt",
+            "start": "2018-08-07 02:35:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "p158",
+            "type": "abrupt",
+            "start": "2018-10-06 02:35:00",
+            "detected": true,
+            "delay_hours": 4.416666666666667
+          },
+          {
+            "event_id": "p369",
+            "type": "abrupt",
+            "start": "2018-10-26 02:05:00",
+            "detected": true,
+            "delay_hours": 11.916666666666666
+          }
+        ]
+      }
+    },
+    "isolation_forest": {
+      "params": {
+        "contamination": 0.05,
+        "min_run": 1,
+        "fitted_on": "validation-period features"
+      },
+      "val": {
+        "n_labels": 4,
+        "n_detected": 3,
+        "recall": 0.75,
+        "n_events": 30,
+        "n_true_events": 24,
+        "precision": 0.8,
+        "false_alarms": 6,
+        "false_alarms_per_week": 0.46174988547869905,
+        "median_delay_hours": 23.916666666666668,
+        "f1": 0.7741935483870969,
+        "chance_precision": 0.7023809523809523,
+        "per_label": [
+          {
+            "event_id": "p628",
+            "type": "incipient",
+            "start": "2018-05-02 14:55:00",
+            "detected": true,
+            "delay_hours": 166.08333333333334
+          },
+          {
+            "event_id": "p538",
+            "type": "abrupt",
+            "start": "2018-05-18 08:35:00",
+            "detected": true,
+            "delay_hours": 6.416666666666667
+          },
+          {
+            "event_id": "p866",
+            "type": "abrupt",
+            "start": "2018-06-01 09:05:00",
+            "detected": true,
+            "delay_hours": 23.916666666666668
+          },
+          {
+            "event_id": "p31",
+            "type": "incipient",
+            "start": "2018-06-28 10:35:00",
+            "detected": false,
+            "delay_hours": null
+          }
+        ]
+      },
+      "test": {
+        "n_labels": 5,
+        "n_detected": 4,
+        "recall": 0.8,
+        "n_events": 60,
+        "n_true_events": 49,
+        "precision": 0.8166666666666667,
+        "false_alarms": 11,
+        "false_alarms_per_week": 0.41857304643261606,
+        "median_delay_hours": 13.166666666666668,
+        "f1": 0.8082474226804124,
+        "chance_precision": 0.7171648550724637,
+        "per_label": [
+          {
+            "event_id": "p810",
+            "type": "incipient",
+            "start": "2018-07-28 03:05:00",
+            "detected": true,
+            "delay_hours": 21.916666666666668
+          },
+          {
+            "event_id": "p654",
+            "type": "incipient",
+            "start": "2018-07-05 03:40:00",
+            "detected": true,
+            "delay_hours": 3.3333333333333335
+          },
+          {
+            "event_id": "p183",
+            "type": "abrupt",
+            "start": "2018-08-07 02:35:00",
+            "detected": true,
+            "delay_hours": 123.41666666666667
+          },
+          {
+            "event_id": "p158",
+            "type": "abrupt",
+            "start": "2018-10-06 02:35:00",
+            "detected": true,
+            "delay_hours": 4.416666666666667
+          },
+          {
+            "event_id": "p369",
+            "type": "abrupt",
+            "start": "2018-10-26 02:05:00",
+            "detected": false,
+            "delay_hours": null
+          }
+        ]
+      },
+      "grid": [
+        {
+          "contamination": 0.005,
+          "min_run": 1,
+          "f1": 0.28571428571428575,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "contamination": 0.005,
+          "min_run": 2,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.005,
+          "min_run": 3,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 1,
+          "f1": 0.75,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 2,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 3,
+          "f1": 0.3333333333333333,
+          "recall": 0.25,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 1,
+          "f1": 0.7674418604651163,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.23087494273934953
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 2,
+          "f1": 0.75,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 3,
+          "f1": 0.7058823529411765,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.07695831424644985
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 1,
+          "f1": 0.7741935483870969,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.46174988547869905
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 2,
+          "f1": 0.7317073170731706,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.3078332569857994
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 3,
+          "f1": 0.75,
+          "recall": 0.75,
+          "false_alarms_per_week": 0.1539166284928997
+        }
+      ],
+      "test_onset_72h": {
+        "n_labels": 5,
+        "n_detected": 3,
+        "recall": 0.6,
+        "n_events": 60,
+        "n_true_events": 7,
+        "precision": 0.11666666666666667,
+        "false_alarms": 53,
+        "false_alarms_per_week": 2.0167610419026047,
+        "median_delay_hours": 4.416666666666667,
+        "f1": 0.1953488372093023,
+        "chance_precision": 0.08401268115942029,
+        "per_label": [
+          {
+            "event_id": "p810",
+            "type": "incipient",
+            "start": "2018-07-28 03:05:00",
+            "detected": true,
+            "delay_hours": 21.916666666666668
+          },
+          {
+            "event_id": "p654",
+            "type": "incipient",
+            "start": "2018-07-05 03:40:00",
+            "detected": true,
+            "delay_hours": 3.3333333333333335
+          },
+          {
+            "event_id": "p183",
+            "type": "abrupt",
+            "start": "2018-08-07 02:35:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "p158",
+            "type": "abrupt",
+            "start": "2018-10-06 02:35:00",
+            "detected": true,
+            "delay_hours": 4.416666666666667
+          },
+          {
+            "event_id": "p369",
+            "type": "abrupt",
+            "start": "2018-10-26 02:05:00",
+            "detected": false,
+            "delay_hours": null
+          }
+        ]
+      }
+    },
+    "label_source": "BattLeDIM 2018 leak list (dataset_configuration.yaml)",
+    "series": "L-Town network inflow p227 + p235, hourly mean, m3/h (simulated hydraulics)",
+    "forecaster": {
+      "model": "xgboost",
+      "params": {
+        "learning_rate": 0.03,
+        "max_depth": 8,
+        "relative": true
+      },
+      "trained_on": [
+        "2018-01-01",
+        "2018-03-31"
+      ],
+      "weather": false
+    },
+    "splits": {
+      "train": [
+        "2018-01-01",
+        "2018-03-31"
+      ],
+      "val": [
+        "2018-04-01",
+        "2018-06-30"
+      ],
+      "test": [
+        "2018-07-01",
+        "2018-12-31"
+      ]
+    },
+    "match_rule": "alarm between leak start and min(end, peak + 7 days)",
+    "leaks_by_period": {
+      "train": 5,
+      "val": 4,
+      "test": 5
+    }
+  },
+  "electricity": {
+    "residual_zscore": {
+      "params": {
+        "k": 4.0,
+        "m": 1,
+        "window_hours": 168,
+        "merge_gap_hours": 6
+      },
+      "val": {
+        "n_labels": 11,
+        "n_detected": 7,
+        "recall": 0.6363636363636364,
+        "n_events": 33,
+        "n_true_events": 8,
+        "precision": 0.24242424242424243,
+        "false_alarms": 25,
+        "false_alarms_per_week": 0.9670734515311997,
+        "median_delay_hours": 2.0,
+        "f1": 0.3510971786833856,
+        "chance_precision": 0.07435543278084715,
+        "per_label": [
+          {
+            "event_id": "val_injected_01",
+            "type": "spike",
+            "start": "2010-02-23 05:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "val_injected_02",
+            "type": "level_shift",
+            "start": "2010-03-11 11:00:00",
+            "detected": true,
+            "delay_hours": 9.0
+          },
+          {
+            "event_id": "val_injected_03",
+            "type": "level_shift",
+            "start": "2010-03-26 18:00:00",
+            "detected": true,
+            "delay_hours": 3.0
+          },
+          {
+            "event_id": "val_injected_04",
+            "type": "drift",
+            "start": "2010-03-31 20:00:00",
+            "detected": true,
+            "delay_hours": 91.0
+          },
+          {
+            "event_id": "val_injected_05",
+            "type": "level_shift",
+            "start": "2010-04-27 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_06",
+            "type": "spike",
+            "start": "2010-05-23 00:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_07",
+            "type": "spike",
+            "start": "2010-05-26 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_08",
+            "type": "drift",
+            "start": "2010-05-30 16:00:00",
+            "detected": true,
+            "delay_hours": 1.0
+          },
+          {
+            "event_id": "val_injected_09",
+            "type": "spike",
+            "start": "2010-06-07 05:00:00",
+            "detected": true,
+            "delay_hours": 2.0
+          },
+          {
+            "event_id": "val_injected_10",
+            "type": "spike",
+            "start": "2010-06-20 17:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "val_injected_11",
+            "type": "spike",
+            "start": "2010-06-26 02:00:00",
+            "detected": false,
+            "delay_hours": null
+          }
+        ]
+      },
+      "test": {
+        "n_labels": 11,
+        "n_detected": 8,
+        "recall": 0.7272727272727273,
+        "n_events": 49,
+        "n_true_events": 11,
+        "precision": 0.22448979591836735,
+        "false_alarms": 38,
+        "false_alarms_per_week": 1.797803435651929,
+        "median_delay_hours": 2.5,
+        "f1": 0.3430799220272905,
+        "chance_precision": 0.09769144144144144,
+        "per_label": [
+          {
+            "event_id": "test_injected_01",
+            "type": "drift",
+            "start": "2010-07-05 04:00:00",
+            "detected": true,
+            "delay_hours": 88.0
+          },
+          {
+            "event_id": "test_injected_02",
+            "type": "level_shift",
+            "start": "2010-07-18 09:00:00",
+            "detected": true,
+            "delay_hours": 14.0
+          },
+          {
+            "event_id": "test_injected_03",
+            "type": "spike",
+            "start": "2010-07-23 13:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_04",
+            "type": "drift",
+            "start": "2010-07-26 00:00:00",
+            "detected": true,
+            "delay_hours": 23.0
+          },
+          {
+            "event_id": "test_injected_05",
+            "type": "spike",
+            "start": "2010-08-01 09:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_06",
+            "type": "spike",
+            "start": "2010-08-14 10:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_07",
+            "type": "spike",
+            "start": "2010-09-16 14:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_08",
+            "type": "spike",
+            "start": "2010-09-22 09:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_09",
+            "type": "level_shift",
+            "start": "2010-10-11 19:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_10",
+            "type": "spike",
+            "start": "2010-10-29 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_11",
+            "type": "level_shift",
+            "start": "2010-11-13 11:00:00",
+            "detected": true,
+            "delay_hours": 5.0
+          }
+        ]
+      },
+      "grid": [
+        {
+          "k": 2.0,
+          "m": 1,
+          "f1": 0.21465076660988075,
+          "recall": 0.8181818181818182,
+          "false_alarms_per_week": 5.76375777112595
+        },
+        {
+          "k": 2.0,
+          "m": 2,
+          "f1": 0.2162162162162162,
+          "recall": 0.5454545454545454,
+          "false_alarms_per_week": 2.978586230716095
+        },
+        {
+          "k": 2.0,
+          "m": 3,
+          "f1": 0.2094240837696335,
+          "recall": 0.36363636363636365,
+          "false_alarms_per_week": 1.1218052037761916
+        },
+        {
+          "k": 2.0,
+          "m": 4,
+          "f1": 0.25806451612903225,
+          "recall": 0.36363636363636365,
+          "false_alarms_per_week": 0.6189270089799678
+        },
+        {
+          "k": 2.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.07736587612249597
+        },
+        {
+          "k": 2.5,
+          "m": 1,
+          "f1": 0.2581132075471698,
+          "recall": 0.8181818181818182,
+          "false_alarms_per_week": 4.061708496431039
+        },
+        {
+          "k": 2.5,
+          "m": 2,
+          "f1": 0.18045112781954886,
+          "recall": 0.36363636363636365,
+          "false_alarms_per_week": 1.7020492746949114
+        },
+        {
+          "k": 2.5,
+          "m": 3,
+          "f1": 0.13793103448275862,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.6189270089799678
+        },
+        {
+          "k": 2.5,
+          "m": 4,
+          "f1": 0.09999999999999999,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.3094635044899839
+        },
+        {
+          "k": 2.5,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 3.0,
+          "m": 1,
+          "f1": 0.2685851318944844,
+          "recall": 0.7272727272727273,
+          "false_alarms_per_week": 2.7464886023486073
+        },
+        {
+          "k": 3.0,
+          "m": 2,
+          "f1": 0.15789473684210525,
+          "recall": 0.2727272727272727,
+          "false_alarms_per_week": 0.9283905134699517
+        },
+        {
+          "k": 3.0,
+          "m": 3,
+          "f1": 0.09999999999999999,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.3094635044899839
+        },
+        {
+          "k": 3.0,
+          "m": 4,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.15473175224499194
+        },
+        {
+          "k": 3.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 3.5,
+          "m": 1,
+          "f1": 0.31890660592255127,
+          "recall": 0.6363636363636364,
+          "false_alarms_per_week": 1.4312687082661755
+        },
+        {
+          "k": 3.5,
+          "m": 2,
+          "f1": 0.16,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.46419525673497586
+        },
+        {
+          "k": 3.5,
+          "m": 3,
+          "f1": 0.14285714285714288,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.07736587612249597
+        },
+        {
+          "k": 3.5,
+          "m": 4,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 3.5,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 4.0,
+          "m": 1,
+          "f1": 0.3510971786833856,
+          "recall": 0.6363636363636364,
+          "false_alarms_per_week": 0.9670734515311997
+        },
+        {
+          "k": 4.0,
+          "m": 2,
+          "f1": 0.2105263157894737,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.23209762836748793
+        },
+        {
+          "k": 4.0,
+          "m": 3,
+          "f1": 0.15384615384615385,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.038682938061247986
+        },
+        {
+          "k": 4.0,
+          "m": 4,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 4.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 5.0,
+          "m": 1,
+          "f1": 0.3314917127071823,
+          "recall": 0.45454545454545453,
+          "false_alarms_per_week": 0.6576099470412158
+        },
+        {
+          "k": 5.0,
+          "m": 2,
+          "f1": 0.12500000000000003,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.15473175224499194
+        },
+        {
+          "k": 5.0,
+          "m": 3,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 5.0,
+          "m": 4,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        },
+        {
+          "k": 5.0,
+          "m": 6,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.0
+        }
+      ]
+    },
+    "isolation_forest": {
+      "params": {
+        "contamination": 0.005,
+        "min_run": 1,
+        "fitted_on": "validation-period features"
+      },
+      "val": {
+        "n_labels": 11,
+        "n_detected": 4,
+        "recall": 0.36363636363636365,
+        "n_events": 15,
+        "n_true_events": 6,
+        "precision": 0.4,
+        "false_alarms": 9,
+        "false_alarms_per_week": 0.3481464425512319,
+        "median_delay_hours": 6.0,
+        "f1": 0.380952380952381,
+        "chance_precision": 0.07435543278084715,
+        "per_label": [
+          {
+            "event_id": "val_injected_01",
+            "type": "spike",
+            "start": "2010-02-23 05:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_02",
+            "type": "level_shift",
+            "start": "2010-03-11 11:00:00",
+            "detected": true,
+            "delay_hours": 10.0
+          },
+          {
+            "event_id": "val_injected_03",
+            "type": "level_shift",
+            "start": "2010-03-26 18:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_04",
+            "type": "drift",
+            "start": "2010-03-31 20:00:00",
+            "detected": true,
+            "delay_hours": 91.0
+          },
+          {
+            "event_id": "val_injected_05",
+            "type": "level_shift",
+            "start": "2010-04-27 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_06",
+            "type": "spike",
+            "start": "2010-05-23 00:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_07",
+            "type": "spike",
+            "start": "2010-05-26 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_08",
+            "type": "drift",
+            "start": "2010-05-30 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "val_injected_09",
+            "type": "spike",
+            "start": "2010-06-07 05:00:00",
+            "detected": true,
+            "delay_hours": 2.0
+          },
+          {
+            "event_id": "val_injected_10",
+            "type": "spike",
+            "start": "2010-06-20 17:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "val_injected_11",
+            "type": "spike",
+            "start": "2010-06-26 02:00:00",
+            "detected": false,
+            "delay_hours": null
+          }
+        ]
+      },
+      "test": {
+        "n_labels": 11,
+        "n_detected": 3,
+        "recall": 0.2727272727272727,
+        "n_events": 10,
+        "n_true_events": 5,
+        "precision": 0.5,
+        "false_alarms": 5,
+        "false_alarms_per_week": 0.2365530836384117,
+        "median_delay_hours": 0.0,
+        "f1": 0.3529411764705882,
+        "chance_precision": 0.09769144144144144,
+        "per_label": [
+          {
+            "event_id": "test_injected_01",
+            "type": "drift",
+            "start": "2010-07-05 04:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_02",
+            "type": "level_shift",
+            "start": "2010-07-18 09:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_03",
+            "type": "spike",
+            "start": "2010-07-23 13:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_04",
+            "type": "drift",
+            "start": "2010-07-26 00:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_05",
+            "type": "spike",
+            "start": "2010-08-01 09:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_06",
+            "type": "spike",
+            "start": "2010-08-14 10:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_07",
+            "type": "spike",
+            "start": "2010-09-16 14:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_08",
+            "type": "spike",
+            "start": "2010-09-22 09:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_09",
+            "type": "level_shift",
+            "start": "2010-10-11 19:00:00",
+            "detected": true,
+            "delay_hours": 0.0
+          },
+          {
+            "event_id": "test_injected_10",
+            "type": "spike",
+            "start": "2010-10-29 16:00:00",
+            "detected": false,
+            "delay_hours": null
+          },
+          {
+            "event_id": "test_injected_11",
+            "type": "level_shift",
+            "start": "2010-11-13 11:00:00",
+            "detected": true,
+            "delay_hours": 28.0
+          }
+        ]
+      },
+      "grid": [
+        {
+          "contamination": 0.005,
+          "min_run": 1,
+          "f1": 0.380952380952381,
+          "recall": 0.36363636363636365,
+          "false_alarms_per_week": 0.3481464425512319
+        },
+        {
+          "contamination": 0.005,
+          "min_run": 2,
+          "f1": 0.13333333333333333,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.11604881418374396
+        },
+        {
+          "contamination": 0.005,
+          "min_run": 3,
+          "f1": 0.0,
+          "recall": 0.0,
+          "false_alarms_per_week": 0.038682938061247986
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 1,
+          "f1": 0.3755868544600939,
+          "recall": 0.45454545454545453,
+          "false_alarms_per_week": 0.6576099470412158
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 2,
+          "f1": 0.10526315789473685,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.27078056642873594
+        },
+        {
+          "contamination": 0.01,
+          "min_run": 3,
+          "f1": 0.14285714285714288,
+          "recall": 0.09090909090909091,
+          "false_alarms_per_week": 0.07736587612249597
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 1,
+          "f1": 0.29304029304029305,
+          "recall": 0.45454545454545453,
+          "false_alarms_per_week": 1.1218052037761916
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 2,
+          "f1": 0.2105263157894737,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.46419525673497586
+        },
+        {
+          "contamination": 0.02,
+          "min_run": 3,
+          "f1": 0.26666666666666666,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.11604881418374396
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 1,
+          "f1": 0.29679595278246207,
+          "recall": 0.7272727272727273,
+          "false_alarms_per_week": 1.8567810269399034
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 2,
+          "f1": 0.16326530612244897,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.8897075754087037
+        },
+        {
+          "contamination": 0.05,
+          "min_run": 3,
+          "f1": 0.19999999999999998,
+          "recall": 0.18181818181818182,
+          "false_alarms_per_week": 0.5415611328574719
+        }
+      ]
+    },
+    "label_source": "INJECTED (synthetic) anomalies on copies of the validation and test periods",
+    "injection": {
+      "types": {
+        "spike": 6,
+        "level_shift": 3,
+        "drift": 2
+      },
+      "seed_val": 101,
+      "seed_test": 202,
+      "test_labels_file": "data/processed/electricity_test_injected_labels.csv"
+    },
+    "forecaster": {
+      "model": "gru",
+      "params": {
+        "units": 64,
+        "layers": 1,
+        "relative": false,
+        "residual": false
+      }
+    },
+    "splits": {
+      "val": [
+        "2010-01-01",
+        "2010-06-30"
+      ],
+      "test": [
+        "2010-07-01",
+        "2010-11-25"
+      ]
+    },
+    "match_rule": "alarm between injected anomaly start and end",
+    "recall_by_type_test": {
+      "residual_zscore": {
+        "spike": 0.5,
+        "level_shift": 1.0,
+        "drift": 1.0
+      },
+      "isolation_forest": {
+        "spike": 0.16666666666666666,
+        "level_shift": 0.6666666666666666,
+        "drift": 0.0
+      }
+    }
+  }
+}

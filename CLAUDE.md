@@ -129,7 +129,7 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 4 - baselines, statistical and machine learning models (2026-10-12: 5 models x 4 series backtested, results/metrics.json written; water SARIMA and water W1 Ridge do not beat naive on validation, reported)
 - [x] Phase 5 - deep learning models (2026-10-12: 96 deep fits in about 13 min; training time per model in model_card.json and tuning.json; metrics added)
 - [x] Phase 6 - evaluation and model selection (2026-10-12: metrics.json passes schema check; selected GRU for electricity D1, XGBoost elsewhere; comparison figures and generated summary.md)
-- [ ] Phase 7 - anomaly detection
+- [x] Phase 7 - anomaly detection (2026-10-12: both methods on both resources; precision, recall, delay and chance precision in anomaly.json; injected data labelled)
 - [ ] Phase 8 - resource optimisation
 - [ ] Phase 9 - Flask API and Streamlit dashboard
 - [ ] Phase 10 - Power BI export and build guide

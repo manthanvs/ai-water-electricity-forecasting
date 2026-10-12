@@ -121,5 +121,45 @@
       "results/predictions/water_d1.parquet": "528e7ed796428356829c622b149905cd17827be5b70187d2c857ce7ee18244e9",
       "results/predictions/water_w1.parquet": "789a42196dd804330b60403bc7ae5ca7b805c30c997734551c61195da5e35e68"
     }
+  },
+  {
+    "stage": "anomaly",
+    "timestamp": "2026-10-12T18:14:51+00:00",
+    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
+    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
+    "inputs": {
+      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
+      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
+    }
+  },
+  {
+    "stage": "anomaly",
+    "timestamp": "2026-10-12T18:15:53+00:00",
+    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
+    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
+    "inputs": {
+      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
+      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
+    }
+  },
+  {
+    "stage": "anomaly",
+    "timestamp": "2026-10-12T18:16:30+00:00",
+    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
+    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
+    "inputs": {
+      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
+      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
+    }
+  },
+  {
+    "stage": "anomaly",
+    "timestamp": "2026-10-12T18:17:14+00:00",
+    "git_commit": "b45e41e320bf158b649910a7e9cc0fccc0529a43",
+    "config_hash": "ab70050dcc42cdaecdbbbfd1618b694a098e1abaf02f6c7f228e7c3711cb1207",
+    "inputs": {
+      "data/processed/battledim_inflow_hourly.parquet": "999c52dbeb51cd5505e4f9484e125a01be459e05eb79e0d5c459331ff6def79d",
+      "data/processed/electricity_hourly.parquet": "d268d733458a77ac053829624816e29b2dd49a542201d4a52d3bbcfdaf1b3043"
+    }
   }
 ]

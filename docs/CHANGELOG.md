@@ -43,3 +43,8 @@
 - Metrics: `peak_mae` is null when no point exceeds the training 90th percentile (`n_peak_points`); `write_json` refuses NaN.
 - Figures: `fig_model_comparison`, `fig_forecast_electricity`, `fig_forecast_water`, `fig_error_by_hour`, `fig_training_curves`.
 - Tests: metrics.json schema test.
+
+## Phase 7 - anomaly detection (2026-10-12)
+
+- Added `wef.anomaly` (`inject.py`, `residual.py`, `iforest.py`, `evaluate.py`; `anomaly` stage), `results/anomaly.json`, `results/anomaly_events.csv`, figures `fig_anomaly_water` and `fig_anomaly_electricity`, `tests/test_anomaly.py`.
+- Config: BattLeDIM splits, anomaly grids and injection settings; `split_dates` and holiday helper generalised.

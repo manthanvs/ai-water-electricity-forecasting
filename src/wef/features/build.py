@@ -35,8 +35,8 @@ def feature_cols(horizon: str, weather: bool = True) -> list:
 
 
 def _holiday_set(resource: str, cfg, years) -> set:
-    country = cfg["holidays"][resource]
-    days = set(holidays.country_holidays(country, years=years))
+    country = cfg["holidays"].get(resource)
+    days = set(holidays.country_holidays(country, years=years)) if country else set()
     if resource == "water":  # BWDF city's patron saint (wf4bwdf calendar), 3 November
         days |= {pd.Timestamp(y, 11, 3).date() for y in years}
     return days

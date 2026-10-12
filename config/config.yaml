@@ -33,6 +33,7 @@ sources:
 
 holidays:
   electricity: FR
+  battledim: null        # L-Town is a fictional benchmark town
   water: IT              # BWDF is a city in north-east Italy (wf4bwdf also flags Sundays and 3 Nov)
 
 # Chronological splits. Electricity dates are provisional until confirmed against the data (Phase 2).
@@ -41,6 +42,11 @@ splits:
     train: ["2007-01-01", "2009-12-31"]
     val: ["2010-01-01", "2010-06-30"]
     test: ["2010-07-01", null]       # null = end of data
+  # BattLeDIM 2018 (anomaly detection only): forecaster trained Jan-Mar, detector tuned Apr-Jun, tested Jul-Dec
+  battledim:
+    train: ["2018-01-01", "2018-03-31"]
+    val: ["2018-04-01", "2018-06-30"]
+    test: ["2018-07-01", "2018-12-31"]
   water:
     test_weeks: 12
     val_weeks: 10
@@ -93,3 +99,16 @@ models:
     epochs: 60
     patience: 8
     batch_size: 32
+
+anomaly:
+  rolling_window_hours: 168     # robust z-score window (trailing median and MAD of residuals)
+  k: [2.0, 2.5, 3.0, 3.5, 4.0, 5.0]
+  m: [1, 2, 3, 4, 6]            # consecutive flagged hours needed to raise an alarm
+  merge_gap_hours: 6            # alarms closer than this are one event
+  contamination: [0.005, 0.01, 0.02, 0.05]
+  iforest_min_run: [1, 2, 3]
+  leak_window_after_peak_days: 7
+  inject:                        # electricity, injected into copies of validation and test
+    seed_val: 101
+    seed_test: 202
+    n: {spike: 6, level_shift: 3, drift: 2}
