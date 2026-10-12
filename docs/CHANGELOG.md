@@ -20,3 +20,8 @@
 - Added `wef.viz.style` (report and slide styles, `save_both`) and `wef.viz.figures` with `fig_eda_profiles`, `fig_eda_weekly_heatmap`, `fig_eda_temperature`, `fig_eda_missing`.
 - Processed files: `electricity_hourly/daily`, `water_hourly/daily`, `water_all_dmas_hourly`, `battledim_inflow_15min/hourly` (parquet), `battledim_leaks.csv`.
 - Added `tests/test_clean.py`.
+
+## Phase 3 - feature engineering (2026-10-12)
+
+- Added `wef.features.build` (origin-formulated tables in `data/processed/features/`, deep-model windows, eval mask); `prepare` stage now runs cleaning + features.
+- Added `tests/test_no_leakage.py` (perturbation test) and `tests/test_splits.py`.

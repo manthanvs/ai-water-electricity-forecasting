@@ -125,7 +125,7 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 0 - scaffold and environment (2026-10-12: fresh-venv install from requirements.txt OK; tf/xgboost/statsmodels import; `wef.cli --help` lists all stages; SELFTEST OK)
 - [x] Phase 1 - data acquisition and data cards (2026-10-12: all four sources present, CC BY 4.0, checksums recorded, cards generated; primary water series DMA 3)
 - [x] Phase 2 - cleaning and exploratory analysis (2026-10-12: no duplicate timestamps, regular hourly/daily frequency, eda_summary.json written, 4 EDA figures)
-- [ ] Phase 3 - feature engineering
+- [x] Phase 3 - feature engineering (2026-10-12: perturbation leakage test passes for all four tables and the deep-model windows; mutation check fails as expected)
 - [ ] Phase 4 - baselines, statistical and machine learning models
 - [ ] Phase 5 - deep learning models
 - [ ] Phase 6 - evaluation and model selection
