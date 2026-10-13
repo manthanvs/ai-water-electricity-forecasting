@@ -5,41 +5,41 @@ figures:
   fig_architecture:
     file: figures/report/fig_architecture.png
     caption: System architecture of the study, from data sources to delivery
-    width_mm: 150
+    width_mm: 135
   fig_eda_profiles:
     file: figures/report/fig_eda_profiles.png
-    caption: "Average hourly profile in the training period on weekdays and weekends: (a) household electricity, (b) water inflow of DMA 3"
+    caption: "Average weekday and weekend hourly profiles (training period): (a) electricity, (b) water"
     legend: "Solid line with markers: weekdays; dashed line: weekends"
-    width_mm: 145
+    width_mm: 125
   fig_forecast_electricity:
     file: figures/report/fig_forecast_electricity.png
     caption: "Electricity, next-day forecasts for a typical test week"
     legend: "Solid: actual load; dotted: seasonal naive; dashed: selected model ({{m:electricity.d1.selected.model|name}})"
-    width_mm: 145
+    width_mm: 110
   fig_forecast_water:
     file: figures/report/fig_forecast_water.png
     caption: "Water demand of DMA 3, next-day forecasts for a typical test week"
     legend: "Solid: actual inflow; dotted: seasonal naive; dashed: selected model ({{m:water.d1.selected.model|name}})"
-    width_mm: 145
+    width_mm: 115
   fig_model_comparison:
     file: figures/report/fig_model_comparison.png
     caption: "Test MAE of each model divided by the MAE of the seasonal-naive baseline: (a) next day, (b) next week"
     legend: "Plain bars: electricity; hatched bars: water; dashed line: baseline (shorter bars are better)"
-    width_mm: 150
+    width_mm: 135
   fig_anomaly_water:
     file: figures/report/fig_anomaly_water.png
     caption: "BattLeDIM network inflow in the detection test period with labelled leak starts and alarms of both detectors"
-    legend: "Dashed lines: leak starts from the BattLeDIM leak list; triangles: residual z-score alarms; crosses: Isolation Forest alarms"
-    width_mm: 150
+    legend: "Dashed lines: labelled leak starts; triangles: z-score alarms; crosses: Isolation Forest alarms"
+    width_mm: 115
   fig_pump_schedule:
     file: figures/report/fig_pump_schedule.png
     caption: "Optimised pumping plan for a typical test day (illustrative tank, pump and tariff)"
-    legend: "Top: forecast and actual demand with planned pumping; bottom: tank level for the plan and under actual demand; grey: peak tariff, dotted: off-peak"
-    width_mm: 140
+    legend: "Top: demand and planned pumping; bottom: tank level, solid for the plan and dashed under actual demand"
+    width_mm: 115
   fig_dashboard:
     file: figures/report/fig_dashboard.png
-    caption: "Forecast page of the project's Streamlit dashboard (greyscale screenshot)"
-    width_mm: 150
+    caption: "Forecast page of the project's Streamlit dashboard (greyscale screenshot, navigation sidebar cropped)"
+    width_mm: 110
 
 tables:
   tab_literature:
@@ -68,16 +68,10 @@ tables:
       - ["District water demand (DMA 3)", "BWDF [@alvisi2025bwdf]", "Hourly", "{{e:water.period.0|date}} to {{e:water.period.1|date}}", "{{e:water.n_hours|,}} hours", "Water forecasting; robustness on all DMAs"]
       - ["L-Town network inflow", "BattLeDIM [@vrachimis2022battledim]", "Five-minute, averaged to hourly", "{{e:battledim.period.0|date}} to {{e:battledim.period.1|date}}", "{{e:battledim.n_hours|,}} hours; {{e:battledim.n_leaks_2018}} leaks", "Leak detection with real labels"]
       - ["Weather", "Open-Meteo [@openmeteo]; BWDF", "Hourly", "Same as the consumption series", "-", "Weather features"]
-  tab_metrics_d1:
-    caption: Test-period accuracy of all models, next-day hourly forecasts (D1)
+  tab_metrics:
+    caption: Test-period accuracy of all models for next-day (D1) and next-week (W1) forecasts
     generator: metrics_table
-    args: {horizon: d1}
-    legend: "* selected by validation MAE. Electricity in kW, water in L/s; MAPE in percent."
-  tab_metrics_w1:
-    caption: Test-period accuracy of all models, next-week daily forecasts (W1)
-    generator: metrics_table
-    args: {horizon: w1}
-    legend: "* selected by validation MAE. Electricity in kWh/day, water in m3/day; MAPE in percent."
+    legend: "* selected by validation MAE. MAE in kW (electricity D1), L/s (water D1), kWh/day (electricity W1) and m3/day (water W1); MAPE in percent."
   tab_anomaly:
     caption: Event-level anomaly detection in the test period
     generator: anomaly_table

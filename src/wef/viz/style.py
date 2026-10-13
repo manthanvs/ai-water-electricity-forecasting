@@ -42,6 +42,9 @@ SLIDES = {
     "savefig.dpi": 200, "figure.dpi": 100, "savefig.bbox": "tight",
 }
 SIZE = {"report": (5.9, 3.0), "slides": (11.0, 5.2)}
+# Single-panel report figures are drawn at their printed width (about 117 mm) so that axis text stays
+# at 8-9 pt in the report instead of being scaled down from the full text width.
+COMPACT_REPORT = (4.6, 2.1)
 
 
 def report():
@@ -79,13 +82,13 @@ def _style(mode):
         yield
 
 
-def save_both(fig_id: str, draw) -> None:
+def save_both(fig_id: str, draw, compact: bool = False) -> None:
     """draw(mode, figsize) -> Figure. Writes figures/report/<id>.png (greyscale) and figures/slides/<id>.png."""
     for mode in ("report", "slides"):
         out = ROOT / "figures" / mode / f"{fig_id}.png"
         out.parent.mkdir(parents=True, exist_ok=True)
         with _style(mode):
-            fig = draw(mode, SIZE[mode])
+            fig = draw(mode, COMPACT_REPORT if compact and mode == "report" else SIZE[mode])
             fig.savefig(out)
             plt.close(fig)
         if mode == "report":

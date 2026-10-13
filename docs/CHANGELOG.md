@@ -79,3 +79,10 @@
 - Added `report/build_report.py`, `report/content/ch0_front.md` ... `ch7_conclusion.md`, `report/figures.yaml`, `report/equations.yaml`, `report/facts.yaml`.
 - Extended `report/docx_format.py` (subscripts in body text, italic reference segments, `term_line`, table grid widths).
 - Draft builds with every token and citation resolved (21 of 21 references cited); one CONFIRM marker (Director's name).
+
+## Report R3 - build, page budget, checks (2026-10-13)
+
+- `build_report.py --check` with the 12 checks; draft build passes with 0 failures (warnings: pages above 15, Director CONFIRM marker, chapter budgets).
+- Body trimmed from 26 to 20 pages; Tables 6.1 and 6.2 merged; figure placement and widths adjusted.
+- `wef.viz.style.COMPACT_REPORT` and `save_both(compact=True)` for single-panel report figures; dashboard report copy cropped; figures regenerated.
+- `docx_format.py`: `new_page` on title functions, caption kept with legend.

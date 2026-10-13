@@ -279,9 +279,11 @@ def page_break(doc):
 
 
 # --------------------------------------------------------------------------- headings
-def front_title(doc, text):
-    """ABSTRACT, ACKNOWLEDGEMENT, TABLE OF CONTENTS, ... (same look as a chapter title)."""
+def front_title(doc, text, new_page: bool = False):
+    """ABSTRACT, ACKNOWLEDGEMENT, TABLE OF CONTENTS, ... (same look as a chapter title).
+    new_page=True starts it on a new page with 'page break before' (no empty page if the previous one is full)."""
     p = doc.add_paragraph()
+    p.paragraph_format.page_break_before = new_page
     p.alignment = WD_ALIGN_PARAGRAPH.CENTER
     _spacing(p, 0, 24, 1.0)
     _font(p.add_run(text.upper()), 14, bold=True)
@@ -289,8 +291,10 @@ def front_title(doc, text):
     return p
 
 
-def chapter_title(doc, number: int, title: str):
+def chapter_title(doc, number: int, title: str, new_page: bool = False):
+    """'CHAPTER n' and the title; new_page=True puts 'page break before' on it (each chapter starts a new page)."""
     p1 = doc.add_paragraph()
+    p1.paragraph_format.page_break_before = new_page
     p1.alignment = WD_ALIGN_PARAGRAPH.CENTER
     _spacing(p1, 0, 6, 1.0)
     p1.paragraph_format.keep_with_next = True
@@ -397,6 +401,7 @@ def figure(doc, image_path, label: str, caption: str, width_mm: float = 130, leg
     c = doc.add_paragraph()
     c.alignment = WD_ALIGN_PARAGRAPH.CENTER
     _spacing(c, 0, 4 if legend else PARA_GAP_PT, 1.0)
+    c.paragraph_format.keep_with_next = bool(legend)  # caption and legend stay on one page
     _font(c.add_run(f"Figure {label}: "), CAPTION_PT, bold=True)
     _font(c.add_run(caption), CAPTION_PT)
     if legend:

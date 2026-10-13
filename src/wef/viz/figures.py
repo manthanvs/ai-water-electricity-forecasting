@@ -165,11 +165,11 @@ def _fig_forecast(resource):
             kw = style.line(mode, [0, 2, 1][i]) if mode == "report" else {"color": [style.INK, "#b5b4ae", style.SLIDE_COLORS[0]][i]}
             ax.plot(w.target_time, w[col], label=lab, lw=[1.2, 0.9, 1.1][i] if mode == "report" else [2.2, 1.6, 2.0][i], **kw)
         ax.set_ylabel(LABEL[resource]); ax.set_xlabel("Day (test period)")
-        ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%a %d %b"))
-        ax.legend(frameon=False, ncol=3, loc="upper left", bbox_to_anchor=(0, 1.12))
+        ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%a %d" if mode == "report" else "%a %d %b"))
+        ax.legend(frameon=False, ncol=3, loc="lower left", bbox_to_anchor=(0, 1.0))
         fig.tight_layout()
         return fig
-    style.save_both(f"fig_forecast_{resource}", draw)
+    style.save_both(f"fig_forecast_{resource}", draw, compact=True)
 
 
 def fig_forecast_electricity():
@@ -254,7 +254,7 @@ def fig_anomaly_water():
         ax.legend(frameon=False, ncol=2, loc="upper left", bbox_to_anchor=(0, -0.18))
         fig.tight_layout()
         return fig
-    style.save_both("fig_anomaly_water", draw)
+    style.save_both("fig_anomaly_water", draw, compact=True)
 
 
 def fig_anomaly_electricity():
@@ -288,7 +288,7 @@ def fig_anomaly_electricity():
         ax.legend(frameon=False, ncol=3, loc="upper left", bbox_to_anchor=(0, -0.16))
         fig.tight_layout()
         return fig
-    style.save_both("fig_anomaly_electricity", draw)
+    style.save_both("fig_anomaly_electricity", draw, compact=True)
 
 
 # --------------------------------------------------------------------------- optimisation (Phase 8)
@@ -300,7 +300,7 @@ def fig_pump_schedule():
     lmin, lmax = cap * o["tank"]["min_fraction"], cap * o["tank"]["max_fraction"]
 
     def draw(mode, size):
-        fig, (a1, a2) = plt.subplots(2, 1, figsize=(size[0], size[1] * 1.45), sharex=True, height_ratios=[1.2, 1])
+        fig, (a1, a2) = plt.subplots(2, 1, figsize=(size[0], size[1] * (1.3 if mode == "report" else 1.45)), sharex=True, height_ratios=[1.2, 1])
         h = d["hour"].to_numpy()
         for ax in (a1, a2):
             for hr, band in zip(h, d["band"]):
@@ -324,10 +324,11 @@ def fig_pump_schedule():
         a2.set_xlabel("Hour of day (grey: peak tariff; dotted: off-peak)" if mode == "report"
                       else "Hour of day (red: peak tariff; green: off-peak)")
         a2.set_xticks(range(0, 24, 3)); a2.set_xlim(-0.5, 23.5)
-        a2.legend(frameon=False, ncol=2, loc="lower left")
+        if mode == "slides":  # report: the caption legend explains solid (plan) and dashed (actual demand)
+            a2.legend(frameon=False, ncol=2, loc="lower left")
         fig.tight_layout()
         return fig
-    style.save_both("fig_pump_schedule", draw)
+    style.save_both("fig_pump_schedule", draw, compact=True)
 
 
 # --------------------------------------------------------------------------- screenshots (Phase 11)
@@ -399,7 +400,8 @@ def fig_dashboard():
             page.screenshot(path=str(out["slides"]))
             browser.close()
         out["report"].parent.mkdir(parents=True, exist_ok=True)
-        Image.open(out["slides"]).convert("L").save(out["report"])
+        # report copy: crop the sidebar so the chart stays legible at print width
+        Image.open(out["slides"]).convert("L").crop((300, 90, 1600, 900)).save(out["report"])
     finally:
         for proc in procs:
             proc.terminate()

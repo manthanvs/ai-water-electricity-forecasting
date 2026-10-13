@@ -224,19 +224,22 @@ class Resolver:
 
 
 # ----------------------------------------------------------------------------------------------- generated tables
-def metrics_table(R, horizon):
+def metrics_table(R):
+    """One table for both horizons: MAE and MAPE per resource; * marks the model selected on validation."""
     m = DATA["m"]
-    header = ["Model", "Elec. MAE", "Elec. RMSE", "Elec. MAPE", "Water MAE", "Water RMSE", "Water MAPE"]
+    header = ["Model", "D1 elec. MAE", "D1 elec. MAPE", "D1 water MAE", "D1 water MAPE",
+              "W1 elec. MAE", "W1 elec. MAPE", "W1 water MAE", "W1 water MAPE"]
     rows = []
     for k in MODELS:
         row = [NAMES[k]]
-        for res in ("electricity", "water"):
-            t = m[res][horizon]["test"][k]
-            star = "*" if m[res][horizon]["selected"]["model"] == k else ""
-            dec = 3 if t["mae"] < 10 else 2
-            row += [f"{t['mae']:.{dec}f}{star}", f"{t['rmse']:.{dec}f}", f"{t['mape']:.1f}"]
+        for h in ("d1", "w1"):
+            for res in ("electricity", "water"):
+                t = m[res][h]["test"][k]
+                star = "*" if m[res][h]["selected"]["model"] == k else ""
+                dec = 3 if t["mae"] < 10 else 2
+                row += [f"{t['mae']:.{dec}f}{star}", f"{t['mape']:.1f}"]
         rows.append(row)
-    return header, rows, [31, 20.2, 20.2, 20.2, 20.3, 20.3, 20.4]
+    return header, rows, [24.6] + [16.0] * 8
 
 
 def anomaly_table(R):
@@ -363,12 +366,10 @@ def build(R, front, chapters, toc, lof, lot, pages: dict, path: Path) -> Path:
             F.body_para(doc, [("Keywords: ", {"bold": True}), *R.segs(p[len("Keywords:"):].strip())], indent_first=False)
         elif kind == "para":
             F.body_para(doc, R.segs(p))
-    F.page_break(doc)
-    F.front_title(doc, "Acknowledgement")
+    F.front_title(doc, "Acknowledgement", new_page=True)
     for kind, p in front["acknowledgement"]:
         F.body_para(doc, R.segs(p))
-    F.page_break(doc)
-    F.front_title(doc, "Table of Contents")
+    F.front_title(doc, "Table of Contents", new_page=True)
     for key, label in (("abs", "Abstract"), ("ack", "Acknowledgement"), ("lof", "List of Figures"),
                        ("lot", "List of Tables"), ("nom", "Nomenclature")):
         F.toc_line(doc, label, pg(key))
@@ -378,16 +379,13 @@ def build(R, front, chapters, toc, lof, lot, pages: dict, path: Path) -> Path:
         else:
             F.toc_line(doc, f"{num} {title}", pg(f"s{num}"), level=1)
     F.toc_line(doc, "References", pg("ref"), bold=True)
-    F.page_break(doc)
-    F.front_title(doc, "List of Figures")
+    F.front_title(doc, "List of Figures", new_page=True)
     for fid in lof:
         F.toc_line(doc, f"Figure {R.labels[fid]}  {R.plain(REG['figures'][fid]['caption'])}", pg(f"fig:{fid}"))
-    F.page_break(doc)
-    F.front_title(doc, "List of Tables")
+    F.front_title(doc, "List of Tables", new_page=True)
     for tid in lot:
         F.toc_line(doc, f"Table {R.labels[tid]}  {R.plain(REG['tables'][tid]['caption'])}", pg(f"tab:{tid}"))
-    F.page_break(doc)
-    F.front_title(doc, "Nomenclature")
+    F.front_title(doc, "Nomenclature", new_page=True)
     for kind, p in front["nomenclature"]:
         if kind in ("sub", "section"):
             F.body_para(doc, [(p, {"bold": True})], indent_first=False)
@@ -398,9 +396,7 @@ def build(R, front, chapters, toc, lof, lot, pages: dict, path: Path) -> Path:
 
     F.new_section(doc, META, "decimal", 1)
     for i, ch in enumerate(chapters):
-        if i:
-            F.page_break(doc)
-        F.chapter_title(doc, ch.number, ch.title)
+        F.chapter_title(doc, ch.number, ch.title, new_page=i > 0)
         for kind, num, payload in ch.numbered:
             if kind == "section":
                 F.section_heading(doc, num, payload)
@@ -424,8 +420,7 @@ def build(R, front, chapters, toc, lof, lot, pages: dict, path: Path) -> Path:
                         font_pt=t.get("font_pt", 10), legend=R.plain(t["legend"]) if t.get("legend") else None)
             elif kind == "eq":
                 F.equation(doc, [(s[0], s[1] or {}) for s in EQS[payload]], R.labels[payload])
-    F.page_break(doc)
-    F.front_title(doc, "References")
+    F.front_title(doc, "References", new_page=True)
     for n, key in enumerate(R.cites, 1):
         F.reference(doc, n, ieee(REFS[key]))
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -462,10 +457,140 @@ def word_counts(R, front, chapters) -> dict:
     return out
 
 
+# ----------------------------------------------------------------------------------------------- checks (R3)
+BODY_PAGES = (12, 20, 15)  # min, max, preferred max: option 2 agreed with Manthan on 2026-10-13 (see DECISIONS)
+BUDGETS = {1: (450, 550), 2: (300, 400), 3: (900, 1100), 4: (300, 350), 5: (1000, 1200), 6: (700, 900), 7: (350, 450)}
+FROZEN_TAG = "v1.0-results-frozen"
+
+
+def _git(*args):
+    import subprocess
+    r = subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True)
+    return r.returncode, r.stdout.strip()
+
+
+def _grey_image(img) -> bool:
+    """True if a pdfplumber image is greyscale: DeviceGray, a grey palette, or RGB pixels with R = G = B."""
+    cs = img.get("colorspace") or []
+    names = [str(x) for x in cs]
+    if any("DeviceGray" in n for n in names):
+        return True
+    if any("Indexed" in n for n in names):
+        pal = cs[-1] if isinstance(cs[-1], bytes) else getattr(cs[-1], "get_data", lambda: b"")()
+        return len(pal) % 3 == 0 and all(pal[i] == pal[i + 1] == pal[i + 2] for i in range(0, len(pal), 3))
+    try:
+        import numpy as np
+        a = np.frombuffer(img["stream"].get_data(), dtype=np.uint8)
+        a = a[: len(a) // 3 * 3].reshape(-1, 3)
+        return bool((a[:, 0] == a[:, 1]).all() and (a[:, 1] == a[:, 2]).all())
+    except Exception:  # noqa: BLE001 - undecodable stream: report as not verified
+        return False
+
+
+def check(R, front, chapters, pages, docx: Path, pdf: Path, final: bool) -> bool:
+    import pdfplumber
+    from docx import Document
+    res = []  # (status, check, detail)
+    add = lambda ok, name, detail="", warn=False: res.append(("PASS" if ok else ("WARN" if warn else "FAIL"), name, detail))  # noqa: E731
+    # 1 page size and margins
+    d = Document(str(docx))
+    bad = []
+    for i, s in enumerate(d.sections):
+        for attr, want in (("page_width", F.PAGE_W), ("page_height", F.PAGE_H), ("top_margin", F.MARGINS["top"]),
+                           ("bottom_margin", F.MARGINS["bottom"]), ("left_margin", F.MARGINS["left"]), ("right_margin", F.MARGINS["right"])):
+            if abs(getattr(s, attr) - want) > 3600:  # 0.1 mm in EMU
+                bad.append(f"section {i + 1} {attr}")
+    with pdfplumber.open(str(pdf)) as p:
+        sizes = {(round(pg.width), round(pg.height)) for pg in p.pages}
+        texts = [pg.extract_text() or "" for pg in p.pages]
+        labels = [(t.strip().splitlines() or [""])[-1].strip() for t in texts]
+        numbered = [i for i, lab in enumerate(labels) if re.fullmatch(r"\d+|[ivxlc]+", lab)]
+        fonts = {c["fontname"].split("+")[-1] for pg in p.pages for c in pg.chars}
+        img_pages = [(i, len(pg.images)) for i, pg in enumerate(p.pages)]
+        not_grey = [f"page {labels[i]}" for i, pg in enumerate(p.pages) if i in numbered for im in pg.images if not _grey_image(im)]
+    add(not bad and sizes == {(595, 842)}, "1 A4 page size and margins (25.4 / 37 / 32 / 25.4 mm)",
+        "; ".join(bad) or f"PDF page sizes {sorted(sizes)} pt")
+    # 2 fonts
+    odd = sorted(f for f in fonts if not re.search(r"TimesNewRoman|Times-|LiberationSerif", f))
+    add(not odd, "2 fonts are Times New Roman (or Liberation Serif)", ", ".join(odd) or ", ".join(sorted(fonts)))
+    # 3 body pages
+    total, body = F.page_count(pdf)
+    lo, hi, pref = BODY_PAGES
+    add(lo <= body <= hi, f"3 body pages between {lo} and {hi} (agreed range)", f"{body} body pages, {total} in total")
+    if body > pref:
+        add(False, f"3b body pages above the preferred {pref} of the official format", f"{body} pages - confirm with the guide", warn=True)
+    # 4 unresolved page numbers or markup
+    q = sorted(k for k, v in pages.items() if v == "?")
+    full = "\n".join(texts)
+    leftovers = sorted(set(re.findall(r"\{\{[^}]*\}\}|\[@[^\]]*\]|\[\[UNRESOLVED[^\]]*\]\]|\[\[(?:FIG|TAB|EQ):[^\]]*\]\]", full)))
+    add(not q and not leftovers, "4 no '?' page numbers and no unresolved {{ }}, [@ ] or [[ ]] markup",
+        "; ".join(q + leftovers)[:300])
+    # 5 CONFIRM markers
+    confirms = re.findall(r"\[\[CONFIRM:[^\]]*\]\]", full)
+    add(not confirms, "5 no CONFIRM markers", f"{len(confirms)} marker(s): " + "; ".join(R.confirms), warn=not final)
+    # 6 at most two images per page
+    many = [f"pdf page {i + 1}" for i, n in img_pages if n > 2]
+    add(not many, "6 at most two images per page", ", ".join(many))
+    # 7 greyscale images on numbered pages (cover and certificate logos come from the official template)
+    add(not not_grey, "7 every embedded image on numbered pages is greyscale", ", ".join(not_grey))
+    # 8 figures and tables mentioned in the text before they appear
+    late = []
+    for ch in chapters:
+        seen = set()
+        for kind, payload in ch.blocks:
+            if kind in ("fig", "tab") and payload not in seen:
+                late.append(f"{kind} {payload}")
+            texts_ = payload if isinstance(payload, list) else [payload] if isinstance(payload, str) else []
+            if kind in ("para", "bullets", "numbered"):
+                for t in texts_:
+                    seen.update(re.findall(r"\{\{(?:fig|tab):(\w+)\}\}", t))
+    add(not late, "8 every figure and table is mentioned in the text before it appears", ", ".join(late))
+    # 9 references
+    unknown = sorted({k for k in R.cites if k not in REFS})
+    unverified = sorted({k for k in R.cites if k in REFS and REFS[k].get("status") != "verified"})
+    uncited = sorted(set(REFS) - set(R.cites))
+    add(not (unknown or unverified or uncited), "9 every citation is in references.yaml, verified, and every reference is cited",
+        f"unknown {unknown}, unverified {unverified}, uncited {uncited}" if unknown or unverified or uncited else f"{len(R.cites)} references")
+    # 10 objectives match the synopsis
+    syn = (ROOT / "docs" / "reference" / "synopsis_content.md").read_text(encoding="utf-8")
+    block = syn.split("3. Objectives", 1)[1].split("4. Literature Survey", 1)[0]
+    syn_obj = [re.sub(r"\s+", " ", m).strip() for m in re.findall(r"^\d\. (.+?)(?=^\d\. |\Z)", block, re.S | re.M)]
+    ch4 = next(c for c in chapters if c.number == 4)
+    rep_obj = next((p for k, p in ch4.blocks if k == "numbered"), [])
+    add([re.sub(r"\s+", " ", o).strip() for o in rep_obj] == syn_obj, "10 objectives in 4.2 identical to the approved synopsis",
+        f"{len(rep_obj)} objectives compared")
+    # 11 results come from the frozen tag
+    rc_tag, tag_commit = _git("rev-list", "-n", "1", FROZEN_TAG)
+    res_commit = DATA["m"].get("git_commit") or ""
+    ok_anc = _git("merge-base", "--is-ancestor", res_commit, tag_commit)[0] == 0 if rc_tag == 0 and res_commit else False
+    changed = _git("diff", "--name-only", res_commit, tag_commit, "--", "src/wef", "config")[1].split() if ok_anc else ["?"]
+    changed = [c for c in changed if not c.startswith("src/wef/viz/")]
+    same_files = _git("diff", "--quiet", FROZEN_TAG, "--", "results/metrics.json", "results/anomaly.json",
+                      "results/optimisation.json", "results/eda_summary.json")[0] == 0
+    add(ok_anc and not changed and same_files, f"11 results are the frozen results of {FROZEN_TAG}",
+        f"results commit {res_commit[:7]}, tag {tag_commit[:7]}; code changes in between: {changed or 'none'}; "
+        f"results files unchanged since tag: {same_files}")
+    # 12 abstract length and chapter budgets
+    wc = word_counts(R, front, chapters)
+    add(200 <= wc["Abstract"] <= 250, "12 abstract between 200 and 250 words", f"{wc['Abstract']} words")
+    for ch in chapters:
+        n, (blo, bhi) = wc[f"Chapter {ch.number} {ch.title}"], BUDGETS[ch.number]
+        if not (0.8 * blo <= n <= 1.2 * bhi):
+            add(False, f"12b chapter {ch.number} within 20 percent of its word budget {blo}-{bhi}", f"{n} words", warn=True)
+    lines = [f"Report checks - {datetime.now():%Y-%m-%d %H:%M} - {'final' if final else 'draft'} mode - {pdf.name}", ""]
+    lines += [f"{s:4}  {name}" + (f"  [{det}]" if det else "") for s, name, det in res]
+    fails = sum(s == "FAIL" for s, _, _ in res)
+    lines += ["", f"{fails} failed, {sum(s == 'WARN' for s, _, _ in res)} warnings, {sum(s == 'PASS' for s, _, _ in res)} passed"]
+    (OUT / "check_report.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    print("\n".join(lines))
+    return fails == 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--final", action="store_true", help="fail on CONFIRM markers and unresolved tokens")
     ap.add_argument("--no-pdf", action="store_true", help="skip LibreOffice (single pass, '?' page numbers)")
+    ap.add_argument("--check", action="store_true", help="build, then run the format and integrity checks")
     args = ap.parse_args(argv)
     R = Resolver(final=args.final)
     front, chapters = load_content()
@@ -498,6 +623,11 @@ def main(argv=None):
         if args.final:
             sys.exit(1)
     print(f"built {docx}")
+    if args.check:
+        if args.no_pdf:
+            sys.exit("--check needs the PDF; drop --no-pdf")
+        if not check(R, front, chapters, pages, docx, docx.with_suffix(".pdf"), args.final):
+            sys.exit(1)
 
 
 if __name__ == "__main__":

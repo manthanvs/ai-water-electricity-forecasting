@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Utility demand is non-linear, seasonal at daily, weekly and annual scales, and sensitive to temperature, humidity and occupancy, so averages and linear statistical models give unreliable short-term estimates. As a result, water is over-pumped, electrical reserves are misjudged, and leakage remains undetected until it becomes visible. The problem addressed by this seminar is the absence of a unified, data-driven framework that forecasts both water demand and electricity consumption from smart-meter data while flagging abnormal usage. The problem matters because forecast error turns directly into wasted resources, higher operating cost and avoidable emissions.
+Utility demand is non-linear, seasonal and sensitive to weather and occupancy, so averages and linear models give unreliable short-term estimates; water is over-pumped, reserves are misjudged and leaks stay hidden. The problem addressed is the absence of a unified, data-driven framework that forecasts both water demand and electricity consumption from smart-meter data while flagging abnormal usage.
 
 ## Objectives
 
@@ -13,12 +13,9 @@ Utility demand is non-linear, seasonal at daily, weekly and annual scales, and s
 5. To detect abnormal spikes, leakage and wastage from forecast residuals.
 6. To visualise forecasts through dashboards that support resource allocation and cost reduction.
 
-The fifth and sixth objectives were extended during the study: anomaly detection was evaluated against labelled leaks, and the water forecasts were used in a pump-scheduling optimisation whose cost effect is reported.
+The fifth and sixth objectives were extended: detection was evaluated on labelled leaks, and the water forecasts drove a pump-scheduling optimisation.
 
 ## Scope and Assumptions
 
-- Only public datasets were used: one household in France for electricity, district metered areas in Italy for water demand, and the simulated L-Town network for leaks. No Indian utility data were available.
-- Observed weather at the target hour stands in for a weather forecast (a perfect-forecast assumption); an ablation without weather inputs measures its effect.
-- The tank, pump and tariff parameters of the optimisation are illustrative assumptions, and costs are reported in relative units.
-- Electricity anomalies were injected into a copy of the test data, because no labelled household anomalies exist.
-- All models were sized to train on a laptop without a graphics processor.
+- Public data only: a household in France, district metered areas in Italy and the simulated L-Town network; no Indian utility data were available.
+- Observed weather stands in for a forecast; tank, pump and tariff values are illustrative; electricity anomalies are injected.
