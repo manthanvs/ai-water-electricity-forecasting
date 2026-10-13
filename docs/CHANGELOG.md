@@ -73,3 +73,9 @@
 
 - `report/references.yaml`: 21 verified entries with `verified_on`, `verified_via` and `used_for`; verification log and raw evidence in `report/out/` (git-ignored).
 - Release tag `v1.0-results-frozen` created before R1.
+
+## Report R2 - chapter drafts (2026-10-13)
+
+- Added `report/build_report.py`, `report/content/ch0_front.md` ... `ch7_conclusion.md`, `report/figures.yaml`, `report/equations.yaml`, `report/facts.yaml`.
+- Extended `report/docx_format.py` (subscripts in body text, italic reference segments, `term_line`, table grid widths).
+- Draft builds with every token and citation resolved (21 of 21 references cited); one CONFIRM marker (Director's name).

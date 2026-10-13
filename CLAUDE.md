@@ -138,7 +138,7 @@ Project (01_PROJECT_BUILD.md)
 
 Report (02_SEMINAR_REPORT.md)
 - [x] R1 - bibliography verified (2026-10-13: 21 verified entries; 2 unverifiable papers and the Indian NRW figure listed for Manthan in report/out/reference_verification.md)
-- [ ] R2 - chapter drafts
+- [x] R2 - chapter drafts (2026-10-13: all content files drafted, draft build resolves every token and citation; 4,121 words in Chapters 1-7; body 26 pages vs preferred 12-15 - decision needed before R3)
 - [ ] R3 - build, page budget, automated checks
 - [ ] R4 - visual review and handover for the student's edit
 

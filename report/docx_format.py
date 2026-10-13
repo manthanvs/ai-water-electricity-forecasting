@@ -336,8 +336,10 @@ def body_para(doc, content, indent_first=True):
         p.paragraph_format.first_line_indent = FIRST_INDENT
     segs = [(content, {})] if isinstance(content, str) else content
     for text, st in segs:
-        _font(p.add_run(text), BODY_PT, bold=st.get("bold", False), italic=st.get("italic", False),
-              superscript=st.get("superscript", None), highlight=st.get("highlight", False))
+        r = _font(p.add_run(text), BODY_PT, bold=st.get("bold", False), italic=st.get("italic", False),
+                  superscript=st.get("superscript", None), highlight=st.get("highlight", False))
+        if st.get("sub"):
+            r.font.subscript = True
     return p
 
 
@@ -356,8 +358,10 @@ def bullet_list(doc, items, numbered=False):
         segs = [(item, {})] if isinstance(item, str) else item
         _font(p.add_run(marker + "\t"), BODY_PT)
         for text, st in segs:
-            _font(p.add_run(text), BODY_PT, bold=st.get("bold", False), italic=st.get("italic", False),
-                  highlight=st.get("highlight", False))
+            r = _font(p.add_run(text), BODY_PT, bold=st.get("bold", False), italic=st.get("italic", False),
+                      superscript=st.get("superscript", None), highlight=st.get("highlight", False))
+            if st.get("sub"):
+                r.font.subscript = True
 
 
 def equation(doc, content, label: str):
@@ -444,6 +448,8 @@ def table(doc, label: str, caption: str, header: list[str], rows: list[list[str]
     t = doc.add_table(rows=1 + len(rows), cols=len(header))
     t.alignment = WD_TABLE_ALIGNMENT.CENTER
     t.autofit = False
+    for i, w in enumerate(col_widths_mm):  # grid widths: LibreOffice ignores cell widths without them
+        t.columns[i].width = Mm(w)
     _cell_borders(t)
     for r_i, row in enumerate([header] + rows):
         for c_i, val in enumerate(row):
@@ -470,14 +476,36 @@ def toc_line(doc, text: str, page: str, level: int = 0, bold: bool = False):
     _font(p.add_run("\t" + str(page)), BODY_PT, bold=bold)
 
 
-def reference(doc, number: int, text: str):
+def reference(doc, number: int, text):
+    """IEEE reference with hanging number. text: str, or segments [(text, {"italic": True})] for italic venues."""
     p = doc.add_paragraph()
     p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     _spacing(p, 0, 8, 1.15)
     p.paragraph_format.left_indent = Inches(0.45)
     p.paragraph_format.first_line_indent = Inches(-0.45)
     p.paragraph_format.tab_stops.add_tab_stop(Inches(0.45))
-    _font(p.add_run(f"[{number}]\t{text}"), BODY_PT)
+    _font(p.add_run(f"[{number}]\t"), BODY_PT)
+    for seg, st in ([(text, {})] if isinstance(text, str) else text):
+        _font(p.add_run(seg), BODY_PT, italic=st.get("italic", False))
+
+
+def term_line(doc, term, meaning):
+    """Nomenclature entry: term in bold, meaning after a tab, hanging indent. term/meaning: str or segments."""
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    _spacing(p, 0, 4, 1.15)
+    p.paragraph_format.left_indent = Inches(1.4)
+    p.paragraph_format.first_line_indent = Inches(-1.4)
+    p.paragraph_format.tab_stops.add_tab_stop(Inches(1.4))
+    for seg, st in ([(term, {})] if isinstance(term, str) else term):
+        r = _font(p.add_run(seg), BODY_PT, bold=True, italic=st.get("italic", False))
+        if st.get("sub"):
+            r.font.subscript = True
+    _font(p.add_run("\t"), BODY_PT)
+    for seg, st in ([(meaning, {})] if isinstance(meaning, str) else meaning):
+        r = _font(p.add_run(seg), BODY_PT, italic=st.get("italic", False))
+        if st.get("sub"):
+            r.font.subscript = True
 
 
 # --------------------------------------------------------------------------- PDF + two-pass page numbers

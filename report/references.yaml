@@ -6,7 +6,7 @@
 # ---------------------------------------------------------------- Indian and sector context (Chapters 1-2)
 - key: pib2025smartmeters
   type: web
-  authors: [Ministry of Power, Government of India]
+  authors: ["Ministry of Power, Government of India"]
   title: Smart meters installed under RDSS
   venue: Press Information Bureau (PIB Delhi), press release, 24 Jul. 2025
   year: 2025
@@ -20,7 +20,7 @@
 - key: kingdom2006nrw
   type: report
   authors: [B. Kingdom, R. Liemberger, P. Marin]
-  title: "The challenge of reducing non-revenue water (NRW) in developing countries - How the private sector can help: A look at performance-based service contracting"
+  title: "The challenge of reducing non-revenue water (NRW) in developing countries—How the private sector can help: A look at performance-based service contracting"
   institution: The World Bank
   address: Washington, DC, USA
   series: Water Supply and Sanitation Sector Board Discussion Paper Series, no. 8

@@ -1,0 +1,84 @@
+# Figure and table registry for build_report.py. Captions, legends and static table cells may contain tokens
+# ({{m:...}}, {{e:...}}, ...) and citations ([@key]); they are resolved like body text.
+
+figures:
+  fig_architecture:
+    file: figures/report/fig_architecture.png
+    caption: System architecture of the study, from data sources to delivery
+    width_mm: 150
+  fig_eda_profiles:
+    file: figures/report/fig_eda_profiles.png
+    caption: "Average hourly profile in the training period on weekdays and weekends: (a) household electricity, (b) water inflow of DMA 3"
+    legend: "Solid line with markers: weekdays; dashed line: weekends"
+    width_mm: 145
+  fig_forecast_electricity:
+    file: figures/report/fig_forecast_electricity.png
+    caption: "Electricity, next-day forecasts for a typical test week"
+    legend: "Solid: actual load; dotted: seasonal naive; dashed: selected model ({{m:electricity.d1.selected.model|name}})"
+    width_mm: 145
+  fig_forecast_water:
+    file: figures/report/fig_forecast_water.png
+    caption: "Water demand of DMA 3, next-day forecasts for a typical test week"
+    legend: "Solid: actual inflow; dotted: seasonal naive; dashed: selected model ({{m:water.d1.selected.model|name}})"
+    width_mm: 145
+  fig_model_comparison:
+    file: figures/report/fig_model_comparison.png
+    caption: "Test MAE of each model divided by the MAE of the seasonal-naive baseline: (a) next day, (b) next week"
+    legend: "Plain bars: electricity; hatched bars: water; dashed line: baseline (shorter bars are better)"
+    width_mm: 150
+  fig_anomaly_water:
+    file: figures/report/fig_anomaly_water.png
+    caption: "BattLeDIM network inflow in the detection test period with labelled leak starts and alarms of both detectors"
+    legend: "Dashed lines: leak starts from the BattLeDIM leak list; triangles: residual z-score alarms; crosses: Isolation Forest alarms"
+    width_mm: 150
+  fig_pump_schedule:
+    file: figures/report/fig_pump_schedule.png
+    caption: "Optimised pumping plan for a typical test day (illustrative tank, pump and tariff)"
+    legend: "Top: forecast and actual demand with planned pumping; bottom: tank level for the plan and under actual demand; grey: peak tariff, dotted: off-peak"
+    width_mm: 140
+  fig_dashboard:
+    file: figures/report/fig_dashboard.png
+    caption: "Forecast page of the project's Streamlit dashboard (greyscale screenshot)"
+    width_mm: 150
+
+tables:
+  tab_literature:
+    caption: Summary of the reviewed literature
+    header: [Ref., Method, Data / domain, Key finding, Limitation]
+    widths: [13, 25, 29, 48.6, 37]
+    font_pt: 10
+    rows:
+      - ["[@box2015], [@hyndman2021]", "ARIMA, SARIMA, exponential smoothing", "General utility demand series", "Interpretable and cheap; adequate for stable seasonal demand", "Linear; few exogenous inputs"]
+      - ["[@antunes2018]", "Neural networks, random forests, SVM, k-NN", "Two Portuguese water utilities", "Machine-learning forecasts validated against ARIMA; weather and seasonality studied", "Depends on engineered inputs"]
+      - ["[@chen2016]", "XGBoost", "General machine-learning tasks", "Scalable, sparsity-aware gradient tree boosting", "Not time-aware; needs lag features"]
+      - ["[@kong2019]", "LSTM", "Individual households, smart-meter data", "LSTM outperformed rival methods for volatile single-home load", "Data-hungry; less interpretable"]
+      - ["[@marino2016]", "LSTM, LSTM sequence-to-sequence", "One household (benchmark data)", "Standard LSTM failed on minute data but worked hourly; sequence-to-sequence worked on both", "Single customer"]
+      - ["[@sajjad2020]", "CNN-GRU hybrid", "Household energy, incl. the UCI data", "Lowest error among the baselines compared", "Hybrid design adds complexity"]
+      - ["[@guo2018]", "GRU network", "Urban water demand", "GRU outperformed ANN and SARIMA for short and day-ahead forecasts", "Single network"]
+      - ["[@alvisi2025bwdf]", "Competition of many methods", "Real district metered areas", "Integrated approaches and several metrics matter", "Water only"]
+      - ["[@wang2019smartmeter]", "Review", "Smart-meter analytics", "Descriptive, predictive and prescriptive uses; data challenges", "Electricity only"]
+      - ["[@liu2008], [@vrachimis2022battledim]", "Isolation Forest; leak-detection benchmark", "Generic data; simulated network", "Unsupervised isolation of anomalies; leak methods compared on economic criteria", "Contamination must be set; simulated hydraulics"]
+  tab_datasets:
+    caption: Datasets used in the study
+    header: [Dataset, Source, Resolution, Period, Size after cleaning, Use in this study]
+    widths: [27, 24, 22, 31, 21, 27.6]
+    font_pt: 10
+    rows:
+      - ["Household electricity", "UCI repository [@uci2012household]", "Minute, averaged to hourly", "{{e:electricity.period.0|date}} to {{e:electricity.period.1|date}}", "{{e:electricity.n_hours|,}} hours", "Electricity forecasting; injected anomalies"]
+      - ["District water demand (DMA 3)", "BWDF [@alvisi2025bwdf]", "Hourly", "{{e:water.period.0|date}} to {{e:water.period.1|date}}", "{{e:water.n_hours|,}} hours", "Water forecasting; robustness on all DMAs"]
+      - ["L-Town network inflow", "BattLeDIM [@vrachimis2022battledim]", "Five-minute, averaged to hourly", "{{e:battledim.period.0|date}} to {{e:battledim.period.1|date}}", "{{e:battledim.n_hours|,}} hours; {{e:battledim.n_leaks_2018}} leaks", "Leak detection with real labels"]
+      - ["Weather", "Open-Meteo [@openmeteo]; BWDF", "Hourly", "Same as the consumption series", "-", "Weather features"]
+  tab_metrics_d1:
+    caption: Test-period accuracy of all models, next-day hourly forecasts (D1)
+    generator: metrics_table
+    args: {horizon: d1}
+    legend: "* selected by validation MAE. Electricity in kW, water in L/s; MAPE in percent."
+  tab_metrics_w1:
+    caption: Test-period accuracy of all models, next-week daily forecasts (W1)
+    generator: metrics_table
+    args: {horizon: w1}
+    legend: "* selected by validation MAE. Electricity in kWh/day, water in m3/day; MAPE in percent."
+  tab_anomaly:
+    caption: Event-level anomaly detection in the test period
+    generator: anomaly_table
+    legend: "Electricity anomalies are INJECTED. Chance: the precision that randomly placed alarms would reach. Delay in hours."

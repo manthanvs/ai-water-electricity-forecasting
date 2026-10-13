@@ -1,0 +1,32 @@
+# Statistics quoted from verified sources (not produced by the pipeline). The report text uses {{f:key}};
+# the citation itself is written next to it as [@source]. `quote` is the source's own wording, kept so the
+# figure can be checked against the evidence in report/out/verification_raw/.
+
+rdss_sanctioned:
+  value: 20.33 crore
+  source: pib2025smartmeters
+  quote: "Under the Revamped Distribution Sector Scheme (RDSS), 20.33 crore smart meters have been sanctioned in 28 States/ UTs, out of which 2.41 crore smart meters have been installed as on 15.07.2025."
+rdss_installed:
+  value: 2.41 crore
+  source: pib2025smartmeters
+  quote: same sentence as rdss_sanctioned
+rdss_states:
+  value: "28"
+  source: pib2025smartmeters
+  quote: same sentence as rdss_sanctioned
+rdss_asof:
+  value: 15 July 2025
+  source: pib2025smartmeters
+  quote: same sentence as rdss_sanctioned ("as on 15.07.2025")
+nrw_ibnet:
+  value: about 35 percent
+  source: kingdom2006nrw
+  quote: "The average figure for NRW levels in developing countries' utilities covered by IBNET is around 35 percent."
+nrw_true:
+  value: 40 to 50 percent
+  source: kingdom2006nrw
+  quote: "The actual figure for overall NRW levels in the developing world is probably more in the range of 40-50 percent of the water produced."
+nrw_leak_volume:
+  value: about 45 million cubic metres
+  source: kingdom2006nrw
+  quote: "In developing countries, about 45 million cubic meters are lost daily through water leakage in the distribution networks"
