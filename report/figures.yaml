@@ -5,7 +5,7 @@ figures:
   fig_architecture:
     file: figures/report/fig_architecture.png
     caption: System architecture of the study, from data sources to delivery
-    width_mm: 135
+    width_mm: 150
   fig_eda_profiles:
     file: figures/report/fig_eda_profiles.png
     caption: "Average weekday and weekend hourly profiles (training period): (a) electricity, (b) water"
@@ -61,7 +61,7 @@ tables:
   tab_datasets:
     caption: Datasets used in the study
     header: [Dataset, Source, Resolution, Period, Size after cleaning, Use in this study]
-    widths: [27, 24, 22, 31, 21, 27.6]
+    widths: [26, 23, 23, 27, 21, 32.6]
     font_pt: 10
     rows:
       - ["Household electricity", "UCI repository [@uci2012household]", "Minute, averaged to hourly", "{{e:electricity.period.0|date}} to {{e:electricity.period.1|date}}", "{{e:electricity.n_hours|,}} hours", "Electricity forecasting; injected anomalies"]

@@ -81,7 +81,7 @@ def fmt(v, spec: str | None) -> str:
     if spec == "len":
         return str(len(v))
     if spec == "p":
-        return "< 0.001" if v < 0.001 else f"{v:.3f}"
+        return "p < 0.001" if v < 0.001 else f"p = {v:.3f}"
     if spec == "int":
         return f"{int(round(v)):,}"
     if spec == "list":  # [24, 48, 168] -> "24, 48 and 168"
@@ -253,7 +253,7 @@ def anomaly_table(R):
             rows.append([f"{lab}, {mname}", f"{t['n_detected']} of {t['n_labels']}", f"{t['recall']:.2f}",
                          f"{t['precision']:.2f} ({t['chance_precision']:.2f})", f"{t['false_alarms_per_week']:.2f}",
                          "-" if d is None else f"{d:.1f} h"])
-    return header, rows, [46, 19, 16, 27, 22, 22.6]
+    return header, rows, [64, 18, 14, 21, 18, 17.6]
 
 
 GENERATORS = {"metrics_table": metrics_table, "anomaly_table": anomaly_table}
@@ -388,7 +388,7 @@ def build(R, front, chapters, toc, lof, lot, pages: dict, path: Path) -> Path:
     F.front_title(doc, "Nomenclature", new_page=True)
     for kind, p in front["nomenclature"]:
         if kind in ("sub", "section"):
-            F.body_para(doc, [(p, {"bold": True})], indent_first=False)
+            F.group_heading(doc, p)
         elif kind == "bullets":
             for item in p:
                 term, _, meaning = item.partition(": ")

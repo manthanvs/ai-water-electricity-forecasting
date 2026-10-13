@@ -18,7 +18,7 @@ def _box(ax, mode, x, y, w, h, title, lines=(), layer="data", fs=None):
     ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=0.008,rounding_size=0.015", **kw))
     ax.text(x + w / 2, y + h - 0.012, title, ha="center", va="top", fontsize=fs, fontweight="bold", color=style.INK)
     if lines:
-        ax.text(x + w / 2, y + h / 2 - 0.018, "\n".join(lines), ha="center", va="center", fontsize=fs - 1.5,
+        ax.text(x + w / 2, y + h / 2 - 0.018, "\n".join(lines), ha="center", va="center", fontsize=fs - 1,
                 color="0.15" if mode == "report" else style.INK2, linespacing=1.25)
     return (x, y, w, h)
 
@@ -35,14 +35,15 @@ def _arrow(ax, mode, a, b, side_a="r", side_b="l"):
 def fig_architecture():
     """Five layers left to right; one arrow between layers, vertical arrows only for real dependencies."""
     def draw(mode, size):
-        fig = plt.figure(figsize=(size[0], size[1] * 1.2))
+        # report: drawn at the printed width (150 mm) so text prints at 7-8 pt
+        fig = plt.figure(figsize=(size[0], size[0] * 0.46) if mode == "report" else (size[0], size[1] * 1.2))
         ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
-        fs = 6.5 if mode == "report" else 10.5
-        w, h, pad = 0.15, 0.2, 0.012
+        fs = 8 if mode == "report" else 10.5
+        w, h, pad = 0.16, 0.23, 0.008
         xs = [0.02, 0.22, 0.42, 0.62, 0.82]
-        ys = [0.66, 0.38, 0.10]
+        ys = [0.64, 0.33, 0.02]
         heads = ["Data sources", "Data pipeline", "Forecasting models", "Analytics", "Delivery"]
-        col = [[("Smart-meter data", ["household electricity", "(UCI); district water", "inflows (BWDF)"]),
+        col = [[("Smart-meter data", ["household power", "(UCI); district", "water (BWDF)"]),
                 ("Weather", ["Open-Meteo archive;", "BWDF weather"]),
                 ("Leak labels", ["BattLeDIM 2018", "(L-Town)"])],
                [("Ingestion", ["checksummed", "downloads"]),
@@ -55,7 +56,7 @@ def fig_architecture():
                 ("Anomaly detection", ["residual z-score,", "Isolation Forest"]),
                 ("Optimisation", ["pump-schedule LP,", "peak alerts"])],
                [("Flask REST API", ["JSON endpoints"]),
-                ("Streamlit dashboard", ["six pages"]),
+                ("Dashboard", ["Streamlit,", "six pages"]),
                 ("Power BI", ["star-schema", "CSV export"])]]
         layers = ["data", "prep", "model", "out", "serve"]
         groups, boxes = [], []

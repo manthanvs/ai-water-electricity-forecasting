@@ -42,7 +42,7 @@ MAPE ignored actual values below {{c:metrics.mape_min_fraction_of_train_mean|.0%
 
 ## Anomaly Detection
 
-The first detector computes a robust z-score of the residual r_{t} of the selected next-day model over the previous {{c:anomaly.rolling_window_hours}} hours ({{eq:eq_zscore}}) and raises an alarm when it exceeds k in absolute value for m consecutive hours; the second is an Isolation Forest [@liu2008]. Both were tuned on validation data and scored on BattLeDIM leaks [@vrachimis2022battledim] and on injected electricity anomalies.
+The first detector computes the robust z-score {{eq:eq_zscore}} of the residual r_{t} of the selected next-day model over the previous {{c:anomaly.rolling_window_hours}} hours and raises an alarm when it exceeds k in absolute value for m consecutive hours; the second is an Isolation Forest [@liu2008]. Both were tuned on validation data and scored on BattLeDIM leaks [@vrachimis2022battledim] and on injected electricity anomalies.
 
 [[EQ:eq_zscore]]
 

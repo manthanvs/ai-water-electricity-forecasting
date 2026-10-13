@@ -456,6 +456,11 @@ def table(doc, label: str, caption: str, header: list[str], rows: list[list[str]
     for i, w in enumerate(col_widths_mm):  # grid widths: LibreOffice ignores cell widths without them
         t.columns[i].width = Mm(w)
     _cell_borders(t)
+    for r_i, tr in enumerate(t.rows):  # rows never break across pages; header repeats on a new page
+        trPr = tr._tr.get_or_add_trPr()
+        trPr.append(OxmlElement("w:cantSplit"))
+        if r_i == 0:
+            trPr.append(OxmlElement("w:tblHeader"))
     for r_i, row in enumerate([header] + rows):
         for c_i, val in enumerate(row):
             cell = t.cell(r_i, c_i)
@@ -492,6 +497,16 @@ def reference(doc, number: int, text):
     _font(p.add_run(f"[{number}]\t"), BODY_PT)
     for seg, st in ([(text, {})] if isinstance(text, str) else text):
         _font(p.add_run(seg), BODY_PT, italic=st.get("italic", False))
+
+
+def group_heading(doc, text: str):
+    """Unnumbered bold group label inside a front-matter list (e.g. 'Abbreviations', 'Symbols')."""
+    p = doc.add_paragraph()
+    p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    _spacing(p, 12, 4, 1.0)
+    p.paragraph_format.keep_with_next = True
+    _font(p.add_run(text), BODY_PT, bold=True)
+    return p
 
 
 def term_line(doc, term, meaning):

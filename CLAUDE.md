@@ -140,7 +140,7 @@ Report (02_SEMINAR_REPORT.md)
 - [x] R1 - bibliography verified (2026-10-13: 21 verified entries; 2 unverifiable papers and the Indian NRW figure listed for Manthan in report/out/reference_verification.md)
 - [x] R2 - chapter drafts (2026-10-13: all content files drafted, draft build resolves every token and citation; 4,121 words in Chapters 1-7; body 26 pages vs preferred 12-15 - decision needed before R3)
 - [x] R3 - build, page budget, automated checks (2026-10-13: --check passes in draft mode, 0 failures; 20 body pages by option 2; warnings: above preferred 15 pages, Director CONFIRM, chapter budgets)
-- [ ] R4 - visual review and handover for the student's edit
+- [x] R4 - visual review and handover for the student's edit (2026-10-13: every page rendered and reviewed; tables keep rows whole, Fig 5.1 and 6.4 legibility fixed; --check 0 failures, 20 body pages; STUDENT_REVIEW.md written; final-mode build waits for Manthan's rewrite and the Director CONFIRM)
 
 Presentation (03_FINAL_PRESENTATION.md)
 - [ ] P1 - deck content

@@ -86,3 +86,12 @@
 - Body trimmed from 26 to 20 pages; Tables 6.1 and 6.2 merged; figure placement and widths adjusted.
 - `wef.viz.style.COMPACT_REPORT` and `save_both(compact=True)` for single-panel report figures; dashboard report copy cropped; figures regenerated.
 - `docx_format.py`: `new_page` on title functions, caption kept with legend.
+
+## Report R4 - visual review and student handover (2026-10-13)
+
+- `report/docx_format.py`: table rows cannot split across pages and the header row repeats; new `group_heading()`. Self-test passes.
+- `report/build_report.py`: `p` filter returns "p < 0.001" or "p = x.xxx"; nomenclature groups use `group_heading()`; Table 6.2 column widths.
+- `report/figures.yaml`: Table 5.1 column widths; Figure 5.1 at 150 mm.
+- `src/wef/viz/architecture.py`: report version drawn at the printed width with larger text. `src/wef/viz/figures.py`: BattLeDIM anomaly figure legend above the axes, short leak labels.
+- `report/content/ch5_methodology.md`, `ch6_results.md`: equation reference and p-value wording.
+- Report rebuilt: 30 pages, 20 body pages, `--check` 0 failures (draft mode). `report/out/STUDENT_REVIEW.md` written. 67 tests pass.

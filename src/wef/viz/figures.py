@@ -241,17 +241,17 @@ def fig_anomaly_water():
         for i, r in enumerate(lab.itertuples()):
             ax.axvline(r.start, color="0.3" if mode == "report" else style.SLIDE_COLORS[3], lw=1.0 if mode == "report" else 2,
                        ls="--", label="Leak start (labelled)" if i == 0 else None)
-            ax.annotate(f"{r.link} ({r.type})", (r.start, 1.0), xycoords=("data", "axes fraction"), rotation=90,
+            ax.annotate(r.link, (r.start, 0.98), xycoords=("data", "axes fraction"), rotation=90,
                         va="top", ha="right", fontsize=plt.rcParams["legend.fontsize"] - 1, color=style.INK2 if mode == "slides" else "0.2")
         lo, hi = ax.get_ylim()
         for j, (meth, lab_m, mk) in enumerate([("residual_zscore", "Alarm: residual z-score", "v"), ("isolation_forest", "Alarm: Isolation Forest", "x")]):
             e = ev[ev.method == meth]
             ax.scatter(e.alarm, np.full(len(e), lo - (0.04 + 0.05 * j) * (hi - lo)), marker=mk, s=18 if mode == "report" else 40,
                        clip_on=False, color=style.colour(mode, 0) if mode == "report" else style.SLIDE_COLORS[[2, 4][j]], label=lab_m, zorder=3)
-        ax.set_ylim(lo - 0.12 * (hi - lo), hi)
+        ax.set_ylim(lo - 0.12 * (hi - lo), hi + 0.22 * (hi - lo))  # headroom keeps leak labels clear of the data
         ax.set_ylabel("Inflow (m$^3$/h)"); ax.set_xlabel("2018 (test period)")
         ax.xaxis.set_major_formatter(plt.matplotlib.dates.DateFormatter("%b"))
-        ax.legend(frameon=False, ncol=2, loc="upper left", bbox_to_anchor=(0, -0.18))
+        ax.legend(frameon=False, ncol=2, loc="lower left", bbox_to_anchor=(0, 1.0))
         fig.tight_layout()
         return fig
     style.save_both("fig_anomaly_water", draw, compact=True)
