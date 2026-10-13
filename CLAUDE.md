@@ -137,7 +137,7 @@ Project (01_PROJECT_BUILD.md)
 - [x] Phase 11 - figure freeze, tests, README, release tag (2026-10-13: all figures in both styles, 67 tests pass, README written, clean re-run of `all` in 17 min reproduced every results number exactly; numbers confirmed by Manthan; tagged v1.0-results-frozen)
 
 Report (02_SEMINAR_REPORT.md)
-- [ ] R1 - bibliography verified
+- [x] R1 - bibliography verified (2026-10-13: 21 verified entries; 2 unverifiable papers and the Indian NRW figure listed for Manthan in report/out/reference_verification.md)
 - [ ] R2 - chapter drafts
 - [ ] R3 - build, page budget, automated checks
 - [ ] R4 - visual review and handover for the student's edit

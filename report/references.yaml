@@ -1,20 +1,272 @@
-# Verified bibliography. Only entries with status: verified may be cited (CLAUDE.md invariant 2).
-# Phase 1 added the dataset citations below with status: seed; report phase R1 verifies them and adds the rest
-# from references.seed.yaml. Fields marked "from source" were read from the dataset page or record during
-# download (2026-10-12) but are not yet independently verified.
+# Verified bibliography (phase R1, 2026-10-13). Only entries with status: verified may be cited.
+# Every entry below is intended to be cited (the R3 check fails on an uncited entry). Verified alternates that are
+# not cited yet, and the items that could not be verified, are listed in report/out/reference_verification.md.
+# Evidence (raw DOI records, abstracts, official pages) is in report/out/verification_raw/.
 
-- key: uci2012household
-  type: dataset
-  authors: [G. Hebrail, A. Berard]
-  title: Individual household electric power consumption
-  venue: UCI Machine Learning Repository
+# ---------------------------------------------------------------- Indian and sector context (Chapters 1-2)
+- key: pib2025smartmeters
+  type: web
+  authors: [Ministry of Power, Government of India]
+  title: Smart meters installed under RDSS
+  venue: Press Information Bureau (PIB Delhi), press release, 24 Jul. 2025
+  year: 2025
+  url: https://pib.gov.in/PressReleasePage.aspx?PRID=2147902
+  accessed: 2026-10-13
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: official PIB page read (saved as verification_raw/pib_2147902.html)
+  used_for: "Indian smart-meter roll-out under the Revamped Distribution Sector Scheme: 20.33 crore meters sanctioned in 28 States/UTs, 2.41 crore installed as on 15.07.2025; smart meters give real-time data and help billing and theft detection (1.1, 1.2, 2.3)"
+
+- key: kingdom2006nrw
+  type: report
+  authors: [B. Kingdom, R. Liemberger, P. Marin]
+  title: "The challenge of reducing non-revenue water (NRW) in developing countries - How the private sector can help: A look at performance-based service contracting"
+  institution: The World Bank
+  address: Washington, DC, USA
+  series: Water Supply and Sanitation Sector Board Discussion Paper Series, no. 8
   year: 2006
-  doi: 10.24432/C58K54
-  url: https://archive.ics.uci.edu/dataset/235
-  licence: CC BY 4.0
-  status: seed
-  note: year and DOI from the UCI API record (dataset_doi, year_of_dataset_creation); confirm against the page's Cite box; names carry accents (Hebrail, Berard)
-  used_for: electricity data (5.2)
+  month: Dec.
+  url: https://documents1.worldbank.org/curated/en/385761468330326484/pdf/394050Reducing1e0water0WSS81PUBLIC1.pdf
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: full report read (World Bank documents PDF, saved); title, authors, series, date and Washington DC imprint confirmed on the cover and copyright page
+  used_for: "Non-revenue water: utilities in developing countries covered by IBNET average about 35 percent NRW, the true developing-world level probably 40-50 percent; about 45 million m3 lost daily through leakage in developing countries (1.2, 2.1). Replaces the synopsis's uncited '30-40 percent in Indian cities', which no official source supported."
+
+# ---------------------------------------------------------------- statistical forecasting and evaluation
+- key: box2015
+  type: book
+  authors: [G. E. P. Box, G. M. Jenkins, G. C. Reinsel, G. M. Ljung]
+  title: "Time Series Analysis: Forecasting and Control"
+  edition: 5th
+  publisher: Wiley
+  address: Hoboken, NJ, USA
+  year: 2015
+  isbn: 978-1-118-67502-1
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Wiley product page (title, 5th edition, all four authors, ISBN, June 2015) and Open Library ISBN record (Wiley, 29 June 2015); place of publication as in the approved synopsis, not shown on the Wiley page
+  used_for: ARIMA and SARIMA (3.1, 5.5)
+
+- key: hyndman2021
+  type: book
+  authors: [R. J. Hyndman, G. Athanasopoulos]
+  title: "Forecasting: Principles and Practice"
+  edition: 3rd
+  publisher: OTexts
+  address: Melbourne, Australia
+  year: 2021
+  url: https://otexts.com/fpp3/
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: "official book page; matches the authors' own citation \"Hyndman, R.J., & Athanasopoulos, G. (2021) Forecasting: principles and practice, 3rd edition, OTexts: Melbourne, Australia\""
+  used_for: exponential smoothing and ARIMA practice, seasonal naive benchmark, time-series cross-validation (rolling origin), accuracy measures (3.1, 5.6)
+
+- key: diebold1995
+  type: journal
+  authors: [F. X. Diebold, R. S. Mariano]
+  title: Comparing predictive accuracy
+  venue: Journal of Business & Economic Statistics
+  volume: 13
+  issue: 3
+  pages: 253-263
+  year: 1995
+  doi: 10.1080/07350015.1995.10524599
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record and abstract (OpenAlex)
+  used_for: test of equal forecast accuracy between two models, valid for non-quadratic loss and serially correlated errors (5.6, 6.3)
+
+# ---------------------------------------------------------------- machine learning
+- key: breiman2001
+  type: journal
+  authors: [L. Breiman]
+  title: Random forests
+  venue: Machine Learning
+  volume: 45
+  issue: 1
+  pages: 5-32
+  year: 2001
+  doi: 10.1023/A:1010933404324
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (Semantic Scholar)
+  used_for: Random Forest (3.2, 5.5)
+
+- key: chen2016
+  type: conference
+  authors: [T. Chen, C. Guestrin]
+  title: "XGBoost: A scalable tree boosting system"
+  venue: Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining
+  address: San Francisco, CA, USA
+  pages: 785-794
+  year: 2016
+  doi: 10.1145/2939672.2939785
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record and abstract (OpenAlex)
+  used_for: XGBoost, gradient tree boosting with sparsity-aware split finding (3.2, 5.5)
+
+- key: antunes2018
+  type: journal
+  authors: [A. Antunes, A. Andrade-Campos, A. Sardinha-Lourenço, M. S. Oliveira]
+  title: Short-term water demand forecasting using machine learning techniques
+  venue: Journal of Hydroinformatics
+  volume: 20
+  issue: 6
+  pages: 1343-1366
+  year: 2018
+  doi: 10.2166/hydro.2018.163
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record including abstract
+  used_for: "Short-term water demand forecasting with neural networks, random forests, support vector machines and k-nearest neighbours on two Portuguese utilities, validated against ARIMA; effect of weather, seasonality, training length and window; and the operational motive - reservoirs filled by pumps that switch on at a minimum level, so demand forecasts let utilities pump when electricity is cheaper (2.1, 2.2, 3.2, Table 3.1, 5.8); key paper for the viva"
+
+# ---------------------------------------------------------------- deep learning
+- key: hochreiter1997
+  type: journal
+  authors: [S. Hochreiter, J. Schmidhuber]
+  title: Long short-term memory
+  venue: Neural Computation
+  volume: 9
+  issue: 8
+  pages: 1735-1780
+  year: 1997
+  doi: 10.1162/neco.1997.9.8.1735
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record including abstract
+  used_for: LSTM architecture and gating (3.3, 5.5)
+
+- key: cho2014
+  type: conference
+  authors: [K. Cho, B. van Merrienboer, C. Gulcehre, D. Bahdanau, F. Bougares, H. Schwenk, Y. Bengio]
+  title: Learning phrase representations using RNN encoder-decoder for statistical machine translation
+  venue: Proc. 2014 Conference on Empirical Methods in Natural Language Processing (EMNLP)
+  address: Doha, Qatar
+  pages: 1724-1734
+  year: 2014
+  doi: 10.3115/v1/D14-1179
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (Semantic Scholar). Note - the paper introduces the gated hidden unit later called the GRU
+  used_for: GRU (3.3, 5.5)
+
+- key: kong2019
+  type: journal
+  authors: [W. Kong, Z. Y. Dong, Y. Jia, D. J. Hill, Y. Xu, Y. Zhang]
+  title: Short-term residential load forecasting based on LSTM recurrent neural network
+  venue: IEEE Transactions on Smart Grid
+  volume: 10
+  issue: 1
+  pages: 841-851
+  year: 2019
+  doi: 10.1109/TSG.2017.2753802
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (OpenAlex)
+  used_for: LSTM for single-household load; individual loads are volatile and hard to forecast; LSTM compared favourably with benchmarks on real smart-meter data (3.3, Table 3.1, 6.1); key paper for the viva
+
+- key: marino2016
+  type: conference
+  authors: [D. L. Marino, K. Amarasinghe, M. Manic]
+  title: Building energy load forecasting using deep neural networks
+  venue: Proc. 42nd Annual Conference of the IEEE Industrial Electronics Society (IECON 2016)
+  address: Florence, Italy
+  pages: 7046-7051
+  year: 2016
+  doi: 10.1109/IECON.2016.7793413
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record (pages 7046-7051 added; the seed had none); abstract (OpenAlex) confirms a benchmark dataset of one residential customer
+  used_for: standard LSTM and LSTM sequence-to-sequence on a single-household benchmark dataset (3.3, Table 3.1, 6.1 context)
+
+- key: guo2018
+  type: journal
+  authors: [G. Guo, S. Liu, Y. Wu, J. Li, R. Zhou, X. Zhu]
+  title: Short-term water demand forecast based on deep learning method
+  venue: Journal of Water Resources Planning and Management
+  volume: 144
+  issue: 12
+  pages: "04018076"
+  year: 2018
+  doi: 10.1061/(ASCE)WR.1943-5452.0000992
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record (article number 04018076); abstract (OpenAlex)
+  used_for: GRU network for 15-minute and 24-hour water demand forecasts compared with an ANN and SARIMA (3.3, Table 3.1)
+
+- key: sajjad2020
+  type: journal
+  authors: [M. Sajjad, Z. A. Khan, A. Ullah, T. Hussain, W. Ullah, M. Y. Lee, S. W. Baik]
+  title: A novel CNN-GRU-based hybrid approach for short-term residential load forecasting
+  venue: IEEE Access
+  volume: 8
+  pages: 143759-143768
+  year: 2020
+  doi: 10.1109/ACCESS.2020.3009537
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (OpenAlex)
+  used_for: hybrid convolutional-recurrent (CNN-GRU) model for residential energy consumption prediction, proposed to improve accuracy over single models (3.3, 5.5 CNN-LSTM, Table 3.1)
+
+- key: vaswani2017
+  type: conference
+  authors: [A. Vaswani, N. Shazeer, N. Parmar, J. Uszkoreit, L. Jones, A. N. Gomez, L. Kaiser, I. Polosukhin]
+  title: Attention is all you need
+  venue: Advances in Neural Information Processing Systems 30 (NIPS 2017)
+  publisher: Curran Associates, Inc.
+  year: 2017
+  url: https://papers.nips.cc/paper_files/paper/2017/hash/3f5ee243547dee91fbd053c1c4a845aa-Abstract.html
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: official NeurIPS proceedings page and its BibTeX (authors, volume 30, Curran Associates, 2017; no page numbers given); abstract read on the page
+  used_for: attention-only Transformer architecture without recurrence (3.3 brief note, 7.3 future scope)
+
+# ---------------------------------------------------------------- smart metering, anomaly detection, benchmarks
+- key: wang2019smartmeter
+  type: journal
+  authors: [Y. Wang, Q. Chen, T. Hong, C. Kang]
+  title: "Review of smart meter data analytics: Applications, methodologies, and challenges"
+  venue: IEEE Transactions on Smart Grid
+  volume: 10
+  issue: 3
+  pages: 3125-3148
+  year: 2019
+  doi: 10.1109/TSG.2018.2818167
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (OpenAlex)
+  used_for: smart-meter data analytics - descriptive, predictive and prescriptive uses (load analysis, forecasting, management), data challenges (2.3, 3.4)
+
+- key: liu2008
+  type: conference
+  authors: [F. T. Liu, K. M. Ting, Z.-H. Zhou]
+  title: Isolation forest
+  venue: Proc. 8th IEEE International Conference on Data Mining (ICDM)
+  address: Pisa, Italy
+  pages: 413-422
+  year: 2008
+  doi: 10.1109/ICDM.2008.17
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record; abstract (OpenAlex)
+  used_for: Isolation Forest - isolates anomalies instead of profiling normal points (3.4, 5.7)
+
+- key: vrachimis2022battledim
+  type: journal
+  authors: [S. G. Vrachimis, D. G. Eliades, R. Taormina, Z. Kapelan, A. Ostfeld, S. Liu, M. Kyriakou, P. Pavlou, M. Qiu, M. M. Polycarpou]
+  title: Battle of the leakage detection and isolation methods
+  venue: Journal of Water Resources Planning and Management
+  volume: 148
+  issue: 12
+  pages: "04022068"
+  year: 2022
+  doi: 10.1061/(ASCE)WR.1943-5452.0001601
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record (corrected - volume 148, issue 12, article 04022068 and the full author list were missing in the seed); abstract (OpenAlex)
+  dataset: "Zenodo, doi:10.5281/zenodo.4017659 (CC BY 4.0), same authors - cite this paper for the data"
+  used_for: BattLeDIM benchmark - leak detection on SCADA flow and pressure data of the virtual L-Town network (3.4, 5.2, 5.7, Table 3.1); source of the leak labels
 
 - key: alvisi2025bwdf
   type: journal
@@ -26,43 +278,35 @@
   pages: "04025049"
   year: 2025
   doi: 10.1061/JWRMD5.WRENG-6887
-  licence: data CC BY 4.0 (wf4bwdf README)
-  status: seed
-  note: volume, issue and DOI also appear in the wf4bwdf package citation; article number to be confirmed from the DOI record
-  used_for: BWDF dataset and benchmark (3.3, 5.2)
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: Crossref record (147 authors; IEEE "et al." after the first six as allowed); abstract (OpenAlex)
+  used_for: BWDF benchmark - short-term demand forecasting of real district metered areas, 31 teams; source of the water data (3.3, 5.2, Table 3.1)
 
-- key: battledim2020data
+# ---------------------------------------------------------------- datasets
+- key: uci2012household
   type: dataset
-  authors: [S. G. Vrachimis, D. G. Eliades, R. Taormina, A. Ostfeld, Z. Kapelan, S. Liu, M. S. Kyriakou, P. Pavlou, M. Qiu, M. Polycarpou]
-  title: "Dataset of BattLeDIM: Battle of the Leakage Detection and Isolation Methods"
-  venue: Zenodo
-  year: 2020
-  doi: 10.5281/zenodo.4017659
-  url: https://zenodo.org/record/4017659
-  licence: CC BY 4.0
-  status: seed
-  note: title, creators, DOI and licence from the Zenodo API record (publication date 2020-09-07)
-  used_for: water leakage data (5.2)
+  authors: [G. Hebrail, A. Berard]
+  title: Individual household electric power consumption
+  venue: UCI Machine Learning Repository
+  year: 2006
+  doi: 10.24432/C58K54
+  url: https://archive.ics.uci.edu/dataset/235
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: DataCite record (creators, title, publisher, year 2006) and the UCI dataset page (licence CC BY 4.0); names as in the DataCite record, without accents
+  used_for: electricity data (5.2)
 
 - key: openmeteo
   type: dataset
   authors: [P. Zippenfenig]
-  title: "Open-Meteo.com Weather API"
+  title: Open-Meteo.com weather API
   venue: Zenodo
-  year: 2023
+  version: 1.4.0
+  year: 2024
   doi: 10.5281/zenodo.7970649
   url: https://open-meteo.com/en/docs/historical-weather-api
-  licence: CC BY 4.0
-  status: seed
-  note: DOI listed in the attribution section of the docs page; confirm title, year and version on Zenodo
-  used_for: weather data (5.2)
-
-- key: hersbach2020era5
-  type: dataset
-  authors: [H. Hersbach, "et al."]
-  title: ERA5 hourly data on single levels from 1940 to present
-  venue: Copernicus Climate Change Service (C3S) Climate Data Store (CDS)
-  doi: 10.24381/cds.adbb2d47
-  status: seed
-  note: DOI listed on the Open-Meteo historical API page as the reanalysis behind the archive; confirm authors and year from the CDS record
-  used_for: source of the Open-Meteo archive weather (5.2)
+  status: verified
+  verified_on: 2026-10-13
+  verified_via: DataCite record (creator, title, Zenodo, version 1.4.0, year 2024, CC BY 4.0); the DOI is the one Open-Meteo asks users to cite. The underlying reanalysis (ERA5, doi:10.24381/cds.adbb2d47) is verified as an alternate
+  used_for: weather data for electricity (5.2)

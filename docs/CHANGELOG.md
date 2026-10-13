@@ -68,3 +68,8 @@
 - Added `wef.viz.architecture` (`fig_architecture`, `fig_pipeline`), automatic `fig_dashboard` capture and Power BI screenshot conversion in the `figures` stage, `tests/test_figures.py`, `README.md`.
 - Clean end-to-end re-run (17 min) reproduced every results number exactly. Full test suite: 67 passed.
 - Release tag pending confirmation.
+
+## Report R1 - bibliography verified (2026-10-13)
+
+- `report/references.yaml`: 21 verified entries with `verified_on`, `verified_via` and `used_for`; verification log and raw evidence in `report/out/` (git-ignored).
+- Release tag `v1.0-results-frozen` created before R1.
