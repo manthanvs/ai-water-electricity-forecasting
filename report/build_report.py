@@ -80,6 +80,8 @@ def fmt(v, spec: str | None) -> str:
         return f"{d.day} {d:%B %Y}"
     if spec == "len":
         return str(len(v))
+    if spec == "year":
+        return str(v)[:4]
     if spec == "p":
         return "p < 0.001" if v < 0.001 else f"p = {v:.3f}"
     if spec == "int":

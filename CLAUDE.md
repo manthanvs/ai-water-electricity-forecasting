@@ -143,7 +143,7 @@ Report (02_SEMINAR_REPORT.md)
 - [x] R4 - visual review and handover for the student's edit (2026-10-13: every page rendered and reviewed; tables keep rows whole, Fig 5.1 and 6.4 legibility fixed; --check 0 failures, 20 body pages; STUDENT_REVIEW.md written; final-mode build waits for Manthan's rewrite and the Director CONFIRM)
 
 Presentation (03_FINAL_PRESENTATION.md)
-- [ ] P1 - deck content
+- [x] P1 - deck content (2026-10-13: 18 slides + 5 backups in slides.yaml; all tokens resolve through the report resolver; notes 64-101 words; estimated 10:42 vs planned 10:45)
 - [ ] P2 - deck build and visual review
 - [ ] P3 - viva preparation and demo script
 

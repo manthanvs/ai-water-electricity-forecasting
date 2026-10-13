@@ -30,3 +30,7 @@ nrw_leak_volume:
   value: about 45 million cubic metres
   source: kingdom2006nrw
   quote: "In developing countries, about 45 million cubic meters are lost daily through water leakage in the distribution networks"
+nrw_ibnet_pct:
+  value: "35%"
+  source: kingdom2006nrw
+  quote: same sentence as nrw_ibnet ("around 35 percent"); short form for a slide tile

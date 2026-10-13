@@ -17,3 +17,5 @@ models/*.pkl
 /*.docx
 .claude/
 powerbi/exports/
+presentation/deck.json
+presentation/node_modules/

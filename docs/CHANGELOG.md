@@ -95,3 +95,8 @@
 - `src/wef/viz/architecture.py`: report version drawn at the printed width with larger text. `src/wef/viz/figures.py`: BattLeDIM anomaly figure legend above the axes, short leak labels.
 - `report/content/ch5_methodology.md`, `ch6_results.md`: equation reference and p-value wording.
 - Report rebuilt: 30 pages, 20 body pages, `--check` 0 failures (draft mode). `report/out/STUDENT_REVIEW.md` written. 67 tests pass.
+
+## Presentation P1 - deck content (2026-10-13)
+
+- Added `presentation/slides.yaml` (18 slides plus backups B1-B5: text, notes, figure ids, tokens) and `presentation/make_deck_json.py` (resolves through the report's resolver, checks text rules, writes `presentation/deck.json`, renders `presentation/*.md.tmpl` into `presentation/out/`).
+- `report/build_report.py`: `year` filter. `report/facts.yaml`: `nrw_ibnet_pct`.

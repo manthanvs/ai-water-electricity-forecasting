@@ -161,3 +161,17 @@ Every non-obvious choice, with reason and alternatives. Newest at the bottom.
 - **Section 5.7**: "(5.4)" is now placed after "robust z-score" (it rendered as "((5.4))").
 - **Cover and certificate**: compared with a LibreOffice rendering of the official template. Layout, fonts and the 20 pt title match. The staggered signature lines are in the template too, so they are left unchanged.
 - **Handover**: `report/out/STUDENT_REVIEW.md` covers the sections to rewrite, the CONFIRM item, five papers, open questions for the guide, differences from the synopsis and this review. It is git-ignored with the rest of `report/out/`, like `reference_verification.md`.
+
+## 2026-10-13 - Presentation phase P1 (deck content)
+
+- **One source for numbers and citations**: `presentation/make_deck_json.py` imports `report/build_report.py` and uses its resolver after the report's first pass. Slide tokens therefore resolve exactly as in the report, and `[@key]` gives the report's reference number. A key that the report does not cite is an error. The script also adds `{{t:...}}` for `results/tuning.json`, which is needed for backup slide B2. It fails on any unresolved token.
+- **New `year` filter** in `build_report.fmt` (for example "2006–2010" on the data slide), so years are not typed by hand.
+- **New fact `nrw_ibnet_pct` ("35%")** in `report/facts.yaml`: a short form of the World Bank's "around 35 percent" (same source and quote) for a 32 pt KPI tile. "about 35 percent" does not fit the tile width.
+- **Text-rule conflicts in the instructions**:
+  - The agenda and objectives slides have six items, as the outline requires, although the general rule is at most 5 bullets.
+  - KPI tile labels are 14 pt rather than the 12 pt in section D, so that nothing on a slide falls below 14 pt except the footer.
+  - The references slide (12 pt, allowed by the outline) and backup tables B1 and B2 (12 pt minimum) are the only other exceptions.
+- **Structural counts in words** ("eight models", "six objectives", "Obj. 5") are design facts, not results. They are written directly; every result in slide text, notes and the generated documents is a token.
+- **Highlights**: at most one yellow element per slide, enforced by the script. Slides 3 and 11–14 highlight their key tile; slides 6 and 10 highlight one panel; slide 15 highlights the demo tile.
+- **References slide**: ten references (the five papers from STUDENT_REVIEW.md, the two benchmark datasets, XGBoost, Isolation Forest and the World Bank report), shown with their report numbers in report order.
+- **Timing**: the notes total an estimated 10:42 at 130 words per minute, against 10:45 planned. Notes are 64 to 101 words per slide.

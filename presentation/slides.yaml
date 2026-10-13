@@ -1,0 +1,560 @@
+# Slide text, speaker notes and figure ids for the final presentation (docs/instructions/03_FINAL_PRESENTATION.md).
+# Every number is a token resolved by make_deck_json.py against the frozen results, exactly as in the report:
+#   {{m:...}} metrics.json, {{a:...}} anomaly.json, {{o:...}} optimisation.json, {{e:...}} eda_summary.json,
+#   {{t:...}} tuning.json, {{c:...}} config.yaml, {{f:...}} report/facts.yaml; [@key] gives the report's [n].
+# Layouts: title, content, thanks. A content slide has a main area built from blocks (figure, bullets, panels,
+# table, text) stacked top to bottom, optional side tiles (kpi: value + label; info: head + lines), a takeaway
+# line under the title and a footnote. `highlight: true` marks the one yellow element a slide may have.
+# `time` is the planned speaking time; make_deck_json.py puts it at the start of the notes.
+
+footer: "Manthan Sankpal | PRN 125M1H064 | MCA Seminar (MCA33AE01)"
+
+slides:
+  - id: title
+    layout: title
+    time: "0:20"
+    title: "AI-Based Prediction of Water Demand and Electricity Consumption"
+    subtitle: "Seminar Final Presentation – MCA33AE01"
+    lines:
+      - "Mr. Manthan Sankpal  |  PRN 125M1H064  |  MCA Semester III"
+      - "Guide: Prof. Dr. Anjana Arakerimath, Head of Department"
+      - "Department of Master of Computer Application"
+      - "Pimpri Chinchwad College of Engineering, Pune  |  2026-27"
+    notes: >-
+      Good morning, respected guide and members of the panel. I am Manthan Sankpal, and my seminar is on
+      AI-based prediction of water demand and electricity consumption, under the guidance of Prof. Dr. Anjana
+      Arakerimath. In the next ten minutes I will show why short-term forecasts matter for both utilities, how I
+      compared statistical, machine-learning and deep-learning models on public smart-meter data, and how the
+      forecasts feed leak detection, a pumping schedule and a dashboard.
+
+  - id: agenda
+    layout: content
+    time: "0:15"
+    title: "Agenda"
+    blocks:
+      - type: bullets
+        numbered: true
+        items:
+          - "Why this matters and motivation"
+          - "Literature survey and research gap"
+          - "Problem statement and objectives"
+          - "Methodology: architecture, data and models"
+          - "Results: forecasts, anomalies and optimisation"
+          - "Live demo, conclusion and future scope"
+    notes: >-
+      The talk follows the chapters of my report. I start with why forecasting matters for water and electricity
+      utilities, then summarise the literature and the gap it leaves. Next come the problem statement and my six
+      objectives, the methodology, and the results for forecasting, anomaly detection and pump scheduling. I end
+      with a short live demo of the dashboard, the conclusions and the future scope.
+
+  - id: why
+    layout: content
+    time: "0:40"
+    title: "Why This Matters"
+    takeaway: "Planning on averages turns every forecast error into cost"
+    blocks:
+      - type: bullets
+        items:
+          - "Supply is still planned on historical averages"
+          - "Over-estimated demand means water is over-pumped"
+          - "Under-estimated load means buying power at peak prices"
+          - "Leaks are found late, after large losses"
+    side: right
+    tiles:
+      - kind: kpi
+        value: "{{f:nrw_ibnet_pct}}"
+        label: "average non-revenue water in developing-country utilities [@kingdom2006nrw]"
+        highlight: true
+    notes: >-
+      When supply is planned on averages, every departure from the average costs money. A water utility that
+      cannot anticipate tomorrow's demand pumps whenever the reservoir level falls, whatever the electricity price
+      at that hour. An electricity company that underestimates load must buy power at short notice and at peak
+      prices. And leaks are usually found only after a lot of water is lost: the World Bank reports that
+      utilities in developing countries lose {{f:nrw_ibnet}} of the water they produce as non-revenue water, and
+      estimates the true level at {{f:nrw_true}}. Better short-term forecasts attack all three costs.
+
+  - id: motivation
+    layout: content
+    time: "0:35"
+    title: "Motivation"
+    blocks:
+      - type: panels
+        cols: 3
+        items:
+          - head: "Water–energy link"
+            lines:
+              - "Pumping is itself an electrical load"
+              - "Known demand lets pumps run off-peak [@antunes2018]"
+          - head: "Unused smart-meter data"
+            lines:
+              - "{{f:rdss_installed}} smart meters installed under RDSS [@pib2025smartmeters]"
+              - "Data used mainly for billing today"
+          - head: "Cost of reacting late"
+            lines:
+              - "Over-pumping and peak-price power"
+              - "Leaks found after large losses [@kingdom2006nrw]"
+    notes: >-
+      Three things motivated this work. First, water and energy are linked: pumping is an electrical load, so if
+      tomorrow's water demand is known, the pumps can run when power is cheaper. Second, India is installing smart
+      meters at national scale, {{f:rdss_installed}} of them under the RDSS scheme by {{f:rdss_asof}}, but that
+      interval data is used mainly for billing. Third, reacting late is expensive, both through over-pumping and
+      through leaks that run for days before anyone notices.
+
+  - id: literature
+    layout: content
+    time: "0:40"
+    title: "Literature Survey"
+    blocks:
+      - type: panels
+        cols: 2
+        items:
+          - head: "Statistical: ARIMA, SARIMA [@box2015; @hyndman2021]"
+            lines:
+              - "+ Interpretable, cheap, strong on stable seasonality"
+              - "– Linear, admits few external variables"
+          - head: "Machine learning: RF, XGBoost [@breiman2001; @chen2016; @antunes2018]"
+            lines:
+              - "+ Captures non-linear weather and calendar effects"
+              - "– Sees time only through engineered lags"
+          - head: "Deep learning: LSTM, GRU [@hochreiter1997; @cho2014; @kong2019; @guo2018]"
+            lines:
+              - "+ Learns patterns in volatile household load"
+              - "– Needs more data, harder to interpret"
+          - head: "Anomaly detection [@liu2008; @vrachimis2022battledim]"
+            lines:
+              - "+ Isolation Forest needs no labels"
+              - "– Labelled leaks are rare; methods still developing"
+    notes: >-
+      The literature falls into four groups. Statistical models such as SARIMA are interpretable and cheap, but
+      they are linear and use few external variables. Machine-learning models such as random forests and XGBoost
+      capture non-linear effects of weather and the calendar, but only see time through the lags we give them.
+      Recurrent networks, the LSTM and the GRU, did best on volatile household load in the studies I reviewed,
+      at the cost of more data and less interpretability. For anomalies, unsupervised methods dominate because
+      labelled leaks are rare; the BattLeDIM competition provides such labels.
+
+  - id: gap
+    layout: content
+    time: "0:30"
+    title: "Research Gap and Problem Statement"
+    blocks:
+      - type: panels
+        cols: 1
+        items:
+          - head: "Research gap"
+            lines:
+              - "Water and electricity are forecast in separate studies"
+              - "Model families are rarely compared on identical splits"
+              - "Forecasts seldom reach detection, scheduling or dashboards"
+          - head: "Problem statement"
+            highlight: true
+            lines:
+              - "No unified, data-driven framework forecasts both water demand and electricity consumption from smart-meter data while flagging abnormal usage."
+    notes: >-
+      The studies I reviewed treat water demand and electrical load separately, and they seldom compare
+      statistical, machine-learning and deep-learning models on the same chronological splits. Most stop at the
+      forecast, without linking it to anomaly detection on labelled events, to an optimisation, or to a
+      dashboard. So my problem statement is the absence of a unified, data-driven framework that forecasts both
+      water demand and electricity consumption from smart-meter data while flagging abnormal usage.
+
+  - id: objectives
+    layout: content
+    time: "0:30"
+    title: "Objectives"
+    blocks:
+      - type: bullets
+        numbered: true
+        items:
+          - "Study smart-meter data; build a reliable preprocessing pipeline"
+          - "Compare statistical, ML and deep-learning models on identical data"
+          - "Forecast next-day and next-week water and electricity demand"
+          - "Use weather, day-of-week and holidays as predictors"
+          - "Detect spikes, leakage and wastage from forecast residuals"
+          - "Visualise forecasts in dashboards for allocation and cost reduction"
+    notes: >-
+      These are the six objectives of my approved synopsis, in short form. The first three are about data and
+      forecasting: a reliable preprocessing pipeline, a fair comparison of three model families, and forecasts
+      for the next day and the next week. The fourth adds weather and calendar predictors. I extended the last
+      two slightly: anomaly detection was evaluated on real labelled leaks, and the water forecasts drive a
+      pump-scheduling optimisation in addition to the dashboards.
+
+  - id: architecture
+    layout: content
+    time: "0:45"
+    title: "System Architecture"
+    takeaway: "One pipeline from raw meter data to decisions, for both resources"
+    blocks:
+      - type: figure
+        figure: fig_architecture
+    notes: >-
+      Here is the system, read from left to right. The data sources are household electricity from the UCI
+      repository, district water inflows from the BWDF competition, weather from Open-Meteo, and leak labels from
+      BattLeDIM. The pipeline downloads each source with a checksum, cleans it and builds features. Three model
+      families read exactly the same features. The analytics layer turns forecasts into anomaly alarms and a
+      pumping plan, and the delivery layer serves everything through a Flask API, a Streamlit dashboard and a
+      Power BI dataset. One command rebuilds every result from the raw data.
+
+  - id: data
+    layout: content
+    time: "0:40"
+    title: "Data"
+    takeaway: "Electricity peaks in the evening; water demand peaks in the morning"
+    side: left
+    tiles:
+      - kind: info
+        head: "Electricity"
+        lines:
+          - "UCI household, France [@uci2012household]"
+          - "Minute data averaged to hourly"
+          - "{{e:electricity.period.0|year}}–{{e:electricity.period.1|year}}, {{e:electricity.n_hours|int}} hours"
+      - kind: info
+        head: "Water demand"
+        lines:
+          - "BWDF district (DMA 3), Italy [@alvisi2025bwdf]"
+          - "Hourly inflow"
+          - "{{e:water.period.0|year}}–{{e:water.period.1|year}}, {{e:water.n_hours|int}} hours"
+      - kind: info
+        head: "Water leaks"
+        lines:
+          - "BattLeDIM L-Town [@vrachimis2022battledim]"
+          - "Simulated network, labelled leaks"
+          - "{{e:battledim.period.0|year}}, {{e:battledim.n_leaks_2018}} leaks"
+    blocks:
+      - type: figure
+        figure: fig_eda_profiles
+    notes: >-
+      I used three public datasets, all openly licensed. For electricity, one French household recorded every
+      minute from {{e:electricity.period.0|year}} to {{e:electricity.period.1|year}}, which I averaged to {{e:electricity.n_hours|int}} hourly values. For water,
+      the hourly inflow of district metered area 3 from the Battle of the Water Demand Forecasting. For leaks,
+      the BattLeDIM network, which is simulated but comes with {{e:battledim.n_leaks_2018}} labelled leaks in
+      {{e:battledim.period.0|year}}. The profiles show the daily rhythm: electricity has a large evening peak,
+      water peaks in the morning and later at weekends. Weather from Open-Meteo is added to both.
+
+  - id: methodology
+    layout: content
+    time: "0:40"
+    title: "Methodology"
+    takeaway: "Eight models, one protocol, and no look-ahead"
+    blocks:
+      - type: figure
+        figure: fig_pipeline
+        h: 2.1
+      - type: panels
+        cols: 2
+        items:
+          - head: "Model families"
+            lines:
+              - "Baseline: seasonal naive"
+              - "Statistical: SARIMA"
+              - "ML: Ridge, Random Forest, XGBoost"
+              - "Deep: LSTM, GRU, CNN-LSTM"
+          - head: "Lag rule: the guard against leakage"
+            highlight: true
+            lines:
+              - "Every lag is at least one horizon old"
+              - "Chronological train, validation and test splits"
+              - "Perturbation test confirms no look-ahead"
+    notes: >-
+      The methodology has six stages, from data acquisition to applications. Eight models share identical
+      inputs and splits: the seasonal-naive baseline, SARIMA, three machine-learning models and three deep
+      networks. All hyper-parameters were chosen on validation data, never on the test period. The most
+      important rule is the lag rule: every feature used for a horizon of h steps is at least h steps old, and
+      the splits are strictly chronological. A perturbation test changes future values and confirms that no
+      feature moves, so there is no look-ahead leakage.
+
+  - id: results_electricity
+    layout: content
+    time: "0:45"
+    title: "Results – Electricity"
+    takeaway: "The {{m:electricity.d1.selected.model|name}} follows the daily rhythm but not single appliance peaks"
+    blocks:
+      - type: figure
+        figure: fig_forecast_electricity
+    side: right
+    tiles:
+      - kind: kpi
+        value: "{{m:electricity.d1.selected.model|name}}"
+        label: "selected next-day model (lowest validation MAE)"
+      - kind: kpi
+        value: "{{m:electricity.d1.test.SEL.mape|.0f}}%"
+        label: "test MAPE, next day; low night load inflates it"
+      - kind: kpi
+        value: "{{m:electricity.d1.test.SEL.skill|.0%}}"
+        label: "lower MAE than seasonal naive"
+        highlight: true
+    notes: >-
+      For household electricity, every model beat the seasonal-naive baseline. The {{m:electricity.d1.selected.model|name}}
+      was selected on validation data and reached a test MAE of {{m:electricity.d1.test.SEL.mae|.3f}} kilowatts,
+      {{m:electricity.d1.test.SEL.skill|.0%}} better than the baseline, and significantly better than the
+      {{m:electricity.d1.significance.vs|name}}, with {{m:electricity.d1.significance.p_value|p}}. The percentage
+      error of {{m:electricity.d1.test.SEL.mape|.0f}} percent looks high because one household uses very little
+      power at night. As you can see, the forecast follows the daily rhythm, but it cannot predict exactly when
+      someone switches on an appliance.
+
+  - id: results_water
+    layout: content
+    time: "0:45"
+    title: "Results – Water and Model Comparison"
+    takeaway: "Deep learning won on volatile household load, not on smooth district water"
+    blocks:
+      - type: figure
+        figure: fig_model_comparison
+    side: right
+    tiles:
+      - kind: kpi
+        value: "{{m:water.d1.selected.model|name}}"
+        label: "selected next-day water model"
+      - kind: kpi
+        value: "{{m:water.d1.test.SEL.mape|.1f}}%"
+        label: "test MAPE, next day"
+        highlight: true
+      - kind: kpi
+        value: "{{m:water.robustness.n_dmas_beating_naive}} of {{m:water.robustness.dmas|len}}"
+        label: "districts where it beat the baseline"
+    notes: >-
+      District water demand is much smoother. {{m:water.d1.selected.model|name}} forecast the next day with a
+      MAPE of {{m:water.d1.test.SEL.mape|.1f}} percent, {{m:water.d1.test.SEL.skill|.0%}} better than the
+      baseline, and the same configuration beat the baseline in {{m:water.robustness.n_dmas_beating_naive}} of
+      {{m:water.robustness.dmas|len}} districts. The chart shows each model's error relative to the baseline;
+      shorter bars are better. Honestly, deep learning did not win everywhere: it helped on the volatile household
+      load, but for water the gradient-boosted trees were better, and at the weekly horizon the simple baseline
+      was hard to beat.
+
+  - id: anomaly
+    layout: content
+    time: "0:40"
+    title: "Anomaly Detection"
+    takeaway: "Forecast residuals flag real leaks; overlapping leaks limit precision"
+    blocks:
+      - type: figure
+        figure: fig_anomaly_water
+    side: right
+    tiles:
+      - kind: kpi
+        value: "{{a:water.residual_zscore.test.recall|.0%}}"
+        label: "event recall: {{a:water.residual_zscore.test.n_detected}} of {{a:water.residual_zscore.test.n_labels}} real BattLeDIM leaks"
+        highlight: true
+      - kind: kpi
+        value: "{{a:water.residual_zscore.test.false_alarms_per_week|.2f}}"
+        label: "false alarms per week"
+      - kind: kpi
+        value: "{{a:water.residual_zscore.test.median_delay_hours|.0f}} h"
+        label: "median detection delay"
+    footnote: "Electricity anomalies were INJECTED for testing; the water leaks are real BattLeDIM labels."
+    notes: >-
+      For anomalies I compare each hour with its forecast. A robust z-score of the residual, using the median
+      and the MAD, raises an alarm when it stays high for several hours. On BattLeDIM it found
+      {{a:water.residual_zscore.test.n_detected}} of the {{a:water.residual_zscore.test.n_labels}} leaks that
+      began in the test period, with a median delay of {{a:water.residual_zscore.test.median_delay_hours|.0f}}
+      hours. Its precision of {{a:water.residual_zscore.test.precision|.2f}} must be read against
+      {{a:water.residual_zscore.test.chance_precision|.2f}} for random alarms, because the 2018 leaks overlap.
+      For electricity I injected spikes, shifts and drifts, and they are labelled as injected.
+
+  - id: optimisation
+    layout: content
+    time: "0:40"
+    title: "Optimisation and Cost"
+    takeaway: "The plan fills the tank off-peak, before the morning peak tariff"
+    blocks:
+      - type: figure
+        figure: fig_pump_schedule
+    side: right
+    tiles:
+      - kind: kpi
+        value: "{{o:water_pump.summary.selected_forecast.saving_pct_vs_demand_following|.1f}}%"
+        label: "lower cost than demand-following pumping"
+        highlight: true
+      - kind: kpi
+        value: "{{o:water_pump.summary.perfect_forecast.saving_pct_vs_demand_following|.1f}}%"
+        label: "with a perfect forecast (upper bound)"
+      - kind: kpi
+        value: "{{o:water_pump.summary.selected_forecast.offpeak_kwh_shift_vs_demand_following|int}} kWh"
+        label: "shifted to off-peak over {{o:water_pump.n_days}} test days"
+    footnote: "Tariff, tank and pump values are ILLUSTRATIVE ASSUMPTIONS, not a real utility's."
+    notes: >-
+      Next, I used the water forecast to plan pumping. A linear programme chooses how much to pump each hour to
+      minimise energy cost, while keeping the tank between its limits. Over {{o:water_pump.n_days}} test days, the
+      plan based on the forecast cost {{o:water_pump.summary.selected_forecast.saving_pct_vs_demand_following|.1f}}
+      percent less than pumping to follow demand, close to the
+      {{o:water_pump.summary.perfect_forecast.saving_pct_vs_demand_following|.1f}} percent that a perfect forecast
+      would give. The tariff and tank values are illustrative, so this shows the mechanism rather than a real
+      utility's savings.
+
+  - id: demo
+    layout: content
+    time: "1:30"
+    title: "Live Demo"
+    takeaway: "Streamlit dashboard on the Flask API, running offline on this laptop"
+    blocks:
+      - type: figure
+        figure: fig_dashboard
+    side: right
+    tiles:
+      - kind: info
+        head: "Live demo"
+        highlight: true
+        lines:
+          - "1  Overview"
+          - "2  Forecast: water"
+          - "3  Anomalies"
+          - "4  Optimisation"
+    notes: >-
+      Now I will show the dashboard live. On the Overview page you can see the latest next-day forecast and the
+      error of the selected model. On the Forecast page I switch from electricity to water and show actual
+      against forecast for a test week. On the Anomalies page I pick a labelled BattLeDIM leak and show where the
+      detector raised its alarm. On the Optimisation page I choose a test day and show the pumping moving into
+      off-peak hours, with the cost comparison. If anything fails, I will show the recorded run instead.
+
+  - id: conclusion
+    layout: content
+    time: "0:40"
+    title: "Conclusion and Future Scope"
+    blocks:
+      - type: panels
+        cols: 2
+        items:
+          - head: "Conclusion"
+            lines:
+              - "Next-day forecasts beat the baseline for both resources (Obj. 2, 3)"
+              - "Residuals flagged {{a:water.residual_zscore.test.n_detected}} of {{a:water.residual_zscore.test.n_labels}} real test leaks (Obj. 5)"
+              - "Dashboard and pump plan put forecasts to use (Obj. 6)"
+          - head: "Future scope"
+            lines:
+              - "Indian smart-meter and district data"
+              - "Transformer and probabilistic forecasts [@vaswani2017]"
+              - "Digital twin for leak localisation"
+    notes: >-
+      To conclude: next-day forecasts beat the seasonal baseline for both resources, by
+      {{m:electricity.d1.test.SEL.skill|.0%}} for electricity and {{m:water.d1.test.SEL.skill|.0%}} for water. The
+      best model depends on the series, recurrent networks for volatile household load and boosted trees for
+      smooth district demand. Forecast residuals detected most real leaks, and the forecasts drive a dashboard
+      and a cheaper pumping plan. In future, I would like to use Indian smart-meter data, test Transformer and
+      probabilistic models, and add leak localisation through a digital twin of the network.
+
+  - id: references
+    layout: content
+    time: "0:10"
+    title: "References"
+    blocks:
+      - type: references
+        keys: [kingdom2006nrw, antunes2018, chen2016, hochreiter1997, kong2019, marino2016, guo2018, alvisi2025bwdf, liu2008, vrachimis2022battledim]
+    notes: >-
+      These are the most important references in my report, shown with the same numbers as in the report. The full list, in IEEE style, is at the end of the report. Every reference was checked against its
+      DOI or the official source before I cited it. The datasets I used are all published under open licences,
+      and their citations are in the report as well.
+
+  - id: thanks
+    layout: thanks
+    title: "Thank You"
+    subtitle: "Questions are welcome"
+    lines:
+      - "Mr. Manthan Sankpal  |  PRN 125M1H064"
+      - "Department of Master of Computer Application, PCCOE, Pune"
+    notes: >-
+      Thank you for your attention. I would be happy to answer your questions. If it helps, I also have backup
+      slides with the full table of test metrics, the configuration of the deep-learning models, the formulation
+      of the pump-scheduling linear programme, the data-cleaning statistics and a detailed list of the
+      limitations of this study. I can also show any other page of the dashboard.
+
+  # ------------------------------------------------------------------ backup slides (not presented unless asked)
+  - id: b1_metrics
+    layout: content
+    backup: B1
+    title: "Backup – Test Metrics of All Models"
+    blocks:
+      - type: table
+        generator: metrics_table
+        font: 12
+    footnote: "* selected by validation MAE. MAE in kW, L/s, kWh/day and m³/day; MAPE in percent."
+    notes: >-
+      This table gives the test accuracy of all eight models for both resources and both horizons, generated
+      from the frozen metrics file. The star marks the model selected by validation MAE, which is the rule I
+      used everywhere; I never chose a model by its test score. For electricity next week, the
+      {{m:electricity.w1.significance.vs|name}} beat the selected {{m:electricity.w1.selected.model|name}} on test,
+      but the difference was not significant, with {{m:electricity.w1.significance.p_value|p}}.
+
+  - id: b2_deep
+    layout: content
+    backup: B2
+    title: "Backup – Deep-Learning Configuration"
+    blocks:
+      - type: table
+        generator: deep_config_table
+        font: 12
+    footnote: "Chosen on validation data; Adam, early stopping with patience {{c:models.deep.patience}}, at most {{c:models.deep.epochs}} epochs, batch {{c:models.deep.batch_size}}."
+    notes: >-
+      Here is the configuration of the three deep networks for each series and horizon. The input window is
+      {{c:models.deep.window.d1}} hours for next-day forecasts and {{c:models.deep.window.w1}} days for next-week
+      forecasts. The number of units and the options were chosen on validation data, and early stopping kept the
+      best epoch. The last column shows the training time of the final fit, a matter of seconds on a laptop processor, so
+      the approach does not need special hardware.
+
+  - id: b3_lp
+    layout: content
+    backup: B3
+    title: "Backup – Pump-Scheduling Linear Programme"
+    blocks:
+      - type: text
+        size: 22
+        lines:
+          - "minimise   Σₕ cₕ · e · pₕ"
+          - "subject to   Lₕ = Lₕ₋₁ + pₕ − dₕ"
+          - "Lmin ≤ Lₕ ≤ Lmax,   0 ≤ pₕ ≤ Pmax,   L₂₄ ≥ L₀"
+          - "pₕ pumped volume, dₕ forecast demand, cₕ tariff, e energy per m³"
+    side: right
+    tiles:
+      - kind: info
+        head: "Illustrative values"
+        lines:
+          - "Tank {{o:assumptions.tank.capacity_m3}} m³"
+          - "Pump {{o:assumptions.pump.max_m3_per_h}} m³/h, {{o:assumptions.pump.kwh_per_m3}} kWh/m³"
+          - "Tariff ×{{o:assumptions.tariff.multipliers.off_peak}} off-peak, ×{{o:assumptions.tariff.multipliers.peak}} peak"
+    footnote: "Solved with SciPy linprog (HiGHS) for each test day; ILLUSTRATIVE ASSUMPTIONS, not a real utility's."
+    notes: >-
+      The linear programme decides the volume pumped in each hour of the day. The objective is the energy cost,
+      the tariff times the energy per cubic metre times the volume. The constraints are the tank balance, the
+      lower and upper tank levels, the pump capacity, and an end-of-day level at least equal to the start, so
+      that one day cannot borrow water from the next. The plan is then run against actual demand, with
+      corrective pumping whenever the tank would fall below its minimum.
+
+  - id: b4_cleaning
+    layout: content
+    backup: B4
+    title: "Backup – Data Cleaning Statistics"
+    blocks:
+      - type: table
+        font: 14
+        header: ["Item", "Electricity", "Water (DMA 3)"]
+        widths: [6.0, 3.0, 3.0]
+        rows:
+          - ["Hours after cleaning", "{{e:electricity.n_hours|int}}", "{{e:water.n_hours|int}}"]
+          - ["Missing hours before filling", "{{e:electricity.missing_hours_before_fill|int}}", "{{e:water.missing_hours_before_fill|int}}"]
+          - ["Short gaps interpolated (hours)", "{{e:electricity.interpolated_hours|int}}", "{{e:water.interpolated_hours|int}}"]
+          - ["Long gaps left missing (hours / runs)", "{{e:electricity.long_gap_hours|int}} / {{e:electricity.long_gap_runs}}", "{{e:water.long_gap_hours|int}} / {{e:water.long_gap_runs}}"]
+          - ["Outlier hours flagged and kept", "{{e:electricity.outlier_hours_flagged|int}}", "{{e:water.outlier_hours_flagged|int}}"]
+          - ["Duplicate timestamps", "{{e:electricity.duplicated_timestamps}}", "{{e:water.duplicated_timestamps}}"]
+    footnote: "Gaps up to {{c:cleaning.max_interpolate_hours}} hours interpolated; longer gaps excluded from evaluation, never invented."
+    notes: >-
+      This table shows what cleaning did to each series. Short gaps of up to {{c:cleaning.max_interpolate_hours}}
+      hours were interpolated. Longer gaps were left missing and excluded from evaluation, because inventing
+      values there would flatter every model. Outliers were flagged with a rolling median absolute deviation
+      rule, but kept, because a sudden high reading can be genuine demand. Daylight-saving changes were resolved
+      explicitly, and there are no duplicate timestamps after cleaning.
+
+  - id: b5_limitations
+    layout: content
+    backup: B5
+    title: "Backup – Limitations"
+    blocks:
+      - type: bullets
+        items:
+          - "Electricity from one household, noisier than a feeder"
+          - "Leak labels from a simulated network (L-Town)"
+          - "European data, not Indian utility data"
+          - "Observed weather used in place of weather forecasts"
+          - "Illustrative tariff and tank; injected electricity anomalies"
+    notes: >-
+      I want to be clear about the limitations. The electricity data comes from a single household, which is
+      much noisier than a feeder or a city. The leak labels come from a simulated network. All data are European,
+      because I could not find open Indian utility data at this resolution. I used observed weather in place of
+      a weather forecast, so real accuracy would be slightly lower. The tariff and tank values are illustrative,
+      and the electricity anomalies were injected for testing.
