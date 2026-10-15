@@ -33,7 +33,7 @@ REPORT = {
 SLIDES = {
     "font.family": "sans-serif",
     "font.sans-serif": ["Segoe UI", "Arial", "Liberation Sans", "DejaVu Sans"],
-    "font.size": 12, "axes.labelsize": 12, "legend.fontsize": 11, "xtick.labelsize": 11, "ytick.labelsize": 11,
+    "font.size": 14, "axes.labelsize": 14, "legend.fontsize": 13, "xtick.labelsize": 13, "ytick.labelsize": 13,
     "axes.prop_cycle": cycler(color=SLIDE_COLORS),
     "axes.grid": True, "grid.color": "#e4e3df", "grid.linewidth": 0.6,
     "axes.edgecolor": "#b5b4ae", "axes.labelcolor": INK, "xtick.color": INK2, "ytick.color": INK2,

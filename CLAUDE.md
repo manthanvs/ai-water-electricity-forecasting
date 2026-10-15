@@ -98,6 +98,8 @@ If an instruction file and this file disagree, this file wins. If either disagre
 |   |-- slides.yaml                slide text, notes, figure ids
 |   |-- make_deck_json.py          results + text -> deck.json
 |   |-- build_deck.js              pptxgenjs
+|   |-- render_deck.py             pptx -> PDF and slide PNGs, font/notes checks
+|   |-- *.md.tmpl                  speaker, demo and viva documents with tokens
 |   |-- package.json
 |   `-- out/
 |-- submission/                    final bundle from 04_SUBMISSION_CHECKLIST.md (git-ignored)
@@ -116,7 +118,7 @@ If an instruction file and this file disagree, this file wins. If either disagre
 - Tests: `pytest -q`
 - Report: `python report/build_report.py` then `python report/build_report.py --check`
 - Format self-test: `python report/docx_format.py --selftest`
-- Deck: `python presentation/make_deck_json.py && node presentation/build_deck.js`
+- Deck: `python presentation/make_deck_json.py && node presentation/build_deck.js && python presentation/render_deck.py` (first time: `npm install --prefix presentation`)
 
 All commands must work on Windows (PowerShell) and Linux. Use `pathlib`, never hard-coded separators. Do not rely on `make`.
 
@@ -144,7 +146,7 @@ Report (02_SEMINAR_REPORT.md)
 
 Presentation (03_FINAL_PRESENTATION.md)
 - [x] P1 - deck content (2026-10-13: 18 slides + 5 backups in slides.yaml; all tokens resolve through the report resolver; notes 64-101 words; estimated 10:42 vs planned 10:45)
-- [ ] P2 - deck build and visual review
+- [x] P2 - deck build and visual review (2026-10-15: 23 slides built, PDF and PNGs written; render_deck checks pass (fonts, notes, count); every slide reviewed and fixed: numbering, panel heights, figure legibility)
 - [ ] P3 - viva preparation and demo script
 
 ## 8. Open questions for the guide (do not decide these silently)

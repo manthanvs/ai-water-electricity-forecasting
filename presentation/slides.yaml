@@ -77,9 +77,11 @@ slides:
     layout: content
     time: "0:35"
     title: "Motivation"
+    takeaway: "Forecasts let both utilities act before demand arrives"
     blocks:
       - type: panels
         cols: 3
+        h: 3.0
         items:
           - head: "Water–energy link"
             lines:
@@ -112,13 +114,13 @@ slides:
             lines:
               - "+ Interpretable, cheap, strong on stable seasonality"
               - "– Linear, admits few external variables"
-          - head: "Machine learning: RF, XGBoost [@breiman2001; @chen2016; @antunes2018]"
+          - head: "Machine learning: RF, XGBoost [@breiman2001; @chen2016]"
             lines:
-              - "+ Captures non-linear weather and calendar effects"
+              - "+ Non-linear weather and calendar effects [@antunes2018]"
               - "– Sees time only through engineered lags"
-          - head: "Deep learning: LSTM, GRU [@hochreiter1997; @cho2014; @kong2019; @guo2018]"
+          - head: "Deep learning: LSTM, GRU [@hochreiter1997; @cho2014]"
             lines:
-              - "+ Learns patterns in volatile household load"
+              - "+ Best on volatile household load [@kong2019]"
               - "– Needs more data, harder to interpret"
           - head: "Anomaly detection [@liu2008; @vrachimis2022battledim]"
             lines:
@@ -139,6 +141,7 @@ slides:
     blocks:
       - type: panels
         cols: 1
+        h: 4.4
         items:
           - head: "Research gap"
             lines:
@@ -408,9 +411,11 @@ slides:
     layout: content
     time: "0:40"
     title: "Conclusion and Future Scope"
+    takeaway: "The best model depends on the series"
     blocks:
       - type: panels
         cols: 2
+        h: 3.4
         items:
           - head: "Conclusion"
             lines:
@@ -494,12 +499,12 @@ slides:
     title: "Backup – Pump-Scheduling Linear Programme"
     blocks:
       - type: text
-        size: 22
+        size: 24
         lines:
           - "minimise   Σₕ cₕ · e · pₕ"
           - "subject to   Lₕ = Lₕ₋₁ + pₕ − dₕ"
           - "Lmin ≤ Lₕ ≤ Lmax,   0 ≤ pₕ ≤ Pmax,   L₂₄ ≥ L₀"
-          - "pₕ pumped volume, dₕ forecast demand, cₕ tariff, e energy per m³"
+          - "pₕ pumped, dₕ forecast demand, cₕ tariff, e energy per m³"
     side: right
     tiles:
       - kind: info
@@ -522,7 +527,7 @@ slides:
     title: "Backup – Data Cleaning Statistics"
     blocks:
       - type: table
-        font: 14
+        font: 18
         header: ["Item", "Electricity", "Water (DMA 3)"]
         widths: [6.0, 3.0, 3.0]
         rows:

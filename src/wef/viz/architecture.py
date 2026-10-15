@@ -36,9 +36,9 @@ def fig_architecture():
     """Five layers left to right; one arrow between layers, vertical arrows only for real dependencies."""
     def draw(mode, size):
         # report: drawn at the printed width (150 mm) so text prints at 7-8 pt
-        fig = plt.figure(figsize=(size[0], size[0] * 0.46) if mode == "report" else (size[0], size[1] * 1.2))
+        fig = plt.figure(figsize=(size[0], size[0] * 0.46) if mode == "report" else size)
         ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
-        fs = 8 if mode == "report" else 10.5
+        fs = 8 if mode == "report" else 13
         w, h, pad = 0.16, 0.23, 0.008
         xs = [0.02, 0.22, 0.42, 0.62, 0.82]
         ys = [0.64, 0.33, 0.02]
@@ -80,19 +80,19 @@ def fig_architecture():
 
 
 def fig_pipeline():
-    stages = [("1  Data acquisition", ["four public", "datasets,", "checksums"]),
-              ("2  Cleaning and EDA", ["DST, gaps,", "outliers,", "profiles"]),
-              ("3  Features", ["lag rule,", "calendar,", "weather"]),
-              ("4  Modelling", ["8 models,", "2 horizons,", "validation tuning"]),
-              ("5  Evaluation", ["rolling origin,", "metrics,", "DM test"]),
-              ("6  Applications", ["anomalies, pump", "LP, API,", "dashboard"])]
+    stages = [("1  Data", ["four public", "datasets"]),
+              ("2  Cleaning", ["DST, gaps,", "outliers"]),
+              ("3  Features", ["lag rule,", "calendar"]),
+              ("4  Modelling", ["8 models,", "2 horizons"]),
+              ("5  Evaluation", ["rolling origin,", "DM test"]),
+              ("6  Applications", ["anomalies, LP,", "dashboard"])]
     layers = ["data", "prep", "prep", "model", "out", "serve"]
 
     def draw(mode, size):
-        fig = plt.figure(figsize=(size[0], size[1] * 0.34))
+        fig = plt.figure(figsize=(size[0], size[1] * 0.42))
         ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis("off")
-        fs = 6.5 if mode == "report" else 11
-        n, gap = len(stages), 0.04
+        fs = 6.5 if mode == "report" else 14
+        n, gap = len(stages), 0.025
         w = (1 - gap * (n + 1)) / n
         boxes = [_box(ax, mode, gap + i * (w + gap), 0.06, w, 0.88, t.replace("  ", "\n", 1), l, layer, fs)
                  for i, ((t, l), layer) in enumerate(zip(stages, layers))]

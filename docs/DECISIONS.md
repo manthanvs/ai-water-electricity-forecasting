@@ -175,3 +175,18 @@ Every non-obvious choice, with reason and alternatives. Newest at the bottom.
 - **Highlights**: at most one yellow element per slide, enforced by the script. Slides 3 and 11–14 highlight their key tile; slides 6 and 10 highlight one panel; slide 15 highlights the demo tile.
 - **References slide**: ten references (the five papers from STUDENT_REVIEW.md, the two benchmark datasets, XGBoost, Isolation Forest and the World Bank report), shown with their report numbers in report order.
 - **Timing**: the notes total an estimated 10:42 at 130 words per minute, against 10:45 planned. Notes are 64 to 101 words per slide.
+
+## 2026-10-15 - Presentation phase P2 (build and visual review)
+
+- **Renderer**: `build_deck.js` reads only `deck.json`. Figures are fitted inside their box with the aspect ratio kept, computed from the PNG's pixel size. This is the same result as pptxgenjs `sizing: contain`, and it does not depend on that option's handling of image sizes. Rejected alternative: native `sizing`.
+- **Numbered lists** (agenda, objectives) are written as "1.", "2." in the text. LibreOffice restarts pptxgenjs auto-numbering on every paragraph, which showed "1." for every item, and the PDF backup must match the pptx.
+- **Slide-figure legibility**: slide figures are drawn at 11 in but placed at about 8.4 in, so axis text was about 9 pt on screen.
+  - The slide style (`style.SLIDES`) moved from 12/11 pt to 14/13 pt.
+  - The architecture diagram (slide version) uses the 11 x 5.2 in slide size with 13 pt box text.
+  - The pump schedule uses a wider shape (height factor 1.1 instead of 1.45).
+  - The pipeline diagram has shorter stage labels at 14 pt.
+  - Report figures are unchanged; the regenerated report PNGs are byte-identical except `fig_pipeline`, which the report does not use.
+- **Panels**: blocks of panels take a fixed height from `slides.yaml` (`h`), so a few short lines do not stretch into empty boxes. Motivation and conclusion gained a takeaway line.
+- **Literature slide**: citations moved from panel headings to the line they support, so the headings fit on one line. Guo et al. stays on the references slide.
+- **Title slide** has no footer or slide number; every other slide has both. Backup slides are numbered B1-B5.
+- **Automatic checks** (`render_deck.py`): every slide has notes; no text run below 14 pt except the 10 pt footer and number, and 12 pt on the references slide and in tables; the slide count matches `deck.json`. The visual review covered all 23 rendered slides: no overflow, overlap or distortion remains.

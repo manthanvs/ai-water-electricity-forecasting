@@ -300,7 +300,7 @@ def fig_pump_schedule():
     lmin, lmax = cap * o["tank"]["min_fraction"], cap * o["tank"]["max_fraction"]
 
     def draw(mode, size):
-        fig, (a1, a2) = plt.subplots(2, 1, figsize=(size[0], size[1] * (1.3 if mode == "report" else 1.45)), sharex=True, height_ratios=[1.2, 1])
+        fig, (a1, a2) = plt.subplots(2, 1, figsize=(size[0], size[1] * (1.3 if mode == "report" else 1.1)), sharex=True, height_ratios=[1.2, 1])
         h = d["hour"].to_numpy()
         for ax in (a1, a2):
             for hr, band in zip(h, d["band"]):

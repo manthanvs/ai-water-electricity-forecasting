@@ -100,3 +100,10 @@
 
 - Added `presentation/slides.yaml` (18 slides plus backups B1-B5: text, notes, figure ids, tokens) and `presentation/make_deck_json.py` (resolves through the report's resolver, checks text rules, writes `presentation/deck.json`, renders `presentation/*.md.tmpl` into `presentation/out/`).
 - `report/build_report.py`: `year` filter. `report/facts.yaml`: `nrw_ibnet_pct`.
+
+## Presentation P2 - deck build and visual review (2026-10-15)
+
+- Added `presentation/package.json` (pptxgenjs 4.0.1, lock file committed), `presentation/build_deck.js` (layouts: title, content with figure, bullets, panels, table, text and references blocks plus KPI/info tiles, thanks), `presentation/render_deck.py` (LibreOffice PDF, slide PNGs, checks).
+- `src/wef/viz/style.py`: larger slide-figure fonts. `src/wef/viz/architecture.py`: slide sizes and pipeline labels. `src/wef/viz/figures.py`: wider slide pump schedule. Slide figures regenerated.
+- `presentation/slides.yaml`: panel heights, two takeaways, literature headings, B3 and B4 layout.
+- Output: `presentation/out/Final_Presentation_Manthan_Sankpal.pptx` and `.pdf`, `presentation/out/slides/slide_01-23.png`.

@@ -1,0 +1,11 @@
+{
+  "name": "wef-seminar-deck",
+  "private": true,
+  "description": "Renders presentation/deck.json into the final presentation (pptxgenjs).",
+  "scripts": {
+    "build": "node build_deck.js"
+  },
+  "dependencies": {
+    "pptxgenjs": "4.0.1"
+  }
+}
