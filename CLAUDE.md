@@ -102,6 +102,7 @@ If an instruction file and this file disagree, this file wins. If either disagre
 |   |-- *.md.tmpl                  speaker, demo and viva documents with tokens
 |   |-- package.json
 |   `-- out/
+|-- make_submission.py             assembles submission/ and the zip (refuses unless the report passed --final --check)
 |-- submission/                    final bundle from 04_SUBMISSION_CHECKLIST.md (git-ignored)
 `-- docs/
     |-- instructions/  reference/
@@ -118,6 +119,8 @@ If an instruction file and this file disagree, this file wins. If either disagre
 - Tests: `pytest -q`
 - Report: `python report/build_report.py` then `python report/build_report.py --check`
 - Format self-test: `python report/docx_format.py --selftest`
+- Viva/script documents and number audit: `python presentation/make_deck_json.py` (`--audit` lists digits outside tokens)
+- Submission bundle: `python make_submission.py` (`--draft` for a test bundle from a draft report)
 - Deck: `python presentation/make_deck_json.py && node presentation/build_deck.js && python presentation/render_deck.py` (first time: `npm install --prefix presentation`)
 
 All commands must work on Windows (PowerShell) and Linux. Use `pathlib`, never hard-coded separators. Do not rely on `make`.
@@ -157,6 +160,7 @@ Presentation (03_FINAL_PRESENTATION.md)
 - Presentation length and format: assumed 10 minutes plus 5 minutes of questions.
 - Whether the department requires a declaration of AI-tool assistance.
 - The format lists the right margin (32 mm) as wider than the left (25.4 mm) although the report is spiral bound on the left. Followed literally unless the guide says otherwise.
+- Department practicalities from 04_SUBMISSION_CHECKLIST.md: plagiarism similarity limit, single- or double-sided printing, number of printed copies, softcopy channel (email, LMS or pen drive).
 - The earlier template mentions the theme "Energy Resources Conservation Year (2026-27)". Confirm whether this is the department's seminar theme before referring to it.
 
 ## 9. Working style

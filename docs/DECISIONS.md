@@ -207,3 +207,18 @@ Every non-obvious choice, with reason and alternatives. Newest at the bottom.
   - The demo script names the leak band by its start date, because five labelled leaks overlap in that window.
 - **Papers to know**: the five papers cited most in the report (Wang, Antunes, Vrachimis and Alvisi with four citations each; Kong chosen among the papers with three, since it supports the main deep-learning finding). Marino and Guo, recommended in STUDENT_REVIEW.md, are added briefly. The summaries paraphrase the verified abstracts in `report/out/verification_raw/` and add nothing beyond them.
 - **AI-tool question (Q31)**: answered as "say so honestly and describe the checks". Whether a written declaration is required stays an open question for the guide.
+
+## 2026-10-15 - Submission preparation (04_SUBMISSION_CHECKLIST.md)
+
+- **`make_submission.py`** assembles `submission/<name>/` and `Seminar_MCA33AE01_125M1H064_Manthan_Sankpal.zip` as listed in section D.
+  - It refuses to run unless the last `report/out/check_report.txt` is a passing final-mode build, so a report with a CONFIRM marker cannot be packaged by accident.
+  - `--draft` builds the same bundle with a `_DRAFT` suffix, for checking only.
+- **Project_Source** is `git archive` of `v1.0-results-frozen`, as the checklist specifies. That excludes `data/`, `.venv/` and anything untracked, and the tag holds no file over 5 MB (14 MB in total). Its `README.md` explains how to download the data and reproduce the results. The report and presentation tooling, added after the tag, is not part of Project_Source; the built report and deck are in the bundle itself.
+- **Manthan's files** (plagiarism report, backup video) are picked up from `submission/` when present and listed as missing otherwise.
+- **Not done, needs Manthan**:
+  - the five rewrites and the Director CONFIRM, then the final-mode build;
+  - the plagiarism check and the grammar pass;
+  - the backup video;
+  - printing, signature and binding.
+  - The department questions (similarity limit, print sides, copies, channel) were added to CLAUDE.md section 8 and STUDENT_REVIEW.md section 8.
+- **Regression check after P1-P2 code changes**: report `--check` passes in draft mode (0 failures, results still the frozen tag), and all 67 tests pass.

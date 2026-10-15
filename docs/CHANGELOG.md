@@ -113,3 +113,8 @@
 - Added `presentation/SPEAKER_SCRIPT.md.tmpl`, `DEMO_SCRIPT.md.tmpl` and `VIVA_PREP.md.tmpl` (31 questions in seven groups, weak points, papers to know). They render to `presentation/out/`.
 - `make_deck_json.py`: renders the templates, `{{total}}`, `--audit` for digits outside tokens, nested `tuning.json` lookup.
 - `slides.yaml`: the anomaly notes read the year from a token.
+
+## Submission preparation (2026-10-15)
+
+- Added `make_submission.py` (bundle and zip; final-build guard; `--draft`). A draft bundle was built and checked (16.4 MB).
+- `STUDENT_REVIEW.md` (git-ignored) gained section 8, the remaining steps to submission. CLAUDE.md: layout, commands, department questions.
