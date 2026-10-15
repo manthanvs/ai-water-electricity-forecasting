@@ -1,0 +1,79 @@
+# Live Demo Script
+
+Mr. Manthan Sankpal, PRN 125M1H064 - MCA Seminar (MCA33AE01)
+
+The demo runs during slide 15 and takes about 90 seconds. It needs your laptop; the college PC does not have the project. No internet connection is needed: the API and the dashboard read the saved models and results.
+
+Every number below is read from the frozen results when this file is generated. The dashboard shows the same values.
+
+## Before the session (allow 15 minutes)
+
+1. **Laptop and display**
+   - Charge the laptop fully and bring the charger and an HDMI adapter.
+   - Set the display to "Duplicate" (Windows key + P) so you see what the panel sees.
+   - Turn on "Do not disturb" so that no notification pops up during the talk.
+2. **Start the API** in a first terminal, from the project folder:
+
+```bash
+.venv\Scripts\Activate.ps1
+```
+
+```bash
+flask --app api.app run --port 5000
+```
+
+3. **Start the dashboard** in a second terminal:
+
+```bash
+.venv\Scripts\Activate.ps1
+```
+
+```bash
+streamlit run dashboard/app.py
+```
+
+4. **Check the API**: open `http://127.0.0.1:5000/api/health` in the browser. It must answer with a list of models.
+5. **Prepare the browser window**
+   - Open the dashboard (Streamlit prints the address, usually `http://localhost:8501`).
+   - Set the browser zoom to 100 percent, or 125 percent in a large hall.
+   - Leave the dashboard open on the Overview page in its own window, next to the slides.
+6. **Keep the backup video ready**: open `Demo_Backup_Manthan_Sankpal.mp4` in a media player and pause it on the first frame. Keep copies on the laptop, a USB drive and cloud storage.
+
+If the API cannot start (for example, the port is busy), go ahead anyway. The dashboard falls back to computing everything locally from the same saved files, and every page still works. This was tested in Phase 9.
+
+## Click path (about 90 seconds)
+
+1. **Overview (about 15 seconds)**
+   - Left column, electricity: the selected next-day model is {{m:electricity.d1.selected.model|name}}, with a skill of {{m:electricity.d1.test.SEL.skill|.2f}} against the seasonal-naive baseline and a test MAPE of {{m:electricity.d1.test.SEL.mape|.1f}} percent.
+   - Right column, water: {{m:water.d1.selected.model|name}}, with a test MAPE of {{m:water.d1.test.SEL.mape|.1f}} percent.
+   - Point at "Forecast for ...": the next-day forecast made at the last origin of the test period.
+   - Say: "Every number here is read from the results files, the same ones as in my report."
+2. **Forecast (about 25 seconds)**
+   - Switch the resource from electricity to water and keep the next-day horizon.
+   - The selected model is already chosen, and the window shows the first test week, from {{m:water.d1.split_dates.test.0|date}}.
+   - Point at the actual line against the forecast line.
+   - Then point at the three numbers below the chart: the error in this window, the seasonal-naive error, and the full test-period MAE of {{m:water.d1.test.SEL.mae|.3f}} L/s.
+3. **Anomalies (about 25 seconds)**
+   - Choose water and set the window to start a few days before {{a:water.residual_zscore.test.per_label.3.start|date}}.
+   - Earlier leaks are still running, so several bands overlap. Point at the band that starts on {{a:water.residual_zscore.test.per_label.3.start|date}}: it is the labelled leak {{a:water.residual_zscore.test.per_label.3.event_id}} ({{a:water.residual_zscore.test.per_label.3.type}}).
+   - The triangle is the z-score alarm, raised {{a:water.residual_zscore.test.per_label.3.delay_hours|.0f}} hours after the leak started.
+   - Point at the text under the chart: over the whole test period, recall {{a:water.residual_zscore.test.recall|.2f}}, and precision {{a:water.residual_zscore.test.precision|.2f}} against {{a:water.residual_zscore.test.chance_precision|.2f}} for random alarms.
+   - Say that this precision is close to chance because the leaks overlap.
+4. **Optimisation (about 25 seconds)**
+   - Keep the default test day, or pick any day in the test period.
+   - Point at the pumping bars inside the green off-peak bands, and at the tank level rising before the red peak band.
+   - Read the three numbers under the chart: plan cost, demand-following cost, saving.
+   - Scroll to the whole-period table. Over {{o:water_pump.n_days}} test days, the forecast-based plan costs {{o:water_pump.summary.selected_forecast.saving_pct_vs_demand_following|.1f}} percent less than demand-following pumping.
+   - Add: "the tank and tariff values are illustrative".
+   - If someone asks, move the tank-capacity slider to show that the plan adapts.
+5. **Back to the slides** (about 5 seconds): switch to the slide window and go to slide 16.
+
+## Fallback
+
+- If anything fails or hangs for more than 10 seconds, say "I will show the recorded run" and play the backup video. Do not debug live.
+- If the projector cuts the browser window, show the screenshot on slide 15 and describe the click path.
+
+## Recording the backup video (do this once, before the day)
+
+- Follow the click path above exactly, in about 90 seconds. Use any screen recorder; on Windows, Xbox Game Bar records the active window with Windows key + Alt + R.
+- Save it as `Demo_Backup_Manthan_Sankpal.mp4`. Watch it once to check that the text is readable and that no personal notifications appear.

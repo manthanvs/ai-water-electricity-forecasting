@@ -107,3 +107,9 @@
 - `src/wef/viz/style.py`: larger slide-figure fonts. `src/wef/viz/architecture.py`: slide sizes and pipeline labels. `src/wef/viz/figures.py`: wider slide pump schedule. Slide figures regenerated.
 - `presentation/slides.yaml`: panel heights, two takeaways, literature headings, B3 and B4 layout.
 - Output: `presentation/out/Final_Presentation_Manthan_Sankpal.pptx` and `.pdf`, `presentation/out/slides/slide_01-23.png`.
+
+## Presentation P3 - speaker script, demo script, viva preparation (2026-10-15)
+
+- Added `presentation/SPEAKER_SCRIPT.md.tmpl`, `DEMO_SCRIPT.md.tmpl` and `VIVA_PREP.md.tmpl` (31 questions in seven groups, weak points, papers to know). They render to `presentation/out/`.
+- `make_deck_json.py`: renders the templates, `{{total}}`, `--audit` for digits outside tokens, nested `tuning.json` lookup.
+- `slides.yaml`: the anomaly notes read the year from a token.

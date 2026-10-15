@@ -349,7 +349,8 @@ slides:
       {{a:water.residual_zscore.test.n_detected}} of the {{a:water.residual_zscore.test.n_labels}} leaks that
       began in the test period, with a median delay of {{a:water.residual_zscore.test.median_delay_hours|.0f}}
       hours. Its precision of {{a:water.residual_zscore.test.precision|.2f}} must be read against
-      {{a:water.residual_zscore.test.chance_precision|.2f}} for random alarms, because the 2018 leaks overlap.
+      {{a:water.residual_zscore.test.chance_precision|.2f}} for random alarms, because the
+      {{e:battledim.period.0|year}} leaks overlap.
       For electricity I injected spikes, shifts and drifts, and they are labelled as injected.
 
   - id: optimisation

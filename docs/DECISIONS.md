@@ -190,3 +190,20 @@ Every non-obvious choice, with reason and alternatives. Newest at the bottom.
 - **Literature slide**: citations moved from panel headings to the line they support, so the headings fit on one line. Guo et al. stays on the references slide.
 - **Title slide** has no footer or slide number; every other slide has both. Backup slides are numbered B1-B5.
 - **Automatic checks** (`render_deck.py`): every slide has notes; no text run below 14 pt except the 10 pt footer and number, and 12 pt on the references slide and in tables; the slide count matches `deck.json`. The visual review covered all 23 rendered slides: no overflow, overlap or distortion remains.
+
+## 2026-10-15 - Presentation phase P3 (speaker script, demo script, viva preparation)
+
+- **Generated, not hand-written**: the three documents are templates (`presentation/*.md.tmpl`) rendered by `make_deck_json.py` with the report's resolver. `SPEAKER_SCRIPT.md` is assembled from the slide notes, with per-slide and cumulative timings (`{{script}}`, `{{total}}`). A note changed in `slides.yaml` therefore changes the slides and the script together.
+- **Gate check: numbers traced to tokens.** `python presentation/make_deck_json.py --audit` lists every digit outside a token in the notes and templates. The ones that remain are accepted:
+  - Structural: PRN, course code, slide and question numbers, list numbering, B1-B5, DMA 3, the git tag, the port 5000, browser zoom, rehearsal and demo durations from the instructions, Phase 9.
+  - Method constants: 1.4826 in the robust z-score, and the 72-hour onset rule named in `anomaly.json` (`test_onset_72h`).
+  - The descriptive "late 2022" for the water demand drop, the same wording as in the report.
+  - One hand-typed year in the anomaly notes ("2018") was replaced with a token.
+- **`tuning.json` paths**: its keys contain a dot ("water.d1"), so `make_deck_json.py` nests them before lookup (`{{t:water.d1.xgboost...}}`).
+- **Viva content checked against results**:
+  - The weekly-horizon statement names both selected models and their non-significant tests: electricity skill 21 percent, p 0.151, not significant despite the skill.
+  - The detection-delay answer lists the actual per-leak delays, including the fastest incipient detection.
+  - "Shallow trees" was dropped for XGBoost (selected depth 8).
+  - The demo script names the leak band by its start date, because five labelled leaks overlap in that window.
+- **Papers to know**: the five papers cited most in the report (Wang, Antunes, Vrachimis and Alvisi with four citations each; Kong chosen among the papers with three, since it supports the main deep-learning finding). Marino and Guo, recommended in STUDENT_REVIEW.md, are added briefly. The summaries paraphrase the verified abstracts in `report/out/verification_raw/` and add nothing beyond them.
+- **AI-tool question (Q31)**: answered as "say so honestly and describe the checks". Whether a written declaration is required stays an open question for the guide.

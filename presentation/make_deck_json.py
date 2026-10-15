@@ -22,7 +22,9 @@ ROOT = HERE.parent
 sys.path.insert(0, str(ROOT / "report"))
 import build_report as B  # noqa: E402
 
-B.DATA["t"] = json.loads((ROOT / "results" / "tuning.json").read_text(encoding="utf-8"))
+B.DATA["t"] = {}  # tuning.json keys are "resource.horizon"; nest them so {{t:water.d1.xgboost...}} resolves
+for _k, _v in json.loads((ROOT / "results" / "tuning.json").read_text(encoding="utf-8")).items():
+    B.DATA["t"].setdefault(_k.split(".")[0], {})[_k.split(".")[1]] = _v
 OUT = HERE / "out"
 WPM = 130  # speaking rate used for the time estimate
 MODELS_DEEP = ["lstm", "gru", "cnn_lstm"]
@@ -58,7 +60,7 @@ def deep_config_table(R):
         res, h = task.split(".")
         sel = B.DATA["m"][res][h]["selected"]["model"]
         for m in MODELS_DEEP:
-            d = t[task][m]
+            d = t[res][h][m]
             unit = "hours" if h == "d1" else "days"
             rows.append([f"{res.capitalize()} {h.upper()}", B.NAMES[m] + ("*" if m == sel else ""),
                          f"{c['window'][h]} {unit}", str(d["selected_params"]["units"]), str(d["selected_params"]["layers"]),
@@ -144,11 +146,19 @@ def outline(deck) -> str:
     return "\n".join(lines)
 
 
+def untokenised(text: str) -> list[str]:
+    """Digits written outside {{...}} tokens and [@...] citations, with context - the P3 audit lists them for review."""
+    bare = re.sub(r"\{\{[^}]*\}\}|\[@[^\]]*\]", "§", text)
+    return [bare[max(0, m.start() - 25):m.end() + 15].replace("\n", " ") for m in re.finditer(r"\d+", bare)]
+
+
 def render_docs(R, deck) -> list[Path]:
-    """presentation/*.md.tmpl -> presentation/out/*.md; {{script}} expands to the speaker notes of the main slides."""
+    """presentation/*.md.tmpl -> presentation/out/*.md. {{script}} expands to the speaker notes of the main slides,
+    {{total}} to the planned speaking time."""
     written = []
+    plan = sum(seconds(s["time"]) for s in deck["slides"] if s.get("time") and not s.get("backup"))
     for tmpl in sorted(HERE.glob("*.md.tmpl")):
-        text = tmpl.read_text(encoding="utf-8")
+        text = tmpl.read_text(encoding="utf-8").replace("{{total}}", f"{plan // 60}:{plan % 60:02d}")
         if "{{script}}" in text:
             text = text.replace("{{script}}", speaker_script(deck))
         out = OUT / tmpl.name.removesuffix(".tmpl")
@@ -171,7 +181,19 @@ def speaker_script(deck) -> str:
     return "\n".join(parts)
 
 
+def audit():
+    """List digits outside tokens in slides.yaml notes and the templates (they must be structural, not results)."""
+    spec = yaml.safe_load((HERE / "slides.yaml").read_text(encoding="utf-8"))
+    sources = {f"slides.yaml notes ({s['id']})": s["notes"] for s in spec["slides"]}
+    sources.update({t.name: t.read_text(encoding="utf-8") for t in sorted(HERE.glob("*.md.tmpl"))})
+    for name, text in sources.items():
+        for hit in untokenised(text):
+            print(f"{name}: ...{hit}...")
+
+
 def main():
+    if "--audit" in sys.argv:
+        return audit()
     spec = yaml.safe_load((HERE / "slides.yaml").read_text(encoding="utf-8"))
     R = resolver()
     deck, warns = build(spec, R)

@@ -1,0 +1,227 @@
+# Viva Preparation
+
+Mr. Manthan Sankpal, PRN 125M1H064 - MCA Seminar (MCA33AE01)
+
+The answers below are model answers of three to five sentences, built from this project's own results. Every number is read from the frozen results files when this document is generated, so it matches the report and the slides. Reference numbers in square brackets are the numbers used in the report.
+
+Learn the reasoning, not the wording. If you do not know an answer in the viva, say so and say how you would find out; do not guess.
+
+## 1. Concepts
+
+**Q1. What are the components of a time series, and which matter in your data?**
+
+A time series is usually described by its trend, its seasonality, its cycles and an irregular part (noise). Both of my series have strong daily and weekly seasonality, which you can see in the average daily profiles. The annual pattern comes mostly through temperature: daily electricity use fell as temperature rose (correlation {{e:electricity.corr_daily_value_temperature_train|.2f}}, because of electric heating), while water demand rose (correlation {{e:water.corr_daily_value_temperature_train|.2f}}). The water series also had a level shift: demand dropped in late 2022, which is why SARIMA, with fixed parameters, did worse than the baseline.
+
+**Q2. What is stationarity, and why does SARIMA need it?**
+
+A stationary series has a constant mean, variance and autocorrelation over time. ARIMA-type models describe the series through its own past values and past errors, and those relationships are only stable if the series is stationary [@box2015]. Differencing makes a series stationary; seasonal differencing subtracts the value one season earlier, which removes the daily or weekly cycle. My SARIMA used seasonal differencing with a period of one day for hourly forecasts and one week for daily totals, with the orders chosen by the Akaike information criterion.
+
+**Q3. Why can LSTM and GRU networks learn long dependencies?**
+
+A plain recurrent network multiplies its gradient through every time step, so information from far back fades away (the vanishing-gradient problem). The LSTM adds a cell state that is updated additively and three gates (input, forget and output) that decide what to keep, add and expose, so useful information can travel over long spans [@hochreiter1997]. The GRU merges these into an update gate and a reset gate, which gives fewer parameters and similar behaviour [@cho2014]. My networks read the last {{c:models.deep.window.d1}} hours for next-day forecasts and {{c:models.deep.window.w1}} days for next-week forecasts.
+
+**Q4. What does the CNN layer add in a CNN-LSTM?**
+
+The convolutional layer slides small filters along the input window and picks out short local shapes, such as the morning ramp or the evening peak, before the recurrent layer models how they follow each other. It also shortens and denoises the sequence the LSTM has to read. Hybrids of this kind have done well on household energy data [@sajjad2020]. In my results, the CNN-LSTM reached a next-day MAE of {{m:electricity.d1.test.cnn_lstm.mae|.3f}} kW on electricity, close to the GRU's {{m:electricity.d1.test.gru.mae|.3f}} kW.
+
+**Q5. How does XGBoost differ from a random forest?**
+
+A random forest grows many deep trees independently on bootstrap samples and random subsets of features, and averages them; the averaging mainly reduces variance [@breiman2001]. XGBoost builds trees one after another, each one fitted to the errors of the trees before it, with shrinkage (a learning rate) and regularisation to avoid overfitting [@chen2016]. The number of trees is chosen by early stopping on the validation set. For water next-day forecasts, the selected XGBoost had a depth of {{t:water.d1.xgboost.selected_params.max_depth}}, a learning rate of {{t:water.d1.xgboost.selected_params.learning_rate}} and {{t:water.d1.xgboost.n_estimators}} trees.
+
+## 2. Data
+
+**Q6. Why did you choose these datasets?**
+
+They are public, openly licensed, well documented and used in the literature, so anyone can repeat my work. The UCI household data gives minute-level electricity readings from {{e:electricity.period.0|year}} to {{e:electricity.period.1|year}} [@uci2012household]. The BWDF data gives real hourly inflows of district metered areas used in an international forecasting competition [@alvisi2025bwdf]. BattLeDIM is the only open dataset I found with labelled leak start times [@vrachimis2022battledim]. I could not find open Indian utility data at hourly resolution, which I state as a limitation.
+
+**Q7. How did you handle gaps and daylight-saving changes?**
+
+The UCI clock never changes for daylight saving, so I kept it as a fixed clock and shifted the weather data to match. The water data is in local time: the repeated autumn hour is averaged, and the missing spring hour becomes a one-hour gap. Gaps of up to {{c:cleaning.max_interpolate_hours}} hours were interpolated linearly. Longer gaps were left missing and excluded from evaluation ({{e:electricity.long_gap_hours|int}} hours in {{e:electricity.long_gap_runs}} runs for electricity), because inventing values would flatter every model.
+
+**Q8. What do AMI and DMA mean?**
+
+AMI, advanced metering infrastructure, is the combination of smart meters, two-way communication and the systems that collect and manage their readings. A DMA, district metered area, is a zone of a water network whose inflows are metered, so that the utility can see how much water enters the zone and spot losses. My water series is the inflow of one such district, DMA 3 of the BWDF data. The same pipeline beat the baseline in {{m:water.robustness.n_dmas_beating_naive}} of the {{m:water.robustness.dmas|len}} districts.
+
+**Q9. Why is L-Town simulated, and is that a problem?**
+
+Utilities rarely publish leak records, so real labelled leaks are hard to get. The BattLeDIM organisers built a virtual network, L-Town, with realistic demands and sensor readings, and they know exactly when each leak starts; this allows a fair comparison of methods [@vrachimis2022battledim]. The drawback is that a simulation can be cleaner than a real network, so my detection results are an optimistic first test, not a field result. I say this in the limitations.
+
+## 3. Evaluation
+
+**Q10. Why chronological splits and rolling origins?**
+
+In real use, a model only knows the past, so the evaluation must respect time. I never shuffled the data:
+- Electricity: training ran to {{m:electricity.d1.split_dates.train.1|date}}, validation to {{m:electricity.d1.split_dates.val.1|date}}, and testing started on {{m:electricity.d1.split_dates.test.0|date}}.
+- Water: the last {{c:splits.water.test_weeks}} weeks formed the test period.
+
+A forecast was made at every midnight of the test period without refitting: {{m:electricity.d1.n_test_origins}} origins for electricity and {{m:water.d1.n_test_origins}} for water. This is how the model would actually be used.
+
+**Q11. What is leakage, and how does your lag rule prevent it?**
+
+Leakage means that a model uses information that would not be available when the forecast is made, which makes test results look better than they can be in practice. My lag rule says that every lag used for a horizon of h steps is at least h steps old: {{c:horizons.d1.lags|list}} hours for next-day forecasts and {{c:horizons.w1.lags|list}} days for next-week forecasts. Scalers are fitted on training data only. A perturbation test changes all values after an origin and checks that no feature changes; a deliberately broken version of the features fails this test, which shows that the test works.
+
+**Q12. Why does MAPE fail near zero, and what does sMAPE do?**
+
+MAPE divides each error by the actual value, so a small actual value turns a small error into a huge percentage. This is why the household's MAPE of {{m:electricity.d1.test.SEL.mape|.0f}} percent looks worse than the model is: night-time use is very low. I excluded actual values below {{c:metrics.mape_min_fraction_of_train_mean|.0%}} of the training mean; for the electricity test set this removed {{m:electricity.d1.test.SEL.mape_excluded_points}} of {{m:electricity.d1.test.SEL.n_points|int}} points. sMAPE divides by the average of the actual and forecast values, which keeps it bounded; for the same model it is {{m:electricity.d1.test.SEL.smape|.0f}} percent. MAE in kilowatts is the main metric.
+
+**Q13. Why does the seasonal-naive baseline matter?**
+
+The seasonal-naive forecast simply repeats the value from one week earlier, so it already captures the daily and weekly cycles. Any model that cannot beat it adds no value, and the "skill" I report is the reduction in MAE relative to it. For next-day forecasts, the selected models improved on it by {{m:electricity.d1.test.SEL.skill|.0%}} for electricity and {{m:water.d1.test.SEL.skill|.0%}} for water. For next-week water totals the improvement was only {{m:water.w1.test.SEL.skill|.0%}}, and not significant, so I say clearly that the baseline was hard to beat there.
+
+**Q14. What did the significance test show?**
+
+I used the Diebold-Mariano test on the per-origin errors of two models [@diebold1995].
+- **Electricity, next day:** the {{m:electricity.d1.selected.model|name}} was significantly better than the {{m:electricity.d1.significance.vs|name}} ({{m:electricity.d1.significance.p_value|p}}) and than the baseline ({{m:electricity.d1.significance_vs_naive.p_value|p}}).
+- **Water, next day:** {{m:water.d1.selected.model|name}} was significantly better than the {{m:water.d1.significance.vs|name}} ({{m:water.d1.significance.p_value|p}}).
+- **Next week:** the differences were not significant. Against the baseline, electricity gave {{m:electricity.w1.significance_vs_naive.p_value|p}} and water {{m:water.w1.significance_vs_naive.p_value|p}}; electricity, the {{m:electricity.w1.significance.vs|name}} against the selected {{m:electricity.w1.selected.model|name}}, gave {{m:electricity.w1.significance.p_value|p}}.
+
+**Q15. How did you choose hyper-parameters? Did you ever look at the test set?**
+
+Every model was tuned on the validation period only, and the model for each series and horizon was selected by its validation MAE. The test period was used once, for the final evaluation, and the results were then frozen under a git tag. That is why, for example, the selected XGBoost for next-week water totals stays selected, although the LSTM had a lower test MAE ({{m:water.w1.test.lstm.mae|.2f}} against {{m:water.w1.test.xgboost.mae|.2f}} cubic metres per day). That difference was not significant ({{m:water.w1.significance.p_value|p}}).
+
+**Q16. Did the weather inputs help?**
+
+I tested this by removing the weather inputs and refitting. For XGBoost on electricity, the next-day MAE changed only from {{m:electricity.d1.test.xgboost.mae|.3f}} to {{m:electricity.d1.ablation_no_weather.test.xgboost.mae|.3f}} kW. Weather is strongly related to daily use, but at the next-day horizon the recent lags already carry most of that information. Also, I used observed weather in place of a weather forecast, so in real use weather would help even less.
+
+## 4. Anomaly detection
+
+**Q17. How does the robust z-score detector work?**
+
+For every hour I take the residual, actual minus forecast. I then compare it with the median and the median absolute deviation (MAD) of the residuals over the previous {{c:anomaly.rolling_window_hours}} hours; the factor 1.4826 makes the MAD comparable to a standard deviation. Median and MAD are not pulled around by the outliers I am trying to find, unlike the mean and standard deviation. An alarm is raised when the absolute z-score exceeds k = {{a:water.residual_zscore.params.k}} for m = {{a:water.residual_zscore.params.m}} consecutive hours; both values were chosen on validation data.
+
+**Q18. How does Isolation Forest isolate outliers?**
+
+It builds many random trees; each split picks a random feature and a random cut value [@liu2008]. Unusual points are separated from the rest after only a few splits, so their average path length is short and their anomaly score is high. It needs no labels. On BattLeDIM it reached a recall of {{a:water.isolation_forest.test.recall|.2f}} with {{a:water.isolation_forest.test.false_alarms_per_week|.2f}} false alarms per week, against {{a:water.residual_zscore.test.recall|.2f}} and {{a:water.residual_zscore.test.false_alarms_per_week|.2f}} for the residual z-score.
+
+**Q19. What is the precision-recall trade-off, and why do you report "chance precision"?**
+
+A lower threshold catches more leaks (higher recall) but raises more false alarms (lower precision). I chose k and m on validation data by the F1 score, which balances the two. Precision alone can mislead here: the leaks of {{e:battledim.period.0|year}} overlap and cover most of the period, so even random alarms would land inside a leak window {{a:water.residual_zscore.test.chance_precision|.0%}} of the time. My detector's precision of {{a:water.residual_zscore.test.precision|.2f}} is close to that. With a stricter rule, where an alarm must come within 72 hours of a leak's start, precision is {{a:water.residual_zscore.test_onset_72h.precision|.2f}} against {{a:water.residual_zscore.test_onset_72h.chance_precision|.2f}} by chance.
+
+**Q20. What is detection delay, and what was it?**
+
+Detection delay is the time from the labelled start of a leak to the first alarm. The median delay was {{a:water.residual_zscore.test.median_delay_hours|.0f}} hours. Delays varied: the abrupt leak {{a:water.residual_zscore.test.per_label.3.event_id}} was flagged after {{a:water.residual_zscore.test.per_label.3.delay_hours|.0f}} hours and the incipient leak {{a:water.residual_zscore.test.per_label.1.event_id}} after {{a:water.residual_zscore.test.per_label.1.delay_hours|.0f}}, but the incipient leak {{a:water.residual_zscore.test.per_label.0.event_id}} took {{a:water.residual_zscore.test.per_label.0.delay_hours|.0f}} hours, because the forecast partly absorbs a slowly growing leak. One abrupt leak, {{a:water.residual_zscore.test.per_label.2.event_id}}, was missed.
+
+**Q21. Why did you inject anomalies into the electricity data?**
+
+The household dataset has no labelled anomalies, so I could not measure detection on it directly. I injected spikes, level shifts and drifts into copies of the validation and test data, with fixed random seeds, and labelled them INJECTED everywhere. The residual detector found {{a:electricity.residual_zscore.test.n_detected}} of {{a:electricity.residual_zscore.test.n_labels}} injected anomalies: {{a:electricity.recall_by_type_test.residual_zscore.level_shift|.0%}} of the level shifts, {{a:electricity.recall_by_type_test.residual_zscore.drift|.0%}} of the drifts and {{a:electricity.recall_by_type_test.residual_zscore.spike|.0%}} of the spikes. It also raised {{a:electricity.residual_zscore.test.false_alarms_per_week|.1f}} false alarms per week, which is too many for operational use.
+
+## 5. Optimisation
+
+**Q22. What are the linear programme's objective and constraints?**
+
+For each day the programme chooses the volume pumped in each hour. It minimises the energy cost: tariff times energy per cubic metre times volume, summed over the day. The constraints are:
+- the tank balance: level now = level before + pumped − demand;
+- the minimum and maximum tank levels;
+- the pump capacity;
+- an end-of-day level at least equal to the start, so that one day cannot borrow from the next.
+
+It is solved with SciPy's HiGHS solver and was feasible on all {{o:water_pump.n_days}} test days ({{o:water_pump.results.selected_forecast.infeasible_days|len}} infeasible).
+
+**Q23. Why is the perfect-foresight saving an upper bound?**
+
+With a perfect forecast, the plan is made with the actual demand, so it never needs corrective pumping, and no plan that respects the same tank limits and tariff can cost less. My forecast-based plan saved {{o:water_pump.summary.selected_forecast.saving_pct_vs_demand_following|.1f}} percent against demand-following pumping, close to the {{o:water_pump.summary.perfect_forecast.saving_pct_vs_demand_following|.1f}} percent of perfect foresight. The seasonal-naive forecast gave {{o:water_pump.summary.seasonal_naive_forecast.saving_pct_vs_demand_following|.1f}} percent. The differences are small because the tank absorbs most forecast errors.
+
+**Q24. What is the effect of forecast error on the schedule?**
+
+If demand is under-forecast, the tank would fall below its minimum, so extra corrective pumping is needed, possibly at the peak tariff. If demand is over-forecast, more water than necessary is pumped. Better forecasts needed less correction: {{o:water_pump.results.selected_forecast.corrective_m3|int}} cubic metres with my forecast, against {{o:water_pump.results.seasonal_naive_forecast.corrective_m3|int}} with the seasonal-naive forecast. All tank, pump and tariff values are illustrative, so these numbers show the mechanism, not a utility's real savings.
+
+## 6. Implementation
+
+**Q25. What are the roles of Flask, Streamlit and Power BI?**
+
+The Flask REST API is the single source of results: it returns metrics, forecasts, anomalies and pumping plans as JSON. The Streamlit dashboard is the operator's view. It calls the API, and if the API is down it falls back to computing the same answers locally, so the demo cannot fail on a network problem. The Power BI dataset is a star-schema export (fact and dimension tables as CSV files) for managers who build their own reports.
+
+**Q26. How is a model served?**
+
+After training, each model is saved: scikit-learn, XGBoost and SARIMA models as joblib files, and the deep networks in the Keras format. A model card records the selected parameters. The API loads the saved model on request, builds the same features with the same lag rule, and returns the forecast. Nothing is retrained or downloaded at serving time.
+
+**Q27. How would this run for a real utility?**
+
+Every night, a scheduled job would:
+1. read the day's meter and SCADA data and clean it with the same rules;
+2. build the features and forecast the next day;
+3. compare the forecast residuals with recent actuals to raise leak alarms;
+4. compute the next day's pumping plan for an operator to approve.
+
+Weather forecasts would replace observed weather. The models would be retrained on a fixed schedule, selected on recent validation data, and their error would be monitored for drift.
+
+**Q28. How do you know your results are reproducible?**
+
+All random seeds are fixed at {{c:seed}}, the package versions are pinned, and one command rebuilds every result, figure and export from the raw data. A clean re-run reproduced every number exactly, and the results are frozen under the git tag v1.0-results-frozen. The report, the slides and this document read every number from the results files at build time, so no number is typed by hand.
+
+## 7. Indian context and ethics
+
+**Q29. How could this use India's national smart-meter data?**
+
+Under the Revamped Distribution Sector Scheme, {{f:rdss_sanctioned}} smart meters had been sanctioned and {{f:rdss_installed}} installed by {{f:rdss_asof}} [@pib2025smartmeters]. A distribution company could run the same pipeline on feeder or transformer totals for next-day load, and on household data for demand response. The changes needed are Indian holidays in the calendar features, weather inputs that capture the monsoon, and data-sharing agreements. City water utilities that meter district inflows could use the water side in the same way.
+
+**Q30. What about the privacy of household readings?**
+
+Fine-grained readings can reveal when a home is occupied and which appliances are used, and privacy and security are recognised challenges in smart-meter analytics [@wang2019smartmeter]. A real deployment should collect data with consent, keep it secure, aggregate it where possible, and process it within the utility. Federated learning, listed in my future scope, would let models learn without moving household data off the meter. This project used a public, anonymised dataset; in India such data would also fall under the Digital Personal Data Protection Act.
+
+**Q31. How did you use AI tools in this project?**
+
+Answer honestly. Say that you used an AI coding assistant to help write code and draft text, and describe how you kept control:
+- every result comes from the pipeline and is read into the report automatically;
+- every reference was checked against its DOI or official source before it was cited;
+- you reviewed the code and rewrote the key sections in your own words.
+
+Whether a written declaration is required is an open question with the guide; follow her answer.
+
+## 8. Weak points: the questions most likely to hurt
+
+Give these answers calmly and first. Admitting a limitation clearly is better than being caught out.
+
+- **Single household for electricity.** One home is far noisier than a feeder or a city, which is why the MAPE is {{m:electricity.d1.test.SEL.mape|.0f}} percent. The method is the same for aggregated data, and the literature shows that aggregated load is much easier to forecast [@kong2019].
+- **Simulated network for leaks.** L-Town is a benchmark network, not a real one. It is the standard open benchmark with exact leak start times. Real networks are noisier, so these detection results are a first test.
+- **Observed weather used as a forecast.** I used the weather that actually happened, so real accuracy would be slightly lower. The ablation shows that weather changed next-day errors very little, so the effect is small.
+- **Illustrative tariff and tank.** The cost savings show the mechanism, not a real utility's savings. A utility would plug in its own tariff and tank data, and the comparison against perfect foresight shows how much room remains.
+- **Deep learning did not win everywhere.**
+  - It won for volatile household load.
+  - For water next-day forecasts, XGBoost beat the GRU ({{m:water.d1.test.xgboost.mae|.3f}} against {{m:water.d1.test.gru.mae|.3f}} L/s), because smooth district demand is explained well by lags and the calendar, and there were fewer than two years of training data.
+  - For next-week totals, the selected models were {{m:electricity.w1.test.SEL.skill|.0%}} (electricity) and {{m:water.w1.test.SEL.skill|.0%}} (water) better than the baseline, but neither difference was significant ({{m:electricity.w1.significance_vs_naive.p_value|p}} and {{m:water.w1.significance_vs_naive.p_value|p}}).
+- **European rather than Indian data.** There is no open Indian utility data at this resolution. The pipeline is data-agnostic, and Indian smart meters are being installed at scale.
+- **Points excluded from MAPE.** For the electricity test set, {{m:electricity.d1.test.SEL.mape_excluded_points}} points were excluded; for water, {{m:water.d1.test.SEL.mape_excluded_points}}. MAE, which excludes nothing, is the main metric.
+- **Leak precision near chance, and electricity false alarms.** Say this openly (Q19). A utility would use the alarms as a prompt to check, not as an automatic trigger.
+- **Electricity peak-day alerts were weak.** With a threshold calibrated on validation forecasts, {{o:electricity_peak_alerts.test_calibrated.alert_days}} alerts caught {{o:electricity_peak_alerts.test_calibrated.hits}} of {{o:electricity_peak_alerts.test_calibrated.actual_peak_days}} peak days. Forecasts are smoother than actual peaks, so peak alerts need a dedicated model.
+
+## 9. Papers to know
+
+Read these five papers yourself before the viva; the summaries below are a revision aid, not a substitute. They are the papers cited most often in the report.
+
+**Wang et al., review of smart-meter data analytics [@wang2019smartmeter].**
+- **Problem:** how to use the huge volume of fine-grained consumption data from smart meters to make the power grid more efficient and sustainable.
+- **Method:** an application-oriented review, organised by descriptive, predictive and prescriptive analytics. The main application areas it identifies are load analysis, load forecasting and load management, and it reviews the techniques used for each.
+- **Data:** the published literature.
+- **Findings:** open research directions, including big-data issues, new machine-learning methods, new business models, the energy transition, and data privacy and security.
+- **Why it matters to you:** it frames what smart-meter data is used for, and supports your answer on privacy.
+
+**Antunes et al., short-term water demand forecasting with machine learning [@antunes2018].**
+- **Problem:** many water utilities run their pumps on the immediate demand: pumps start at a minimum tank level and stop at a maximum. Planning on forecast demand instead allows pumping when electricity is cheaper.
+- **Method:** neural networks, random forests, support vector machines and k-nearest neighbours, plus a weighted combination of them. They also study the effect of weather, seasonality, the amount of training data and the forecast window.
+- **Data:** real data from two Portuguese water utilities, with results compared against ARIMA benchmarks.
+- **Why it matters to you:** it is the basis of your water-energy argument and of the level-triggered rule you compared against.
+
+**Vrachimis et al., the BattLeDIM competition [@vrachimis2022battledim].**
+- **Problem:** methods for detecting and locating leaks in water networks are hard to compare without common benchmarks.
+- **Method:** a competition in which teams from academia and industry detected and located leaks. They used time-series analysis, statistics, machine learning, mathematical programming, metaheuristics and engineering judgement, and were scored with realistic economic criteria.
+- **Data:** flow and pressure readings from sensors in a virtual network, L-Town.
+- **Main finding:** leak detection and isolation methods still need further development, and more open benchmarks are needed.
+- **Why it matters to you:** it is the source of your leak labels.
+
+**Alvisi et al., the Battle of Water Demand Forecasting [@alvisi2025bwdf].**
+- **Problem:** comparing methods for short-term urban water demand forecasting.
+- **Method:** an international competition held with the WDSA-CCWI conference in Ferrara, in which teams from around the world forecast demand in a set of real district metered areas.
+- **Main findings:** integrated forecasting approaches matter, and methods should be judged on more than one metric, case study and period.
+- **Why it matters to you:** it is the source of your water data, and it is why you checked robustness across districts and report several metrics.
+
+**Kong et al., LSTM for residential load forecasting [@kong2019].**
+- **Problem:** forecasting the load of a single household is much harder than forecasting aggregated load, because individual use is highly volatile and uncertain.
+- **Method:** a framework based on an LSTM recurrent neural network.
+- **Data:** publicly available real residential smart-meter data, compared against a range of benchmarks, including state-of-the-art methods.
+- **Main finding:** the LSTM outperformed the competing methods for short-term load forecasting of individual households.
+- **Why it matters to you:** it supports your finding that a recurrent network (your GRU) was best for household electricity.
+
+**Also read (recommended in STUDENT_REVIEW.md):**
+- **Marino et al. [@marino2016]** compared a standard LSTM with an LSTM sequence-to-sequence model on electricity data from one residential customer, at one-minute and one-hour resolution. The standard LSTM failed on the minute data but worked well on the hourly data, while the sequence-to-sequence model worked on both. This supports your choice to average to hourly values.
+- **Guo et al. [@guo2018]** developed a GRU network for short-term water demand forecasting, with a correction module for accumulated error. It outperformed a conventional neural network and SARIMA. Your water result went the other way (XGBoost beat the GRU), and Q1, Q13 and the weak-points section explain why.

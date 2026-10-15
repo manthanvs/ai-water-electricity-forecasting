@@ -147,7 +147,7 @@ Report (02_SEMINAR_REPORT.md)
 Presentation (03_FINAL_PRESENTATION.md)
 - [x] P1 - deck content (2026-10-13: 18 slides + 5 backups in slides.yaml; all tokens resolve through the report resolver; notes 64-101 words; estimated 10:42 vs planned 10:45)
 - [x] P2 - deck build and visual review (2026-10-15: 23 slides built, PDF and PNGs written; render_deck checks pass (fonts, notes, count); every slide reviewed and fixed: numbering, panel heights, figure legibility)
-- [ ] P3 - viva preparation and demo script
+- [x] P3 - viva preparation and demo script (2026-10-15: SPEAKER_SCRIPT, DEMO_SCRIPT and VIVA_PREP rendered from token templates; --audit leaves only structural numbers and two method constants; 31 viva questions, weak points, papers to know)
 
 ## 8. Open questions for the guide (do not decide these silently)
 
