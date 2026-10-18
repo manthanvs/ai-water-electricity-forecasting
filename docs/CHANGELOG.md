@@ -118,3 +118,10 @@
 
 - Added `make_submission.py` (bundle and zip; final-build guard; `--draft`). A draft bundle was built and checked (16.4 MB).
 - `STUDENT_REVIEW.md` (git-ignored) gained section 8, the remaining steps to submission. CLAUDE.md: layout, commands, department questions.
+
+## Completion run (2026-10-18)
+
+- `report/content/ch0_front.md`: Director's name from the official PCCOE website; final-mode build passes with zero CONFIRM markers.
+- Added `presentation/record_demo.py` and recorded `submission/Demo_Backup_Manthan_Sankpal.mp4` (1:35, captioned).
+- `presentation/DEMO_SCRIPT.md.tmpl`: the backup-video section now describes the recording. `README.md`: report, slides and submission commands. CLAUDE.md: layout, commands, submission status.
+- Final bundle and zip built (18.7 MB); missing only `Plagiarism_Report_Manthan_Sankpal.pdf` (Manthan).

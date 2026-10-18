@@ -73,7 +73,8 @@ If the API cannot start (for example, the port is busy), go ahead anyway. The da
 - If anything fails or hangs for more than 10 seconds, say "I will show the recorded run" and play the backup video. Do not debug live.
 - If the projector cuts the browser window, show the screenshot on slide 15 and describe the click path.
 
-## Recording the backup video (do this once, before the day)
+## The backup video
 
-- Follow the click path above exactly, in about 90 seconds. Use any screen recorder; on Windows, Xbox Game Bar records the active window with Windows key + Alt + R.
-- Save it as `Demo_Backup_Manthan_Sankpal.mp4`. Watch it once to check that the text is readable and that no personal notifications appear.
+- A silent recording of this click path, with a caption for each step, is already in `submission/Demo_Backup_Manthan_Sankpal.mp4`. It was made by `python presentation/record_demo.py`, which drives the real dashboard.
+- It differs from the live path in one place. On the Anomalies page it keeps the default window (July {{e:battledim.period.0|year}}), where leak {{a:water.residual_zscore.test.per_label.1.event_id}} ({{a:water.residual_zscore.test.per_label.1.type}}) starts on {{a:water.residual_zscore.test.per_label.1.start|date}} and is flagged {{a:water.residual_zscore.test.per_label.1.delay_hours|.0f}} hours later.
+- Watch it once before the day. If you prefer a narrated version, record the same path yourself with any screen recorder (on Windows, Xbox Game Bar records the active window with Windows key + Alt + R) and save it under the same name.

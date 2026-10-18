@@ -75,6 +75,27 @@ Tests:
 pytest -q
 ```
 
+## Report, slides and submission
+
+These read the frozen results; every number in them is a token resolved at build time.
+
+```bash
+python report/build_report.py --final --check
+python presentation/make_deck_json.py
+npm install --prefix presentation
+node presentation/build_deck.js
+python presentation/render_deck.py
+python presentation/record_demo.py
+python make_submission.py
+```
+
+1. The report command writes `report/out/Seminar_Report_Manthan_Sankpal.docx` and `.pdf` and the checks to `check_report.txt`.
+2. `make_deck_json.py` resolves the slide text and writes `SPEAKER_SCRIPT.md`, `DEMO_SCRIPT.md` and `VIVA_PREP.md` to `presentation/out/`.
+3. `build_deck.js` writes the `.pptx`. Run `npm install` only the first time.
+4. `render_deck.py` makes the PDF and slide images and checks fonts and notes.
+5. `record_demo.py` records the backup demo video. MP4 output needs ffmpeg on PATH, imageio-ffmpeg, or `--ffmpeg PATH`.
+6. `make_submission.py` assembles `submission/` and the zip. It runs only after a passing final-mode report build.
+
 ## Reproducing the results
 
 `python -m wef.cli all` rebuilds every file in `results/`, `figures/`, `models/` and `powerbi/exports/` from the raw data, with seed 42 for Python, NumPy and TensorFlow (TensorFlow op determinism on). Downloads are checksummed (`data/raw/checksums.json`) and are skipped when the files are already present. On the machine that produced the frozen results a clean re-run reproduced `results/metrics.json` exactly; on other hardware the deep-learning metrics can differ slightly (floating-point order), within the tolerance stated in `docs/DECISIONS.md`. The other models are deterministic.

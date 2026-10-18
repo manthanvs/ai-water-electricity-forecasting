@@ -222,3 +222,20 @@ Every non-obvious choice, with reason and alternatives. Newest at the bottom.
   - printing, signature and binding.
   - The department questions (similarity limit, print sides, copies, channel) were added to CLAUDE.md section 8 and STUDENT_REVIEW.md section 8.
 - **Regression check after P1-P2 code changes**: report `--check` passes in draft mode (0 failures, results still the frozen tag), and all 67 tests pass.
+
+## 2026-10-18 - Completion run (Manthan: "complete the entire project today")
+
+- **Director's name filled**: "Dr. Govind N. Kulkarni, Director", taken from the college's own pages (https://www.pccoepune.com/director.php and https://www.pccoepune.com/kshitij-2026/aboutus.php), which name him as Director, PCCoE.
+  - This is a sourced institutional fact, not an invented one (invariant 11).
+  - Wikipedia's infobox names someone else and was not used.
+  - STUDENT_REVIEW.md asks Manthan to check the name against the letterhead before printing.
+- **Final-mode report build** passes: 0 failed, 0 CONFIRM, 20 body pages. The remaining warnings are the page count (open with the guide) and the chapter word budgets.
+- **Own-words rewrites not done by Claude**: the Abstract, Acknowledgement, 1.3, 6.7 and 7.1 are meant to be in Manthan's own words (02_SEMINAR_REPORT.md section G), so writing them for him would defeat the purpose. The drafts stay; they are accurate and build cleanly. After his edits, the final build and `make_submission.py` are re-run.
+- **Backup demo video** recorded automatically (`presentation/record_demo.py`): Playwright drives the real dashboard along the DEMO_SCRIPT click path, with step captions, in 1:35 at 1440x810, H.264.
+  - The first load is done in an unrecorded warm-up pass, so the video has no loading time.
+  - Selectboxes are set with the keyboard, because the options of Streamlit 1.65's combobox have no accessible name.
+  - ffmpeg for MP4 came from imageio-ffmpeg installed into the scratch directory, not the project venv; requirements.txt is unchanged.
+  - The video keeps the default anomaly window (July 2018, leak p654) instead of the live script's October window, to avoid scripted date entry.
+  - Manthan may replace it with a narrated recording.
+- **README** gained a "Report, slides and submission" section with the build commands.
+- **Bundle**: `make_submission.py` built `Seminar_MCA33AE01_125M1H064_Manthan_Sankpal.zip` (18.7 MB). The plagiarism report is the only file missing; it needs the institute's checker.

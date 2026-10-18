@@ -10,7 +10,7 @@ Keywords: water demand forecasting; electricity load forecasting; smart meters; 
 
 I express my sincere gratitude to my Seminar Guide, Prof. Dr. Anjana Arakerimath, Head of the Department of Master of Computer Application, for her guidance, constructive feedback and encouragement throughout this seminar. Her suggestions shaped both the direction of the study and the presentation of this report.
 
-I am grateful to [[CONFIRM: name and designation of the Director of PCCOE]], Pimpri Chinchwad College of Engineering, Pune, for the facilities and the academic environment that made this work possible. I also thank the faculty members and staff of the Department of Master of Computer Application for their support and timely help.
+I am grateful to Dr. Govind N. Kulkarni, Director, Pimpri Chinchwad College of Engineering, Pune, for the facilities and the academic environment that made this work possible. I also thank the faculty members and staff of the Department of Master of Computer Application for their support and timely help.
 
 I acknowledge the organisations that make their data openly available: the UCI Machine Learning Repository, the organisers of the Battle of the Water Demand Forecasting and of the BattLeDIM competition, and Open-Meteo.
 

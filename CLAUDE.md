@@ -99,6 +99,7 @@ If an instruction file and this file disagree, this file wins. If either disagre
 |   |-- make_deck_json.py          results + text -> deck.json
 |   |-- build_deck.js              pptxgenjs
 |   |-- render_deck.py             pptx -> PDF and slide PNGs, font/notes checks
+|   |-- record_demo.py             records the backup demo video from the real dashboard (Playwright + ffmpeg)
 |   |-- *.md.tmpl                  speaker, demo and viva documents with tokens
 |   |-- package.json
 |   `-- out/
@@ -120,6 +121,7 @@ If an instruction file and this file disagree, this file wins. If either disagre
 - Report: `python report/build_report.py` then `python report/build_report.py --check`
 - Format self-test: `python report/docx_format.py --selftest`
 - Viva/script documents and number audit: `python presentation/make_deck_json.py` (`--audit` lists digits outside tokens)
+- Backup demo video: `python presentation/record_demo.py` (MP4 needs ffmpeg on PATH, imageio-ffmpeg, or `--ffmpeg PATH`)
 - Submission bundle: `python make_submission.py` (`--draft` for a test bundle from a draft report)
 - Deck: `python presentation/make_deck_json.py && node presentation/build_deck.js && python presentation/render_deck.py` (first time: `npm install --prefix presentation`)
 
@@ -151,6 +153,10 @@ Presentation (03_FINAL_PRESENTATION.md)
 - [x] P1 - deck content (2026-10-13: 18 slides + 5 backups in slides.yaml; all tokens resolve through the report resolver; notes 64-101 words; estimated 10:42 vs planned 10:45)
 - [x] P2 - deck build and visual review (2026-10-15: 23 slides built, PDF and PNGs written; render_deck checks pass (fonts, notes, count); every slide reviewed and fixed: numbering, panel heights, figure legibility)
 - [x] P3 - viva preparation and demo script (2026-10-15: SPEAKER_SCRIPT, DEMO_SCRIPT and VIVA_PREP rendered from token templates; --audit leaves only structural numbers and two method constants; 31 viva questions, weak points, papers to know)
+
+Submission (04_SUBMISSION_CHECKLIST.md)
+- [x] Automated part (2026-10-18: Director's name filled from pccoepune.com; report --final --check 0 failures, 0 CONFIRM; backup demo video recorded; bundle and zip built, 18.7 MB)
+- [ ] Manthan: own-words rewrite of Abstract, Acknowledgement, 1.3, 6.7, 7.1 then rebuild; plagiarism report; grammar pass; print, sign, bind; guide's answers to section 8
 
 ## 8. Open questions for the guide (do not decide these silently)
 
