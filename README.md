@@ -1,5 +1,12 @@
 # AI-Based Prediction of Water Demand and Electricity Consumption
 
+[![Python 3.11](https://img.shields.io/badge/Python-3.11-3776AB?logo=python&logoColor=white)](pyproject.toml)
+[![TensorFlow 2.21](https://img.shields.io/badge/TensorFlow-2.21-FF6F00?logo=tensorflow&logoColor=white)](requirements.txt)
+[![Streamlit 1.65](https://img.shields.io/badge/Streamlit-1.65-FF4B4B?logo=streamlit&logoColor=white)](dashboard/app.py)
+[![Flask 3.1](https://img.shields.io/badge/Flask-3.1-000000?logo=flask&logoColor=white)](api/app.py)
+[![Results tag](https://img.shields.io/github/v/tag/manthanvs/ai-water-electricity-forecasting?label=results)](https://github.com/manthanvs/ai-water-electricity-forecasting/tags)
+[![Data: CC BY 4.0](https://img.shields.io/badge/data-CC%20BY%204.0-lightgrey)](#datasets-and-licences)
+
 MCA Seminar project (Course MCA33AE01), Pimpri Chinchwad College of Engineering, Pune. Student: Mr. Manthan Sankpal (PRN 125M1H064). Guide: Prof. Dr. Anjana Arakerimath.
 
 The project forecasts household electricity consumption and district water demand with statistical, machine-learning and deep-learning models, detects anomalies (leaks; injected electricity anomalies), turns water forecasts into a cost-optimal pumping schedule, and serves everything through a Flask REST API, a Streamlit dashboard and a Power BI dataset. Every number in the seminar report and slides is read from the `results/` files that this pipeline writes.
